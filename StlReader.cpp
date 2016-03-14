@@ -7,7 +7,6 @@
 #include <QHBoxLayout>
 
 #include "StlReader.h"
-#include "Parametrics.h"
 #include "Treefoil.h"
 #include "Torus.h"
 
@@ -355,7 +354,7 @@ void CGMainWindow::loadEq(Parametrics& parametrics) {
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
             pointvec.push_back(parametrics.getPoint((float)i/delta, (float)j/eps));
-//            pointvec.push_back(treefoil->getNormal((float)i/delta, (float)j/eps));
+            pointvec.push_back(parametrics.getNormal((float)i/delta, (float)j/eps));
         }
     }
 
@@ -381,7 +380,8 @@ void CGMainWindow::loadEq(Parametrics& parametrics) {
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
 
-    ogl->initTrianglesVBO(ogl->triangles);
+    //ogl->initTrianglesVBO(ogl->triangles);
+    ogl->initVBO(ogl->triangles);
 
     QVector3D extent = ogl->max - ogl->min;
     std::cout << "b = [" << ogl->min.x() << "," << ogl->max.x() << "] x [ "
