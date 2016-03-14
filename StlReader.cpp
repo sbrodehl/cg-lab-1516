@@ -6,7 +6,9 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QHBoxLayout>
+
 #include "StlReader.h"
+#include "Parametrics.h"
 
 #include <algorithm>
 #include <cmath>
@@ -25,6 +27,7 @@ CGMainWindow::CGMainWindow (QWidget* parent)
     // Create a menu
     QMenu *file = new QMenu("&File",this);
     file->addAction ("Load model", this, SLOT(loadModel()), Qt::CTRL+Qt::Key_L);
+    file->addAction ("Load parametric eq", this, SLOT(loadEq()), Qt::CTRL+Qt::Key_L);
     file->addAction ("Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
 
     menuBar()->addMenu(file);
@@ -347,3 +350,10 @@ int main (int argc, char **argv) {
 		return app.exec();
 }
 
+void CGMainWindow::loadEq() {
+    Parametrics* parametrics = new Parametrics();
+    parametrics->loadEq();
+    delete parametrics;
+
+    // create points, triangulate and render here ...
+}

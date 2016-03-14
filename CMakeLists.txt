@@ -41,7 +41,7 @@ set(SOURCE_FILES
         drawing.cpp
         StlReader.cpp
         StlReader.h
-        )
+        Parametrics.cpp Parametrics.h)
 
 include_directories(.)
 

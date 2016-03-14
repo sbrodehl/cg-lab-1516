@@ -28,6 +28,7 @@ public:
 
 public slots:
     void loadModel();
+    void loadEq();
 
 protected:
 
