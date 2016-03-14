@@ -300,6 +300,17 @@ std::vector<QVector3D> CGView::createTriangles(const std::vector<QVector3D> &poi
     return triangles;
 }
 
+void CGView::initVBO(const std::vector<QVector3D>& trianglesWN) {
+    GLuint id;
+    glGenBuffers(1,&id);
+
+    glBindBuffer(GL_ARRAY_BUFFER,id);
+    glBufferData(GL_ARRAY_BUFFER,trianglesWN.size()*sizeof(QVector3D),trianglesWN.data(),GL_STATIC_DRAW);
+
+    vboTrianglesId.push_back(id);
+    vboTrianglesSize.push_back(static_cast<int>(triangles.size()));
+}
+
 void CGView::initTrianglesVBO(const std::vector<QVector3D>& triangles) {
 	std::vector<QVector3D> vertexWithNormal;
 	GLuint id;

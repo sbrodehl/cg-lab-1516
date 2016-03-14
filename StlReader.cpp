@@ -356,6 +356,7 @@ void CGMainWindow::loadEq() {
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
             pointvec.push_back(treefoil->getPoint((float)i/delta, (float)j/eps));
+//            pointvec.push_back(treefoil->getNormal((float)i/delta, (float)j/eps));
         }
     }
 
