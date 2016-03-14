@@ -42,6 +42,7 @@ set(SOURCE_FILES
         StlReader.cpp
         StlReader.h
         Parametrics.h
+        Torus.h
         Treefoil.h)
 
 include_directories(.)
