@@ -17,6 +17,7 @@ public:
     void loadEq();
     QVector3D getPoint(double u, double v);
     QVector3D parameterizedTorus(float u, float v);
+    QVector3D parameterizedTrefoilKnot(float u, float v);
 };
 
 
