@@ -100,23 +100,23 @@ void getFromStlFile(std::vector<QVector3D>& triangles, const char *filename) {
         return;
     }
 
-        instream.seekg( 80, std::ios_base::beg ); // skip ascii header
-        int trinum = 0;
-        instream.read((char*) &trinum, 4 ); // number of triangles
-        float tmp;
-        for(int k = 0; k < trinum; k++) {
-            for(int i=0;i < 3 ; i++ )
-                instream.read( (char*) &tmp, 4 );
-            for(int i = 0; i < 3; i++ ) {
-		qreal v[3];
-                for(int j = 0 ; j < 3 ; j++) {
-                    instream.read( (char*) &tmp, 4 );
-                    v[j] = tmp;
-                }
-            	triangles.push_back(QVector3D(v[0],v[1],v[2]));
+    instream.seekg(80, std::ios_base::beg); // skip ascii header
+    int trinum = 0;
+    instream.read((char *) &trinum, 4); // number of triangles
+    float tmp;
+    for (int k = 0; k < trinum; k++) {
+        for (int i = 0; i < 3; i++)
+            instream.read((char *) &tmp, 4);
+        for (int i = 0; i < 3; i++) {
+            qreal v[3];
+            for (int j = 0; j < 3; j++) {
+                instream.read((char *) &tmp, 4);
+                v[j] = tmp;
             }
-            instream.read( (char*) &tmp, 2);
+            triangles.push_back(QVector3D(v[0], v[1], v[2]));
         }
+        instream.read((char *) &tmp, 2);
+    }
 
     instream.close();
 }
@@ -359,17 +359,49 @@ void CGMainWindow::loadEq() {
     int eps = 200;
 
     QVector3D points [delta][eps];
+    std::vector<QVector3D> pointvec;
 
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
             points[i][j] = parametrics->parameterizedTorus((float)i/delta, (float)j/eps);
+            pointvec.push_back(parametrics->parameterizedTorus((float)i/delta, (float)j/eps));
         }
     }
 
-    for(int j=0; j < eps; j++){
-        std::cout << points[0][j].x() << ", " << points[0][j].y() << ", " << points[0][j].z() << std::endl;;
+    ogl->triangles = ogl->createTriangles(pointvec, delta);
+
+    float x1, x2, y1, y2, z1, z2;
+    x1 = ogl->min.x();
+    y1 = ogl->min.y();
+    z1 = ogl->min.z();
+    x2 = ogl->max.x();
+    y2 = ogl->max.y();
+    z2 = ogl->max.z();
+
+    for (size_t i = 0; i < ogl->triangles.size(); i++) {
+        x1 = std::min(x1, ogl->triangles[i].x());
+        x2 = std::max(x2, ogl->triangles[i].x());
+        y1 = std::min(y1, ogl->triangles[i].y());
+        y2 = std::max(y2, ogl->triangles[i].y());
+        z1 = std::min(z1, ogl->triangles[i].z());
+        z2 = std::max(z2, ogl->triangles[i].z());
     }
 
+    ogl->min = QVector3D(x1, y1, z1);
+    ogl->max = QVector3D(x2, y2, z2);
+
+    ogl->initTrianglesVBO(ogl->triangles);
+
+    QVector3D extent = ogl->max - ogl->min;
+    std::cout << "b = [" << ogl->min.x() << "," << ogl->max.x() << "] x [ "
+    << ogl->min.y() << "," << ogl->max.y() << "] x [ "
+    << ogl->min.z() << "," << ogl->max.z() << "]" << std::endl;
+    std::cout << "e = " << extent.x() << " " << extent.y() << " " << extent.z() << std::endl;
+    ogl->zoom = 1.5 / std::max(std::max(extent.x(), extent.y()), extent.z());
+    ogl->center = (ogl->min + ogl->max) / 2;
+
+    statusBar()->showMessage ("Loading done.",3000);
+    ogl->updateGL();
 
     delete parametrics;
 }

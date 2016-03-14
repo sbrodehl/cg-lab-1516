@@ -15,7 +15,7 @@ QVector3D Parametrics::parameterizedTorus(float u, float v){
     float u_scaled = u*2*PI;
     float v_scaled = v*2*PI;
     // hard coded main circle radius R and sub circle radius r
-    float R = 1;
+    float R = 10;
     float r = 1;
 
     float x = (R + r*cos(v_scaled))*cos(u_scaled);
