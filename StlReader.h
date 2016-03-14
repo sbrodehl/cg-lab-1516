@@ -51,6 +51,7 @@ public:
     void initSolidCylinderVBO();
     void refineSolidSphere(const std::vector<QVector3D>&, std::vector<QVector3D>&);
     void initTrianglesVBO(const std::vector<QVector3D>&);
+    std::vector<QVector3D> createTriangles(const std::vector<QVector3D>&, int);
 
     QVector3D min, max, center;
     qreal zoom, phi, theta;

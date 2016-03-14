@@ -274,6 +274,32 @@ void CGView::initSolidCylinderVBO() {
     vboSolidCylinderSize = static_cast<int>(vertexWithNormal.size()/2);
 }
 
+std::vector<QVector3D> CGView::createTriangles(const std::vector<QVector3D> &points, int bucketsize) {
+    std::vector<QVector3D> triangles;
+    size_t s = points.size();
+    for (size_t i = 0; i < s; i += bucketsize) {
+        for (size_t l = 0; l < bucketsize; ++l) {
+            size_t leftRoot = (i + l) % s;
+            size_t rightRoot = (i + l + bucketsize) % s;
+            size_t nextLeft = (i + ((l + 1) % bucketsize)) % s;
+            size_t nextRight = (i + bucketsize + ((l + 1) % bucketsize)) % s;
+
+            QVector3D leftR = points[leftRoot];
+            QVector3D rightR = points[rightRoot];
+            QVector3D neleftR = points[nextLeft];
+            QVector3D nerightR = points[nextRight];
+
+            triangles.push_back(neleftR);
+            triangles.push_back(rightR);
+            triangles.push_back(leftR);
+            triangles.push_back(neleftR);
+            triangles.push_back(nerightR);
+            triangles.push_back(rightR);
+        }
+    }
+    return triangles;
+}
+
 void CGView::initTrianglesVBO(const std::vector<QVector3D>& triangles) {
 	std::vector<QVector3D> vertexWithNormal;
 	GLuint id;
