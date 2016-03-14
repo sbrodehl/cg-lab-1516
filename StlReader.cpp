@@ -4,25 +4,18 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QKeyEvent>
-#include <QMessageBox>
 #include <QHBoxLayout>
 
 #include "StlReader.h"
 #include "Parametrics.h"
 
-#include <algorithm>
-#include <cmath>
 #include <fstream>
-#include <iostream>
-#include <limits>
-
-#include <QVector3D>
 
 CGMainWindow *w;
 
 CGMainWindow::CGMainWindow (QWidget* parent) 
 	: QMainWindow (parent) {
-    resize (604, 614);
+    resize (768, 768);
 
     // Create a menu
     QMenu *file = new QMenu("&File",this);
@@ -355,10 +348,9 @@ void CGMainWindow::loadEq() {
     parametrics->loadEq();
 
     // create points, triangulate and render here ...
-    int delta = 200;
-    int eps = 200;
+    int delta = 20;
+    int eps = 20;
 
-    QVector3D points [delta][eps];
     std::vector<QVector3D> pointvec;
 
     for(int i=0; i < delta; i++){
