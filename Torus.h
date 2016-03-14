@@ -5,32 +5,33 @@
 
 #include "Parametrics.h"
 
-class Treefoil : public Parametrics {
+class Torus : public Parametrics {
 
 private:
-    // hard coded sub circle radius r
-    float r = 0.5;
+    // hard coded main circle radius R and sub circle radius r
+    float R = 10;
+    float r = 1;
 
 public:
     double x(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (3+cos(3*u_scaled))*cos(2*u_scaled) + r*cos(v_scaled)*cos(2*u_scaled);
+        return (R + r*cos(v_scaled))*cos(u_scaled);
     }
 
     double y(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (3+cos(3*u_scaled))*sin(2*u_scaled) + r*cos(v_scaled)*sin(2*u_scaled);
+        return (R + r*cos(v_scaled))*sin(u_scaled);
     }
 
     double z(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return sin(3*u_scaled) + r*sin(v_scaled);
+        return r*sin(v_scaled);
     }
 
     QVector3D getPoint(double u, double v) {
