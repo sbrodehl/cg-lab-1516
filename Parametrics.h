@@ -11,12 +11,13 @@ public:
 
     const double PI = std::atan(1.0)*4;
 
-    Parametrics();
-    ~Parametrics();
+    virtual double x(double u, double v) = 0;
+    virtual double y(double u, double v) = 0;
+    virtual double z(double u, double v) = 0;
 
-    void loadEq();
-    QVector3D getPoint(double u, double v);
-    QVector3D parameterizedTorus(float u, float v);
+    virtual QVector3D getPoint(double u, double v) = 0;
+
+    virtual QVector3D n(double u, double v) = 0;
 };
 
 

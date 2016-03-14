@@ -41,7 +41,8 @@ set(SOURCE_FILES
         drawing.cpp
         StlReader.cpp
         StlReader.h
-        Parametrics.cpp Parametrics.h)
+        Parametrics.h
+        Treefoil.h)
 
 include_directories(.)
 

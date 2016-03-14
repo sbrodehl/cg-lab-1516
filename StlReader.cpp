@@ -8,6 +8,7 @@
 
 #include "StlReader.h"
 #include "Parametrics.h"
+#include "Treefoil.h"
 
 #include <fstream>
 
@@ -344,8 +345,7 @@ int main (int argc, char **argv) {
 }
 
 void CGMainWindow::loadEq() {
-    Parametrics* parametrics = new Parametrics();
-    parametrics->loadEq();
+    Treefoil* treefoil = new Treefoil();
 
     // create points, triangulate and render here ...
     int delta = 20;
@@ -355,7 +355,7 @@ void CGMainWindow::loadEq() {
 
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
-            pointvec.push_back(parametrics->parameterizedTorus((float)i/delta, (float)j/eps));
+            pointvec.push_back(treefoil->getPoint((float)i/delta, (float)j/eps));
         }
     }
 
@@ -394,5 +394,5 @@ void CGMainWindow::loadEq() {
     statusBar()->showMessage ("Loading done.",3000);
     ogl->updateGL();
 
-    delete parametrics;
+    delete treefoil;
 }
