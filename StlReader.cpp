@@ -9,6 +9,7 @@
 #include "StlReader.h"
 #include "Parametrics.h"
 #include "Treefoil.h"
+#include "Torus.h"
 
 #include <fstream>
 
@@ -20,14 +21,14 @@ CGMainWindow::CGMainWindow (QWidget* parent)
 
     // Create a menu
     QMenu *file = new QMenu("&File",this);
-    file->addAction ("Load model", this, SLOT(loadModel()), Qt::CTRL+Qt::Key_L);
-    file->addAction ("Load parametric eq", this, SLOT(loadEq()), Qt::CTRL+Qt::Key_L);
+    file->addAction ("Load STL", this, SLOT(loadModel()));
     file->addAction ("Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
 
     menuBar()->addMenu(file);
 
-    QMenu *view = new QMenu("&Extra",this);
-    view->addAction ("Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
+    QMenu *view = new QMenu("&Parametrics",this);
+    view->addAction ("Torus", this, SLOT(loadTorusParam()));
+    view->addAction ("Treefoil Knot", this, SLOT(loadTreefoilParam()));
     menuBar()->addMenu(view);
 
     // Create a nice frame to put around the OpenGL widget
@@ -344,9 +345,7 @@ int main (int argc, char **argv) {
 		return app.exec();
 }
 
-void CGMainWindow::loadEq() {
-    Treefoil* treefoil = new Treefoil();
-
+void CGMainWindow::loadEq(Parametrics& parametrics) {
     // create points, triangulate and render here ...
     int delta = 20;
     int eps = 20;
@@ -355,7 +354,7 @@ void CGMainWindow::loadEq() {
 
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
-            pointvec.push_back(treefoil->getPoint((float)i/delta, (float)j/eps));
+            pointvec.push_back(parametrics.getPoint((float)i/delta, (float)j/eps));
 //            pointvec.push_back(treefoil->getNormal((float)i/delta, (float)j/eps));
         }
     }
@@ -394,6 +393,16 @@ void CGMainWindow::loadEq() {
 
     statusBar()->showMessage ("Loading done.",3000);
     ogl->updateGL();
+}
 
+void CGMainWindow::loadTreefoilParam() {
+    Treefoil* treefoil = new Treefoil();
+    loadEq(*treefoil);
     delete treefoil;
+}
+
+void CGMainWindow::loadTorusParam() {
+    Torus* torus = new Torus();
+    loadEq(*torus);
+    delete torus;
 }

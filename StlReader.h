@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <iostream>
+#include "Parametrics.h"
 
 class CGView;
 
@@ -28,10 +29,11 @@ public:
 
 public slots:
     void loadModel();
-    void loadEq();
+    void loadTorusParam();
+    void loadTreefoilParam();
 
 protected:
-
+    void loadEq(Parametrics&);
     void keyPressEvent(QKeyEvent*);
 };
 
