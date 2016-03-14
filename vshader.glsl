@@ -5,15 +5,16 @@ precision mediump float;
 #endif
 
 attribute vec3 a_position;
-attribute vec3 aTexCoord;
-
-varying vec3 vTexCoord;
+attribute vec3 a_normal;
 
 uniform mat4 uMVMat;
 uniform mat4 uPMat;
+uniform mat3 uNMat;
+
+varying float vIntensity;
 
 void main() {
-	vec4 p = uMVMat * vec4(a_position,1.0);
-	gl_Position = uPMat * vec4(a_position,1.0);
-	vTexCoord = vec3(0.5*p.x+0.5,0.5*p.y+0.5,0.5*p.z+0.5);
+	gl_Position = uPMat * uMVMat * vec4(a_position,1.0);
+	vec3 n = normalize(uNMat * a_normal);
+	vIntensity = abs(n.z);
 }

@@ -38,8 +38,9 @@ qt5_add_resources(RESOURCES
         )
 
 set(SOURCE_FILES
-        CGViewer.cpp
-        CGViewer.h
+        drawing.cpp
+        StlReader.cpp
+        StlReader.h
         )
 
 include_directories(.)
