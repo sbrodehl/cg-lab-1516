@@ -41,9 +41,12 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        return QVector3D(0,
-                         0,
-                         0);
+        float u_scaled = (float) (u * 2 * PI);
+        float v_scaled = (float) (v * 2 * PI);
+
+        return QVector3D((float)((R+r*cos(v_scaled))*r*cos(u_scaled)*cos(v_scaled)),
+                         (float)((R+r*cos(v_scaled))*r*sin(u_scaled)*cos(v_scaled)),
+                         (float)((R+r*cos(v_scaled))*r*sin(v_scaled)));
     }
 
 };
