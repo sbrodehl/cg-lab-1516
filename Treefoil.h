@@ -39,7 +39,7 @@ public:
                          (float) z(u, v));
     }
 
-    QVector3D n(double u, double v) {
+    QVector3D getNormal(double u, double v) {
         return QVector3D(0,
                          0,
                          0);

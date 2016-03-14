@@ -17,7 +17,7 @@ public:
 
     virtual QVector3D getPoint(double u, double v) = 0;
 
-    virtual QVector3D n(double u, double v) = 0;
+    virtual QVector3D getNormal(double u, double v) = 0;
 };
 
 
