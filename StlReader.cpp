@@ -353,7 +353,23 @@ int main (int argc, char **argv) {
 void CGMainWindow::loadEq() {
     Parametrics* parametrics = new Parametrics();
     parametrics->loadEq();
-    delete parametrics;
 
     // create points, triangulate and render here ...
+    int delta = 200;
+    int eps = 200;
+
+    QVector3D points [delta][eps];
+
+    for(int i=0; i < delta; i++){
+        for(int j=0; j < eps; j++){
+            points[i][j] = parametrics->parameterizedTorus((float)i/delta, (float)j/eps);
+        }
+    }
+
+    for(int j=0; j < eps; j++){
+        std::cout << points[0][j].x() << ", " << points[0][j].y() << ", " << points[0][j].z() << std::endl;;
+    }
+
+
+    delete parametrics;
 }
