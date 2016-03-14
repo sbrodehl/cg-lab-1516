@@ -15,7 +15,7 @@
 
 #include <QVector3D>
 
-#include "DicomReader.h"
+#include "CGViewer.h"
 
 CGMainWindow *w;
 

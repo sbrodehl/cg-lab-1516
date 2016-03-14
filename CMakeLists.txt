@@ -38,8 +38,8 @@ qt5_add_resources(RESOURCES
         )
 
 set(SOURCE_FILES
-        DicomReader.cpp
-        DicomReader.h
+        CGViewer.cpp
+        CGViewer.h
         )
 
 include_directories(.)
