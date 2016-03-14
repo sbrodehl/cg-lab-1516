@@ -1,6 +1,6 @@
 
-#ifndef CG_LAB_1516_TREEFOIL_H
-#define CG_LAB_1516_TREEFOIL_H
+#ifndef CG_LAB_1516_TORUS_H
+#define CG_LAB_1516_TORUS_H
 
 
 #include "Parametrics.h"
@@ -51,4 +51,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_TREEFOIL_H
+#endif //CG_LAB_1516_TORUS_H
