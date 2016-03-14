@@ -1,11 +1,11 @@
 
-#ifndef CG_LAB_1516_TREEFOIL_H
-#define CG_LAB_1516_TREEFOIL_H
+#ifndef CG_LAB_1516_TREFOIL_H
+#define CG_LAB_1516_TREFOIL_H
 
 
 #include "Parametrics.h"
 
-class Treefoil : public Parametrics {
+class Trefoil : public Parametrics {
 
 private:
     // hard coded sub circle radius r
@@ -47,4 +47,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_TREEFOIL_H
+#endif //CG_LAB_1516_TREFOIL_H

@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 
 #include "StlReader.h"
-#include "Treefoil.h"
+#include "Trefoil.h"
 #include "Torus.h"
 
 #include <fstream>
@@ -27,7 +27,7 @@ CGMainWindow::CGMainWindow (QWidget* parent)
 
     QMenu *view = new QMenu("&Parametrics",this);
     view->addAction ("Torus", this, SLOT(loadTorusParam()));
-    view->addAction ("Treefoil Knot", this, SLOT(loadTreefoilParam()));
+    view->addAction ("Trefoil Knot", this, SLOT(loadTrefoilParam()));
     menuBar()->addMenu(view);
 
     // Create a nice frame to put around the OpenGL widget
@@ -395,10 +395,10 @@ void CGMainWindow::loadEq(Parametrics& parametrics) {
     ogl->updateGL();
 }
 
-void CGMainWindow::loadTreefoilParam() {
-    Treefoil* treefoil = new Treefoil();
-    loadEq(*treefoil);
-    delete treefoil;
+void CGMainWindow::loadTrefoilParam() {
+    Trefoil * trefoil = new Trefoil();
+    loadEq(*trefoil);
+    delete trefoil;
 }
 
 void CGMainWindow::loadTorusParam() {

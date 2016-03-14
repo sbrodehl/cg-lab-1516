@@ -30,7 +30,7 @@ public:
 public slots:
     void loadModel();
     void loadTorusParam();
-    void loadTreefoilParam();
+    void loadTrefoilParam();
 
 protected:
     void loadEq(Parametrics&);

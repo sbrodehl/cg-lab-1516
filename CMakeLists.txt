@@ -43,7 +43,7 @@ set(SOURCE_FILES
         StlReader.h
         Parametrics.h
         Torus.h
-        Treefoil.h)
+        Trefoil.h)
 
 include_directories(.)
 
