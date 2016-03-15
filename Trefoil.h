@@ -65,13 +65,15 @@ public:
         float theta = (float) scaled(u);
         float phi = (float) scaled(v);
 
-        QVector3D dtheta((float) (b*p*cos(p*theta+phi)+a*q*cos(q*theta)*sin(p*theta)+p*cos(p*theta)*(d+a*sin(q*theta))),
-                     (float) (a*q*cos(p*theta)*cos(q*theta)-p*sin(p*theta)*(d+a*sin(q*theta))-b*p*sin(p*theta+phi)),
-                     (float) (-q * (a * sin(q * theta) + b * sin(q * theta + phi))));
+        QVector3D dtheta((float) (b * p * cos(p * theta + phi) + a * q * cos(q * theta) * sin(p * theta) +
+                                  p * cos(p * theta) * (d + a * sin(q * theta))),
+                         (float) (a * q * cos(p * theta) * cos(q * theta) -
+                                  p * sin(p * theta) * (d + a * sin(q * theta)) - b * p * sin(p * theta + phi)),
+                         (float) (-q * (a * sin(q * theta) + b * sin(q * theta + phi))));
 
         QVector3D dphi((float) (b * cos(p * theta + phi)),
-                     (float) (-b * sin(p * theta + phi)),
-                     (float) (-b * sin(q * theta + phi)));
+                       (float) (-b * sin(p * theta + phi)),
+                       (float) (-b * sin(q * theta + phi)));
 
         QVector3D n = QVector3D::crossProduct(dtheta, dphi);
         n.normalize();
