@@ -14,7 +14,7 @@ public:
 
     Volume_Kegel(){
         parametrics.push_back(new Kegel(5, 10));
-        parametrics.push_back(new ClosedCircle(5, 0));
+        parametrics.push_back(new ClosedCircle(5, 10));
     }
 
     std::vector<QVector3D> triangulate(double delta, double eps) {

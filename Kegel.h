@@ -24,13 +24,13 @@ public:
     double x(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
 
-        return R * cos(u_scaled) * (1-v);
+        return R * cos(u_scaled) * v;
     }
 
     double y(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
 
-        return R * sin(u_scaled) * (1-v);
+        return R * sin(u_scaled) * v;
     }
 
     double z(double u, double v) {
@@ -45,11 +45,11 @@ public:
 
     QVector3D getNormal(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
-        QVector3D first((float) (-1.0f * R * sin(u_scaled) * (1-v)),
-                        (float) (R * cos(u_scaled) * (1-v)),
+        QVector3D first((float) (-1.0f * R * sin(u_scaled) * v),
+                        (float) (R * cos(u_scaled) * v),
                         (float) (0.0));
-        QVector3D second((float) (-1.0f * R * cos(u_scaled)),
-                         (float) (-1.0f *R * sin(u_scaled)),
+        QVector3D second((float) (R * cos(u_scaled)),
+                         (float) (R * sin(u_scaled)),
                          (H));
 
         QVector3D n = QVector3D::crossProduct(first, second);
