@@ -5,8 +5,12 @@
 
 #include "Parametrics.h"
 
-/*
- * See http://www.openprocessing.org/sketch/8105
+/* See for general formulae
+ * http://ocw.nctu.edu.tw/upload/classbfs1209054641151019.pdf
+ *
+ *
+ *
+ * See http://www.openprocessing.org/sketch/8105 for these things below
 
 float x = 2.0f*sin(3.0f*u) / (2+cos(v));
 float del1 = (2.0f*(sin(u) + 2*sin(2.0f*u)));
