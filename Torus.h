@@ -11,26 +11,29 @@ private:
     float R = 10;
     float r = 1;
 
+    double scaled(double x) {
+        return x * 2 * PI;
+    }
+
 public:
     double x(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
+        float theta = (float) scaled(u);
+        float phi = (float) scaled(v);
 
-        return (R + r * cos(v_scaled)) * cos(u_scaled);
+        return (R + r * cos(phi)) * cos(theta);
     }
 
     double y(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
+        float theta = (float) scaled(u);
+        float phi = (float) scaled(v);
 
-        return (R + r * cos(v_scaled)) * sin(u_scaled);
+        return (R + r * cos(phi)) * sin(theta);
     }
 
     double z(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
+        float phi = (float) scaled(v);
 
-        return r * sin(v_scaled);
+        return r * sin(phi);
     }
 
     QVector3D getPoint(double u, double v) {
@@ -40,12 +43,12 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
+        float theta = (float) scaled(u);
+        float phi = (float) scaled(v);
 
-        return QVector3D((float) ((R + r * cos(v_scaled)) * r * cos(u_scaled) * cos(v_scaled)),
-                         (float) ((R + r * cos(v_scaled)) * r * sin(u_scaled) * cos(v_scaled)),
-                         (float) ((R + r * cos(v_scaled)) * r * sin(v_scaled)));
+        return QVector3D((float) ((R + r * cos(phi)) * r * cos(theta) * cos(phi)),
+                         (float) ((R + r * cos(phi)) * r * sin(theta) * cos(phi)),
+                         (float) ((R + r * cos(phi)) * r * sin(phi)));
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {
