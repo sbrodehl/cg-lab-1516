@@ -19,44 +19,61 @@
 class CGView;
 
 class CGMainWindow : public QMainWindow {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    CGMainWindow (QWidget* parent = 0); // , Qt::WFlags flags = Qt::Window);
-    ~CGMainWindow ();
+    CGMainWindow(QWidget *parent = 0); // , Qt::WFlags flags = Qt::Window);
+    ~CGMainWindow();
+
     CGView *ogl;
 
 public slots:
+
     void loadModel();
+
     void loadTorusParam();
+
     void loadTrefoilParam();
+
     void loadZylinderParam();
+
     void changedDeltaSlider(int);
 
 protected:
-    void loadEq(Parametrics&);
-    void keyPressEvent(QKeyEvent*);
+    void loadEq(Parametrics &);
+
+    void keyPressEvent(QKeyEvent *);
 };
 
 class CGView : public QGLWidget, public QGLFunctions {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-    CGView(CGMainWindow*,QWidget*);
+    CGView(CGMainWindow *, QWidget *);
+
     void initShaders();
+
     void initializeGL();
 
-    void pickLine(int,int,QVector3D&,QVector3D&);
-    bool pick(int,int,QVector3D&);
+    void pickLine(int, int, QVector3D &, QVector3D &);
+
+    bool pick(int, int, QVector3D &);
+
     void initSolidCubeVBO();
+
     void initSolidSphereVBO();
+
     void initSolidCylinderVBO();
-    void refineSolidSphere(const std::vector<QVector3D>&, std::vector<QVector3D>&);
-    void initTrianglesVBO(const std::vector<QVector3D>&);
-    void initVBO(const std::vector<QVector3D>&);
-    std::vector<QVector3D> createTriangles(const std::vector<QVector3D>&, int);
+
+    void refineSolidSphere(const std::vector<QVector3D> &, std::vector<QVector3D> &);
+
+    void initTrianglesVBO(const std::vector<QVector3D> &);
+
+    void initVBO(const std::vector<QVector3D> &);
+
+    std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &, int);
 
     QVector3D min, max, center;
     qreal zoom, phi, theta;
@@ -64,8 +81,8 @@ public:
     std::vector<QVector3D> triangles;
     std::vector<GLuint> vboTrianglesId;
     std::vector<int> vboTrianglesSize;
-    GLuint vboSolidCubeId,vboSolidSphereId,vboSolidCylinderId,vboTmpId;
-    int vboSolidCubeSize,vboSolidSphereSize,vboSolidCylinderSize,vboTmpSize;
+    GLuint vboSolidCubeId, vboSolidSphereId, vboSolidCylinderId, vboTmpId;
+    int vboSolidCubeSize, vboSolidSphereSize, vboSolidCylinderSize, vboTmpSize;
 
     QVector3D pickPoint;
     bool pointPicked;
@@ -73,24 +90,32 @@ public:
 protected:
 
     void paintGL();
-    void resizeGL(int,int);
 
-    void mouseMoveEvent(QMouseEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void wheelEvent(QWheelEvent*);
-    void drawSolidSphere(const QVector3D&,qreal);
-    void drawSolidCylinder(const QVector3D&,const QVector3D&,qreal);
-    void drawAABB(const QVector3D&,const QVector3D&);
-    void drawOBB(const QMatrix4x4&,const QVector3D&);
+    void resizeGL(int, int);
+
+    void mouseMoveEvent(QMouseEvent *);
+
+    void mousePressEvent(QMouseEvent *);
+
+    void mouseReleaseEvent(QMouseEvent *);
+
+    void wheelEvent(QWheelEvent *);
+
+    void drawSolidSphere(const QVector3D &, qreal);
+
+    void drawSolidCylinder(const QVector3D &, const QVector3D &, qreal);
+
+    void drawAABB(const QVector3D &, const QVector3D &);
+
+    void drawOBB(const QMatrix4x4 &, const QVector3D &);
 
     CGMainWindow *main;
-    int oldX,oldY;
+    int oldX, oldY;
 
 private:
 
     QGLShaderProgram program;
-    QMatrix4x4 projection,modelView;
+    QMatrix4x4 projection, modelView;
     int width, height;
 };
 
