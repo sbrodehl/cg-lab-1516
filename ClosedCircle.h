@@ -1,12 +1,14 @@
-#ifndef CG_LAB_1516_ZYLINDER_H
-#define CG_LAB_1516_ZYLINDER_H
+#ifndef CG_LAB_1516_CLOSEDCIRCLE_H
+#define CG_LAB_1516_CLOSEDCIRCLE_H
 
 #include "Parametrics.h"
 
-class Zylinder : public Parametrics {
+class ClosedCircle : public Parametrics {
+
+
 
 private:
-    // hard coded main circle radius R and sub circle radius r
+    // hard coded circle radius R and position H
     float R = 0;
     float H = 0;
 
@@ -16,7 +18,7 @@ private:
 
 public:
 
-    Zylinder(float R_in, float H_in) {
+    ClosedCircle(float R_in, float H_in) {
         R = R_in;
         H = H_in;
     }
@@ -24,17 +26,17 @@ public:
     double x(double u, double v) {
         float theta = (float) scaled(u);
 
-        return R * cos(theta);
+        return R * cos(theta) * v;
     }
 
     double y(double u, double v) {
         float theta = (float) scaled(u);
 
-        return R * sin(theta);
+        return R * sin(theta) * v;
     }
 
     double z(double u, double v) {
-        return H * v;
+        return H;
     }
 
     QVector3D getPoint(double u, double v) {
@@ -44,16 +46,8 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        float theta = (float) scaled(u);
 
-        QVector3D first((float) (-1.0f * R * sin(theta)),
-                        (float) (R * cos(theta)),
-                        (float) (0.0));
-        QVector3D second((float) (0.0),
-                         (float) (0.0),
-                         (H));
-
-        QVector3D n = QVector3D::crossProduct(first, second);
+        QVector3D n = QVector3D(0, 0, 1);
         n.normalize();
 
         return n;
@@ -78,4 +72,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_ZYLINDER_H
+#endif //CG_LAB_1516_CLOSEDCIRCLE_H

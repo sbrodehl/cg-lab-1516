@@ -43,7 +43,10 @@ set(SOURCE_FILES
         StlReader.h
         Parametrics.h
         Torus.h
-        Treefoil.h)
+        Trefoil.h
+        Zylinder.h
+        Kegel.h
+        Volume.h Volume_Zylinder.h ClosedCircle.h)
 
 include_directories(.)
 

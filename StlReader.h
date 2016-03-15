@@ -15,6 +15,7 @@
 #include <vector>
 #include <iostream>
 #include "Parametrics.h"
+#include "Volume.h"
 
 class CGView;
 
@@ -34,14 +35,12 @@ public slots:
 
     void loadTorusParam();
 
-    void loadTrefoilParam();
-
     void loadZylinderParam();
 
     void changedDeltaSlider(int);
 
 protected:
-    void loadEq(Parametrics &);
+    void loadEq(Volume &);
 
     void keyPressEvent(QKeyEvent *);
 };
@@ -72,8 +71,6 @@ public:
     void initTrianglesVBO(const std::vector<QVector3D> &);
 
     void initVBO(const std::vector<QVector3D> &);
-
-    std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &, int);
 
     QVector3D min, max, center;
     qreal zoom, phi, theta;

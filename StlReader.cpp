@@ -11,6 +11,9 @@
 #include "Trefoil.h"
 #include "Torus.h"
 #include "Zylinder.h"
+#include "Kegel.h"
+#include "Volume.h"
+#include "Volume_Zylinder.h"
 
 #include <fstream>
 
@@ -374,21 +377,12 @@ int main(int argc, char **argv) {
     return app.exec();
 }
 
-void CGMainWindow::loadEq(Parametrics &parametrics) {
+void CGMainWindow::loadEq(Volume &volume) {
     // create points, triangulate and render here ...
     int delta = 64;
     int eps = 64;
 
-    std::vector<QVector3D> pointvec;
-
-    for (int i = 0; i < delta; i++) {
-        for (int j = 0; j < eps; j++) {
-            pointvec.push_back(parametrics.getPoint((float) i / delta, (float) j / eps));
-            pointvec.push_back(parametrics.getNormal((float) i / delta, (float) j / eps));
-        }
-    }
-
-    ogl->triangles = ogl->createTriangles(pointvec, delta);
+    ogl->triangles = volume.triangulate(delta, eps);
 
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
@@ -425,20 +419,14 @@ void CGMainWindow::loadEq(Parametrics &parametrics) {
     ogl->updateGL();
 }
 
-void CGMainWindow::loadTrefoilParam() {
-    Trefoil *trefoil = new Trefoil();
-    loadEq(*trefoil);
-    delete trefoil;
-}
-
 void CGMainWindow::loadTorusParam() {
     Torus *torus = new Torus();
-    loadEq(*torus);
+    // loadEq(*torus);
     delete torus;
 }
 
 void CGMainWindow::loadZylinderParam() {
-    Zylinder *zylinder = new Zylinder();
+    Volume_Zylinder *zylinder = new Volume_Zylinder();
     loadEq(*zylinder);
     delete zylinder;
 }

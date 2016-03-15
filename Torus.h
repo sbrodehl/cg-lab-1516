@@ -55,6 +55,19 @@ public:
         return std::vector<QPair<QVector3D, QVector3D> >();
     }
 
+    std::vector<QVector3D> triangulate(double delta, double eps) {
+        std::vector<QVector3D> pointvec;
+
+        for (int i = 0; i <= delta; i++) {
+            for (int j = 0; j <= eps; j++) {
+                pointvec.push_back(getPoint((float) i / delta, (float) j / eps));
+                pointvec.push_back(getNormal((float) i / delta, (float) j / eps));
+            }
+        }
+
+        return createTriangles(pointvec, delta + 1);
+    }
+
 };
 
 #endif //CG_LAB_1516_TORUS_H

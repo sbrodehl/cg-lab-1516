@@ -85,6 +85,9 @@ public:
         return std::vector<QPair<QVector3D, QVector3D> >();
     }
 
+    std::vector<QVector3D> triangulate(double delta, double eps){
+        return std::vector<QVector3D>();
+    }
 };
 
 #endif //CG_LAB_1516_TREFOIL_H
