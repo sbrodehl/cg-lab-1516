@@ -5,12 +5,11 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QHBoxLayout>
-#include <QSlider>
 
 #include "StlReader.h"
-#include "Trefoil.h"
+#include "Parametrics.h"
+#include "Treefoil.h"
 #include "Torus.h"
-#include "Zylinder.h"
 
 #include <fstream>
 
@@ -22,28 +21,15 @@ CGMainWindow::CGMainWindow (QWidget* parent)
 
     // Create a menu
     QMenu *file = new QMenu("&File",this);
-    file->addAction ("Load STL", this, SLOT(loadModel()));
+    file->addAction ("Load model", this, SLOT(loadModel()), Qt::CTRL+Qt::Key_L);
+    file->addAction ("Load parametric eq", this, SLOT(loadEq()), Qt::CTRL+Qt::Key_L);
     file->addAction ("Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
 
     menuBar()->addMenu(file);
 
-    QMenu *view = new QMenu("&Parametrics",this);
-    view->addAction ("Torus", this, SLOT(loadTorusParam()));
-    view->addAction ("Trefoil Knot", this, SLOT(loadTrefoilParam()));
-    view->addAction ("Zylinder", this, SLOT(loadZylinderParam()));
+    QMenu *view = new QMenu("&Extra",this);
+    view->addAction ("Quit", qApp, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
     menuBar()->addMenu(view);
-
-    QSlider *slider = new QSlider(Qt::Vertical, this);
-    slider->setMinimum(0);
-    slider->setMaximum(100);
-    slider->setSliderPosition(50);
-    // The smaller of two natural steps that an abstract sliders provides
-    // and typically corresponds to the user pressing an arrow key.
-    slider->setSingleStep(5);
-    // The larger of two natural steps that an abstract slider provides
-    // and typically corresponds to the user pressing PageUp or PageDown.
-    slider->setPageStep(20);
-    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changedDeltaSlider(int)));
 
     // Create a nice frame to put around the OpenGL widget
     QFrame* f = new QFrame (this);
@@ -56,7 +42,6 @@ CGMainWindow::CGMainWindow (QWidget* parent)
     // Put the GL widget inside the frame
     QHBoxLayout* layout = new QHBoxLayout();
     layout->addWidget(ogl);
-    layout->addWidget(slider);
     layout->setMargin(0);
     f->setLayout(layout);
 
@@ -178,7 +163,7 @@ void CGMainWindow::loadModel() {
     ogl->updateGL();
 }
 
-CGView::CGView (CGMainWindow *mainwindow, QWidget* parent ) : QGLWidget (parent) {
+CGView::CGView (CGMainWindow *mainwindow,QWidget* parent ) : QGLWidget (parent) {
 		main = mainwindow;
 }
 
@@ -360,17 +345,19 @@ int main (int argc, char **argv) {
 		return app.exec();
 }
 
-void CGMainWindow::loadEq(Parametrics& parametrics) {
+void CGMainWindow::loadEq() {
+    Treefoil* treefoil = new Treefoil();
+    Torus* torus = new Torus();
+
     // create points, triangulate and render here ...
-    int delta = 64;
-    int eps = 64;
+    int delta = 200;
+    int eps = 200;
 
     std::vector<QVector3D> pointvec;
 
     for(int i=0; i < delta; i++){
         for(int j=0; j < eps; j++){
-            pointvec.push_back(parametrics.getPoint((float)i/delta, (float)j/eps));
-            pointvec.push_back(parametrics.getNormal((float)i/delta, (float)j/eps));
+            pointvec.push_back(treefoil->getPoint((float)i/delta, (float)j/eps));
         }
     }
 
@@ -396,8 +383,7 @@ void CGMainWindow::loadEq(Parametrics& parametrics) {
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
 
-    //ogl->initTrianglesVBO(ogl->triangles);
-    ogl->initVBO(ogl->triangles);
+    ogl->initTrianglesVBO(ogl->triangles);
 
     QVector3D extent = ogl->max - ogl->min;
     std::cout << "b = [" << ogl->min.x() << "," << ogl->max.x() << "] x [ "
@@ -409,26 +395,6 @@ void CGMainWindow::loadEq(Parametrics& parametrics) {
 
     statusBar()->showMessage ("Loading done.",3000);
     ogl->updateGL();
-}
 
-void CGMainWindow::loadTrefoilParam() {
-    Trefoil * trefoil = new Trefoil();
-    loadEq(*trefoil);
-    delete trefoil;
-}
-
-void CGMainWindow::loadTorusParam() {
-    Torus* torus = new Torus();
-    loadEq(*torus);
-    delete torus;
-}
-
-void CGMainWindow::loadZylinderParam() {
-    Zylinder* zylinder = new Zylinder();
-    loadEq(*zylinder);
-    delete zylinder;
-}
-
-void CGMainWindow::changedDeltaSlider(int value) {
-    // std::cout << value << std::endl;
+    delete treefoil;
 }
