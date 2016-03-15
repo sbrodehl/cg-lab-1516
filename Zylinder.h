@@ -10,17 +10,21 @@ private:
     float R = 5;
     float H = 10;
 
+    double scaled(double x) {
+        return x * 2 * PI;
+    }
+
 public:
     double x(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
+        float theta = (float) scaled(u);
 
-        return R * cos(u_scaled);
+        return R * cos(theta);
     }
 
     double y(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
+        float theta = (float) scaled(u);
 
-        return R * sin(u_scaled);
+        return R * sin(theta);
     }
 
     double z(double u, double v) {
@@ -34,9 +38,10 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        QVector3D first((float) (-1.0f * R * sin(u_scaled)),
-                        (float) (R * cos(u_scaled)),
+        float theta = (float) scaled(u);
+
+        QVector3D first((float) (-1.0f * R * sin(theta)),
+                        (float) (R * cos(theta)),
                         (float) (0.0));
         QVector3D second((float) (0.0),
                          (float) (0.0),
