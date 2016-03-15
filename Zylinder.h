@@ -1,11 +1,9 @@
-
-#ifndef CG_LAB_1516_TORUS_H
-#define CG_LAB_1516_TORUS_H
-
+#ifndef CG_LAB_1516_ZYLINDER_H
+#define CG_LAB_1516_ZYLINDER_H
 
 #include "Parametrics.h"
 
-class Torus : public Parametrics {
+class Zylinder : public Parametrics {
 
 private:
     // hard coded main circle radius R and sub circle radius r
@@ -17,21 +15,21 @@ public:
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (R + r*cos(v_scaled))*cos(u_scaled);
+        return 0.0;
     }
 
     double y(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (R + r*cos(v_scaled))*sin(u_scaled);
+        return 0.0;
     }
 
     double z(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return r*sin(v_scaled);
+        return 0.0;
     }
 
     QVector3D getPoint(double u, double v) {
@@ -44,9 +42,9 @@ public:
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return QVector3D((float)((R+r*cos(v_scaled))*r*cos(u_scaled)*cos(v_scaled)),
-                         (float)((R+r*cos(v_scaled))*r*sin(u_scaled)*cos(v_scaled)),
-                         (float)((R+r*cos(v_scaled))*r*sin(v_scaled)));
+        return QVector3D((float)(0.0),
+                         (float)(0.0),
+                         (float)(0.0));
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {
@@ -55,4 +53,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_TORUS_H
+#endif //CG_LAB_1516_ZYLINDER_H

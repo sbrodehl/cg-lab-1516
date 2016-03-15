@@ -10,6 +10,7 @@
 #include "StlReader.h"
 #include "Trefoil.h"
 #include "Torus.h"
+#include "Zylinder.h"
 
 #include <fstream>
 
@@ -29,6 +30,7 @@ CGMainWindow::CGMainWindow (QWidget* parent)
     QMenu *view = new QMenu("&Parametrics",this);
     view->addAction ("Torus", this, SLOT(loadTorusParam()));
     view->addAction ("Trefoil Knot", this, SLOT(loadTrefoilParam()));
+    view->addAction ("Zylinder", this, SLOT(loadZylinderParam()));
     menuBar()->addMenu(view);
 
     QSlider *slider = new QSlider(Qt::Vertical, this);
@@ -419,6 +421,12 @@ void CGMainWindow::loadTorusParam() {
     Torus* torus = new Torus();
     loadEq(*torus);
     delete torus;
+}
+
+void CGMainWindow::loadZylinderParam() {
+    Zylinder* zylinder = new Zylinder();
+    loadEq(*zylinder);
+    delete zylinder;
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {

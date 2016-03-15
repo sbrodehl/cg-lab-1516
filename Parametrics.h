@@ -3,6 +3,7 @@
 #define CG_LAB_1516_PARAMETRICS_H
 
 #include <QVector3D>
+#include <QPair>
 #include <cmath>
 
 class Parametrics {
@@ -18,6 +19,8 @@ public:
     virtual QVector3D getPoint(double u, double v) = 0;
 
     virtual QVector3D getNormal(double u, double v) = 0;
+
+    virtual std::vector<QPair<QVector3D, QVector3D> > getSegments() = 0;
 };
 
 
