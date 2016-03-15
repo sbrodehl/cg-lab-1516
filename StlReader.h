@@ -31,6 +31,7 @@ public slots:
     void loadModel();
     void loadTorusParam();
     void loadTrefoilParam();
+    void changedDeltaSlider(int);
 
 protected:
     void loadEq(Parametrics&);

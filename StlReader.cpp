@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QHBoxLayout>
+#include <QSlider>
 
 #include "StlReader.h"
 #include "Trefoil.h"
@@ -30,6 +31,18 @@ CGMainWindow::CGMainWindow (QWidget* parent)
     view->addAction ("Trefoil Knot", this, SLOT(loadTrefoilParam()));
     menuBar()->addMenu(view);
 
+    QSlider *slider = new QSlider(Qt::Vertical, this);
+    slider->setMinimum(0);
+    slider->setMaximum(100);
+    slider->setSliderPosition(50);
+    // The smaller of two natural steps that an abstract sliders provides
+    // and typically corresponds to the user pressing an arrow key.
+    slider->setSingleStep(5);
+    // The larger of two natural steps that an abstract slider provides
+    // and typically corresponds to the user pressing PageUp or PageDown.
+    slider->setPageStep(20);
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changedDeltaSlider(int)));
+
     // Create a nice frame to put around the OpenGL widget
     QFrame* f = new QFrame (this);
     f->setFrameStyle(QFrame::Sunken | QFrame::Panel);
@@ -41,6 +54,7 @@ CGMainWindow::CGMainWindow (QWidget* parent)
     // Put the GL widget inside the frame
     QHBoxLayout* layout = new QHBoxLayout();
     layout->addWidget(ogl);
+    layout->addWidget(slider);
     layout->setMargin(0);
     f->setLayout(layout);
 
@@ -162,7 +176,7 @@ void CGMainWindow::loadModel() {
     ogl->updateGL();
 }
 
-CGView::CGView (CGMainWindow *mainwindow,QWidget* parent ) : QGLWidget (parent) {
+CGView::CGView (CGMainWindow *mainwindow, QWidget* parent ) : QGLWidget (parent) {
 		main = mainwindow;
 }
 
@@ -405,4 +419,8 @@ void CGMainWindow::loadTorusParam() {
     Torus* torus = new Torus();
     loadEq(*torus);
     delete torus;
+}
+
+void CGMainWindow::changedDeltaSlider(int value) {
+    // std::cout << value << std::endl;
 }
