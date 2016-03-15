@@ -7,29 +7,24 @@ class Zylinder : public Parametrics {
 
 private:
     // hard coded main circle radius R and sub circle radius r
-    float R = 10;
-    float r = 1;
+    float R = 5;
+    float H = 10;
 
 public:
     double x(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
 
-        return 0.0;
+        return R * cos(u_scaled);
     }
 
     double y(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
 
-        return 0.0;
+        return R * sin(u_scaled);
     }
 
     double z(double u, double v) {
-        float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
-
-        return 0.0;
+        return H * v;
     }
 
     QVector3D getPoint(double u, double v) {
@@ -40,11 +35,17 @@ public:
 
     QVector3D getNormal(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
-        float v_scaled = (float) (v * 2 * PI);
+        QVector3D first((float) (-1.0f * R * sin(u_scaled)),
+                        (float) (R * cos(u_scaled)),
+                        (float) (0.0));
+        QVector3D second((float) (0.0),
+                         (float) (0.0),
+                         (H));
 
-        return QVector3D((float)(0.0),
-                         (float)(0.0),
-                         (float)(0.0));
+        QVector3D n = QVector3D::crossProduct(first, second);
+        n.normalize();
+
+        return n;
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {
