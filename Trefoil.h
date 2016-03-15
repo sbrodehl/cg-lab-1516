@@ -5,32 +5,47 @@
 
 #include "Parametrics.h"
 
+/*
+ * See http://www.openprocessing.org/sketch/8105
+
+float x = 2.0f*sin(3.0f*u) / (2+cos(v));
+float del1 = (2.0f*(sin(u) + 2*sin(2.0f*u)));
+float del2 = 2.0f+cos(v+2.0f*PI/3.0);
+float y = del1 / del2;
+float z = (cos(u) - 2.0f*cos(2.0f*u)) * (2.0f+cos(v)) * (2.0f+cos(v+2.0f*PI/3.0f)) / 4.0f;
+
+*/
+
 class Trefoil : public Parametrics {
 
 private:
     // hard coded sub circle radius r
-    float r = 0.5;
+    float a = 2.0f;
+    float b = 2.0f;
+    float d = 10.0f;
+    float q = 3.0f;
+    float p = 2.0f;
 
 public:
     double x(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (3+cos(3*u_scaled))*cos(2*u_scaled) + r*cos(v_scaled)*cos(2*u_scaled);
+        return ((a * sin(q * u_scaled) + d) * sin(p * u_scaled) ) + b * sin(p * u_scaled + v_scaled);
     }
 
     double y(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return (3+cos(3*u_scaled))*sin(2*u_scaled) + r*cos(v_scaled)*sin(2*u_scaled);
+        return ((a * sin(q * u_scaled) + d) * cos(p * u_scaled) ) + b * cos(p * u_scaled + v_scaled);
     }
 
     double z(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
         float v_scaled = (float) (v * 2 * PI);
 
-        return sin(3*u_scaled) + r*sin(v_scaled);
+        return a * cos(q * u_scaled) + b * cos (q * u_scaled + v_scaled);
     }
 
     QVector3D getPoint(double u, double v) {
@@ -44,7 +59,6 @@ public:
                          0,
                          0);
     }
-
 };
 
 #endif //CG_LAB_1516_TREFOIL_H

@@ -346,8 +346,8 @@ int main (int argc, char **argv) {
 
 void CGMainWindow::loadEq(Parametrics& parametrics) {
     // create points, triangulate and render here ...
-    int delta = 20;
-    int eps = 20;
+    int delta = 64;
+    int eps = 64;
 
     std::vector<QVector3D> pointvec;
 
