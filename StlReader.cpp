@@ -14,6 +14,7 @@
 #include "Kegel.h"
 #include "Volume.h"
 #include "Volume_Zylinder.h"
+#include "Volume_Kegel.h"
 
 #include <fstream>
 
@@ -32,7 +33,7 @@ CGMainWindow::CGMainWindow(QWidget *parent)
 
     QMenu *view = new QMenu("&Parametrics", this);
     view->addAction("Torus", this, SLOT(loadTorusParam()));
-    view->addAction("Trefoil Knot", this, SLOT(loadTrefoilParam()));
+    view->addAction("Kegel", this, SLOT(loadKegelParam()));
     view->addAction("Zylinder", this, SLOT(loadZylinderParam()));
     menuBar()->addMenu(view);
 
@@ -429,6 +430,12 @@ void CGMainWindow::loadZylinderParam() {
     Volume_Zylinder *zylinder = new Volume_Zylinder();
     loadEq(*zylinder);
     delete zylinder;
+}
+
+void CGMainWindow::loadKegelParam() {
+    Volume_Kegel *kegel = new Volume_Kegel();
+    loadEq(*kegel);
+    delete kegel;
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {

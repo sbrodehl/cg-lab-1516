@@ -11,10 +11,16 @@ class Kegel : public Parametrics {
 
 private:
     // hard coded main circle radius R and height H
-    float R = 5;
-    float H = 10;
+    float R = 0;
+    float H = 0;
 
 public:
+
+    Kegel(float R_in, float H_in) {
+        R = R_in;
+        H = H_in;
+    }
+
     double x(double u, double v) {
         float u_scaled = (float) (u * 2 * PI);
 
@@ -56,8 +62,17 @@ public:
         return std::vector<QPair<QVector3D, QVector3D> >();
     }
 
-    std::vector<QVector3D> triangulate(double delta, double eps){
-        return std::vector<QVector3D>();
+    std::vector<QVector3D> triangulate(double delta, double eps) {
+        std::vector<QVector3D> pointvec;
+
+        for (int i = 0; i <= delta; i++) {
+            for (int j = 0; j <= eps; j++) {
+                pointvec.push_back(getPoint((float) i / delta, (float) j / eps));
+                pointvec.push_back(getNormal((float) i / delta, (float) j / eps));
+            }
+        }
+
+        return createTriangles(pointvec, delta + 1);
     }
 
 };

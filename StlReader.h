@@ -37,6 +37,8 @@ public slots:
 
     void loadZylinderParam();
 
+    void loadKegelParam();
+
     void changedDeltaSlider(int);
 
 protected:

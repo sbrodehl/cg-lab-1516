@@ -46,7 +46,10 @@ set(SOURCE_FILES
         Trefoil.h
         Zylinder.h
         Kegel.h
-        Volume.h Volume_Zylinder.h ClosedCircle.h)
+        Volume.h
+        Volume_Zylinder.h
+        ClosedCircle.h
+        Volume_Kegel.h)
 
 include_directories(.)
 
