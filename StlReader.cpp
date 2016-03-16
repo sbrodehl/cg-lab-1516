@@ -24,6 +24,7 @@ CGMainWindow::CGMainWindow(QWidget *parent)
     // Create a menu
     QMenu *file = new QMenu("&File", this);
     file->addAction("Load STL", this, SLOT(loadModel()));
+    file->addAction("Clear", this, SLOT(clear()));
     file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
 
     menuBar()->addMenu(file);
@@ -444,4 +445,14 @@ void CGMainWindow::loadKegelPart() {
 
 void CGMainWindow::changedDeltaSlider(int value) {
     // std::cout << value << std::endl;
+}
+
+void CGMainWindow::clear() {
+    ogl->qglClearColor(QColor(0,0,0,0));
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_ARRAY_BUFFER);
+    ogl->triangles = std::vector<QVector3D>();
+    ogl->vboTrianglesId = std::vector<GLuint>();
+    ogl->vboTrianglesSize = std::vector<int>();
+    ogl->updateGL();
 }

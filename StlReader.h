@@ -41,6 +41,8 @@ public slots:
 
     void loadKegelPart();
 
+    void clear();
+
     void changedDeltaSlider(int);
 
 protected:
