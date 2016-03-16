@@ -19,7 +19,7 @@ CGMainWindow *w;
 
 CGMainWindow::CGMainWindow(QWidget *parent)
         : QMainWindow(parent) {
-    resize(768, 768);
+    resize(512, 512);
 
     // Create a menu
     QMenu *file = new QMenu("&File", this);
@@ -68,7 +68,9 @@ CGMainWindow::CGMainWindow(QWidget *parent)
     statusBar()->showMessage("Ready", 1000);
 }
 
-CGMainWindow::~CGMainWindow() { }
+CGMainWindow::~CGMainWindow() {
+    delete parametricWindow;
+}
 
 void CGMainWindow::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {
@@ -421,30 +423,38 @@ void CGMainWindow::loadEq(Part &volume) {
 
 void CGMainWindow::loadTrefoilPart() {
     clear();
-    TrefoilPart *trefoil = new TrefoilPart();
-    loadEq(*trefoil);
-    delete trefoil;
+    TrefoilPart *part = new TrefoilPart();
+    loadEq(*part);
+    parametricWindow = new ParametricWindow(*part);
+    parametricWindow->show();
+    delete part;
 }
 
 void CGMainWindow::loadTorusPart() {
     clear();
-    TorusPart *torus = new TorusPart();
-    loadEq(*torus);
-    delete torus;
+    TorusPart *part = new TorusPart();
+    loadEq(*part);
+    parametricWindow = new ParametricWindow(*part);
+    parametricWindow->show();
+    delete part;
 }
 
 void CGMainWindow::loadZylinderPart() {
     clear();
-    CylinderPart *cylinder = new CylinderPart();
-    loadEq(*cylinder);
-    delete cylinder;
+    CylinderPart *part = new CylinderPart();
+    loadEq(*part);
+    parametricWindow = new ParametricWindow(*part);
+    parametricWindow->show();
+    delete part;
 }
 
 void CGMainWindow::loadKegelPart() {
     clear();
-    ConePart *cone = new ConePart();
-    loadEq(*cone);
-    delete cone;
+    ConePart *part = new ConePart();
+    loadEq(*part);
+    parametricWindow = new ParametricWindow(*part);
+    parametricWindow->show();
+    delete part;
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {
@@ -452,7 +462,7 @@ void CGMainWindow::changedDeltaSlider(int value) {
 }
 
 void CGMainWindow::clear() {
-    ogl->qglClearColor(QColor(0,0,0,0));
+    ogl->qglClearColor(QColor(0, 0, 0, 0));
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_ARRAY_BUFFER);
     ogl->triangles = std::vector<QVector3D>();

@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Parametrics.h"
 #include "Part.h"
+#include "ParametricWindow.h"
 
 class CGView;
 
@@ -28,6 +29,8 @@ public:
     ~CGMainWindow();
 
     CGView *ogl;
+
+    ParametricWindow *parametricWindow;
 
 public slots:
 

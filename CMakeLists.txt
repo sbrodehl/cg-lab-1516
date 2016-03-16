@@ -33,14 +33,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-qt5_add_resources(RESOURCES
-        shaders.qrc
-        )
+qt5_add_resources(RESOURCES shaders.qrc)
 
 set(SOURCE_FILES
         drawing.cpp
         StlReader.cpp
         StlReader.h
+        ParametricWindow.cpp
+        ParametricWindow.h
         Parametrics.h
         parametrics/Torus.h
         parametrics/Trefoil.h
@@ -67,5 +67,4 @@ target_link_libraries(cg_lab_1516
         Qt5::Widgets
         Qt5::Gui
         Qt5::OpenGL
-        ${OPENGL_LIBRARY}
-        )
+        ${OPENGL_LIBRARY})

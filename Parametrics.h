@@ -29,7 +29,7 @@ public:
         std::vector<QVector3D> triangles;
         size_t s = points.size();
 
-        for (size_t i = 0; i < s - (2*bucketsize); i += 2 * bucketsize) {
+        for (size_t i = 0; i < s - (2 * bucketsize); i += 2 * bucketsize) {
             for (size_t l = 0; l < 2 * bucketsize - 2; l += 2) {
                 size_t leftRoot = i + l;
                 size_t rightRoot = i + l + 2 * bucketsize;
