@@ -55,7 +55,8 @@ set(SOURCE_FILES
         parts/TorusPart.h
         parts/TrefoilPart.h
         UserInteractions.cpp
-        )
+        ParamRenderArea.cpp
+        ParamRenderArea.h)
 
 include_directories(.)
 include_directories(parametrics)

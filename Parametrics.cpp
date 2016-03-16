@@ -1,5 +1,4 @@
 #include "Parametrics.h"
-#include "ParametricWindow.h"
 
 std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D> &points, int bucketsize) {
     std::vector<QVector3D> triangles;

@@ -6,6 +6,7 @@
 class Parametrics;
 
 class ParametricWindow : public QMainWindow {
+Q_OBJECT
 
 public:
     ParametricWindow(QWidget *parent = 0);
