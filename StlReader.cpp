@@ -420,24 +420,28 @@ void CGMainWindow::loadEq(Part &volume) {
 }
 
 void CGMainWindow::loadTrefoilPart() {
+    clear();
     TrefoilPart *trefoil = new TrefoilPart();
     loadEq(*trefoil);
     delete trefoil;
 }
 
 void CGMainWindow::loadTorusPart() {
+    clear();
     TorusPart *torus = new TorusPart();
     loadEq(*torus);
     delete torus;
 }
 
 void CGMainWindow::loadZylinderPart() {
+    clear();
     CylinderPart *cylinder = new CylinderPart();
     loadEq(*cylinder);
     delete cylinder;
 }
 
 void CGMainWindow::loadKegelPart() {
+    clear();
     ConePart *cone = new ConePart();
     loadEq(*cone);
     delete cone;
