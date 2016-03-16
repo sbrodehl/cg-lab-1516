@@ -1,39 +1,42 @@
-#ifndef CG_LAB_1516_TORUS_H
-#define CG_LAB_1516_TORUS_H
-
+#ifndef CG_LAB_1516_DISC_H
+#define CG_LAB_1516_DISC_H
 
 #include "Parametrics.h"
 
-class Torus : public Parametrics {
+class Disc : public Parametrics {
+
+
 
 private:
-    // hard coded main circle radius R and sub circle radius r
-    float R = 10;
-    float r = 1;
+    // hard coded circle radius R and position H
+    float R = 0;
+    float H = 0;
 
     double scaled(double x) {
         return x * 2 * PI;
     }
 
 public:
+
+    Disc(float R_in, float H_in) {
+        R = R_in;
+        H = H_in;
+    }
+
     double x(double u, double v) {
         float theta = (float) scaled(u);
-        float phi = (float) scaled(v);
 
-        return (R + r * cos(phi)) * cos(theta);
+        return R * cos(theta) * v;
     }
 
     double y(double u, double v) {
         float theta = (float) scaled(u);
-        float phi = (float) scaled(v);
 
-        return (R + r * cos(phi)) * sin(theta);
+        return R * sin(theta) * v;
     }
 
     double z(double u, double v) {
-        float phi = (float) scaled(v);
-
-        return r * sin(phi);
+        return H;
     }
 
     QVector3D getPoint(double u, double v) {
@@ -43,12 +46,11 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        float theta = (float) scaled(u);
-        float phi = (float) scaled(v);
 
-        return QVector3D((float) ((R + r * cos(phi)) * r * cos(theta) * cos(phi)),
-                         (float) ((R + r * cos(phi)) * r * sin(theta) * cos(phi)),
-                         (float) ((R + r * cos(phi)) * r * sin(phi)));
+        QVector3D n = QVector3D(0, 0, 1);
+        n.normalize();
+
+        return n;
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {
@@ -70,4 +72,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_TORUS_H
+#endif //CG_LAB_1516_DISC_H

@@ -1,13 +1,9 @@
-//
-// Created by clamber on 15.03.2016.
-//
-
 #ifndef CG_LAB_1516_KEGEL_H
 #define CG_LAB_1516_KEGEL_H
 
 #include "Parametrics.h"
 
-class Kegel : public Parametrics {
+class Cone : public Parametrics {
 
 private:
     // hard coded main circle radius R and height H
@@ -16,7 +12,7 @@ private:
 
 public:
 
-    Kegel(float R_in, float H_in) {
+    Cone(float R_in, float H_in) {
         R = R_in;
         H = H_in;
     }

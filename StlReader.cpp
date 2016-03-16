@@ -8,13 +8,10 @@
 #include <QSlider>
 
 #include "StlReader.h"
-#include "Trefoil.h"
-#include "Torus.h"
-#include "Zylinder.h"
-#include "Kegel.h"
-#include "Volume.h"
-#include "Volume_Zylinder.h"
-#include "Volume_Kegel.h"
+#include "CylinderPart.h"
+#include "ConePart.h"
+#include "TorusPart.h"
+#include "TrefoilPart.h"
 
 #include <fstream>
 
@@ -32,9 +29,10 @@ CGMainWindow::CGMainWindow(QWidget *parent)
     menuBar()->addMenu(file);
 
     QMenu *view = new QMenu("&Parametrics", this);
-    view->addAction("Torus", this, SLOT(loadTorusParam()));
-    view->addAction("Kegel", this, SLOT(loadKegelParam()));
-    view->addAction("Zylinder", this, SLOT(loadZylinderParam()));
+    view->addAction("Torus", this, SLOT(loadTorusPart()));
+    view->addAction("Trefoil", this, SLOT(loadTrefoilPart()));
+    view->addAction("Kegel", this, SLOT(loadKegelPart()));
+    view->addAction("Tube", this, SLOT(loadZylinderPart()));
     menuBar()->addMenu(view);
 
     QSlider *slider = new QSlider(Qt::Vertical, this);
@@ -378,7 +376,7 @@ int main(int argc, char **argv) {
     return app.exec();
 }
 
-void CGMainWindow::loadEq(Volume &volume) {
+void CGMainWindow::loadEq(Part &volume) {
     // create points, triangulate and render here ...
     int delta = 64;
     int eps = 64;
@@ -420,22 +418,28 @@ void CGMainWindow::loadEq(Volume &volume) {
     ogl->updateGL();
 }
 
-void CGMainWindow::loadTorusParam() {
-    Torus *torus = new Torus();
-    // loadEq(*torus);
+void CGMainWindow::loadTrefoilPart() {
+    TrefoilPart *trefoil = new TrefoilPart();
+    loadEq(*trefoil);
+    delete trefoil;
+}
+
+void CGMainWindow::loadTorusPart() {
+    TorusPart *torus = new TorusPart();
+    loadEq(*torus);
     delete torus;
 }
 
-void CGMainWindow::loadZylinderParam() {
-    Volume_Zylinder *zylinder = new Volume_Zylinder();
-    loadEq(*zylinder);
-    delete zylinder;
+void CGMainWindow::loadZylinderPart() {
+    CylinderPart *cylinder = new CylinderPart();
+    loadEq(*cylinder);
+    delete cylinder;
 }
 
-void CGMainWindow::loadKegelParam() {
-    Volume_Kegel *kegel = new Volume_Kegel();
-    loadEq(*kegel);
-    delete kegel;
+void CGMainWindow::loadKegelPart() {
+    ConePart *cone = new ConePart();
+    loadEq(*cone);
+    delete cone;
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {

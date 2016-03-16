@@ -42,16 +42,20 @@ set(SOURCE_FILES
         StlReader.cpp
         StlReader.h
         Parametrics.h
-        Torus.h
-        Trefoil.h
-        Zylinder.h
-        Kegel.h
-        Volume.h
-        Volume_Zylinder.h
-        ClosedCircle.h
-        Volume_Kegel.h)
+        parametrics/Torus.h
+        parametrics/Trefoil.h
+        parametrics/Tube.h
+        parametrics/Cone.h
+        parametrics/Disc.h
+        Part.h
+        parts/CylinderPart.h
+        parts/ConePart.h
+        parts/TorusPart.h
+        parts/TrefoilPart.h)
 
 include_directories(.)
+include_directories(parametrics)
+include_directories(parts)
 
 add_executable(cg_lab_1516
         ${SOURCE_FILES}

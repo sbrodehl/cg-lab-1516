@@ -15,7 +15,7 @@
 #include <vector>
 #include <iostream>
 #include "Parametrics.h"
-#include "Volume.h"
+#include "Part.h"
 
 class CGView;
 
@@ -33,16 +33,18 @@ public slots:
 
     void loadModel();
 
-    void loadTorusParam();
+    void loadTorusPart();
 
-    void loadZylinderParam();
+    void loadTrefoilPart();
 
-    void loadKegelParam();
+    void loadZylinderPart();
+
+    void loadKegelPart();
 
     void changedDeltaSlider(int);
 
 protected:
-    void loadEq(Volume &);
+    void loadEq(Part &);
 
     void keyPressEvent(QKeyEvent *);
 };

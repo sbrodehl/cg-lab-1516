@@ -1,9 +1,9 @@
-#ifndef CG_LAB_1516_ZYLINDER_H
-#define CG_LAB_1516_ZYLINDER_H
+#ifndef CG_LAB_1516_TUBE_H
+#define CG_LAB_1516_TUBE_H
 
 #include "Parametrics.h"
 
-class Zylinder : public Parametrics {
+class Tube : public Parametrics {
 
 private:
     // hard coded main circle radius R and sub circle radius r
@@ -16,7 +16,7 @@ private:
 
 public:
 
-    Zylinder(float R_in, float H_in) {
+    Tube(float R_in, float H_in) {
         R = R_in;
         H = H_in;
     }
@@ -78,4 +78,4 @@ public:
 
 };
 
-#endif //CG_LAB_1516_ZYLINDER_H
+#endif //CG_LAB_1516_TUBE_H

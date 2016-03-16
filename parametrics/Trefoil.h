@@ -26,14 +26,30 @@ private:
     float a = 5.0f;
     float b = 2.0f;
     float d = 10.0f;
-    float q = 3.0f;
     float p = 2.0f;
+    float q = 3.0f;
 
     double scaled(double x) {
         return x * 2 * PI;
     }
 
 public:
+
+    Trefoil() : Trefoil(5, 2, 10, 2, 3) {
+    }
+
+    Trefoil(float a_, float b_, float d_, float p_, float q_) {
+        a = a_;
+        b = b_;
+        d = d_;
+        p = p_;
+        q = q_;
+    }
+
+    ~Trefoil() {
+
+    }
+
     double x(double u, double v) {
         float theta = (float) scaled(u);
         float phi = (float) scaled(v);
