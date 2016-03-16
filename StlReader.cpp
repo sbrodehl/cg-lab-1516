@@ -468,5 +468,9 @@ void CGMainWindow::clear() {
     ogl->triangles = std::vector<QVector3D>();
     ogl->vboTrianglesId = std::vector<GLuint>();
     ogl->vboTrianglesSize = std::vector<int>();
+    qreal inf = std::numeric_limits<qreal>::infinity();
+    ogl->min = QVector3D(inf, inf, inf);
+    ogl->max = QVector3D(-inf, -inf, -inf);
+    ogl->center = QVector3D(0, 0, 0);
     ogl->updateGL();
 }
