@@ -17,12 +17,15 @@ class Parametrics {
 private:
 
     QString name;
+    QString description;
     QUuid uid = QUuid::createUuid();
 
 public:
 
     const double PI = std::atan(1.0) * 4;
 
+    void setDescription(QString description_) { description = description_; };
+    QString getDescription() { return description; };
 
     void setName(QString name_) { name = name_; };
     QString getName() { return name; };
