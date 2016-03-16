@@ -10,9 +10,9 @@ class CylinderPart : public Part {
 public:
 
     CylinderPart() {
-        parametrics.push_back(new Tube(5, 10));
-        parametrics.push_back(new Disc(5, 10));
-        parametrics.push_back(new Disc(5, 0));
+        parametrics.push_back(std::shared_ptr<Parametrics>(new Tube(5, 10)));
+        parametrics.push_back(std::shared_ptr<Parametrics>(new Disc(5, 10)));
+        parametrics.push_back(std::shared_ptr<Parametrics>(new Disc(5, 0)));
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {

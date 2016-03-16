@@ -21,15 +21,14 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
 
     // Create a menu
     QMenu *file = new QMenu("&File", this);
-    file->addAction("Clear", this, SLOT(clear()));
     file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
     menuBar()->addMenu(file);
 
     QMenu *view = new QMenu("&Parametrics", this);
     view->addAction("Torus", this, SLOT(loadTorusPart()));
     view->addAction("Trefoil", this, SLOT(loadTrefoilPart()));
-    view->addAction("Kegel", this, SLOT(loadKegelPart()));
-    view->addAction("Tube", this, SLOT(loadZylinderPart()));
+    view->addAction("Cone", this, SLOT(loadKegelPart()));
+    view->addAction("Cylinder", this, SLOT(loadZylinderPart()));
     menuBar()->addMenu(view);
 
     QSlider *slider = new QSlider(Qt::Vertical, this);
@@ -60,9 +59,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     statusBar()->showMessage("Ready", 1000);
 }
 
-CGMainWindow::~CGMainWindow() {
-    delete parametricWindow;
-}
+CGMainWindow::~CGMainWindow() {}
 
 CGView::CGView(CGMainWindow *mainwindow, QWidget *parent) : QGLWidget(parent) {
     main = mainwindow;
@@ -82,11 +79,11 @@ int main(int argc, char **argv) {
     return app.exec();
 }
 
-void CGMainWindow::loadEq(Part &volume) {
+void CGMainWindow::loadEq(Part &part) {
     int delta = 64;
     int eps = 64;
 
-    ogl->triangles = volume.triangulate(delta, eps);
+    ogl->triangles = part.triangulate(delta, eps);
 
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
@@ -113,44 +110,42 @@ void CGMainWindow::loadEq(Part &volume) {
     ogl->zoom = 1.5 / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
 
+    part.showParamWindows(this);
+
     statusBar()->showMessage("Loading done.", 3000);
     ogl->updateGL();
 }
 
 void CGMainWindow::loadTrefoilPart() {
     ogl->clearGL();
-    TrefoilPart *part = new TrefoilPart();
-    loadEq(*part);
-    parametricWindow = new ParametricWindow(*part);
-    parametricWindow->show();
-    delete part;
+    if (viewPart != nullptr)
+        viewPart->destroyWindows();
+    viewPart = new TrefoilPart();
+    loadEq(*viewPart);
 }
 
 void CGMainWindow::loadTorusPart() {
     ogl->clearGL();
-    TorusPart *part = new TorusPart();
-    loadEq(*part);
-    parametricWindow = new ParametricWindow(*part);
-    parametricWindow->show();
-    delete part;
+    if (viewPart != nullptr)
+        viewPart->destroyWindows();
+    viewPart = new TorusPart();
+    loadEq(*viewPart);
 }
 
 void CGMainWindow::loadZylinderPart() {
     ogl->clearGL();
-    CylinderPart *part = new CylinderPart();
-    loadEq(*part);
-    parametricWindow = new ParametricWindow(*part);
-    parametricWindow->show();
-    delete part;
+    if (viewPart != nullptr)
+        viewPart->destroyWindows();
+    viewPart = new CylinderPart();
+    loadEq(*viewPart);
 }
 
 void CGMainWindow::loadKegelPart() {
     ogl->clearGL();
-    ConePart *part = new ConePart();
-    loadEq(*part);
-    parametricWindow = new ParametricWindow(*part);
-    parametricWindow->show();
-    delete part;
+    if (viewPart != nullptr)
+        viewPart->destroyWindows();
+    viewPart = new ConePart();
+    loadEq(*viewPart);
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {

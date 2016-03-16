@@ -29,8 +29,7 @@ public:
     ~CGMainWindow();
 
     CGView *ogl;
-
-    ParametricWindow *parametricWindow;
+    Part *viewPart = nullptr;
 
 public slots:
 

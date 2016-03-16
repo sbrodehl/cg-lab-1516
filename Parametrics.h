@@ -4,6 +4,9 @@
 #include <QVector3D>
 #include <QPair>
 #include <cmath>
+#include <memory>
+
+#include "ParametricWindow.h"
 
 class Parametrics {
 
@@ -60,6 +63,11 @@ public:
         }
 
         return triangles;
+    }
+
+    ParametricWindow* createWindow(QWidget* parent) {
+        ParametricWindow* pw = new ParametricWindow(parent);
+        return pw;
     }
 
 };

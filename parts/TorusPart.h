@@ -9,7 +9,7 @@ class TorusPart : public Part {
 public:
 
     TorusPart() {
-        parametrics.push_back(new Torus(10, 1));
+        parametrics.push_back(std::shared_ptr<Parametrics>(new Torus(10, 1)));
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {

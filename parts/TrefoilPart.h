@@ -9,7 +9,7 @@ class TrefoilPart : public Part {
 public:
 
     TrefoilPart() {
-        parametrics.push_back(new Trefoil());
+        parametrics.push_back(std::shared_ptr<Parametrics>(new Trefoil()));
     }
 
     std::vector<QPair<QVector3D, QVector3D> > getSegments() {
