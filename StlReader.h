@@ -14,8 +14,9 @@
 
 #include <vector>
 #include <iostream>
-#include "Parametrics.h"
+
 #include "Part.h"
+#include "Parametrics.h"
 #include "ParametricWindow.h"
 
 class CGView;

@@ -51,7 +51,8 @@ set(SOURCE_FILES
         parts/CylinderPart.h
         parts/ConePart.h
         parts/TorusPart.h
-        parts/TrefoilPart.h UserInteractions.cpp)
+        parts/TrefoilPart.h
+        UserInteractions.cpp Parametrics.cpp)
 
 include_directories(.)
 include_directories(parametrics)
