@@ -42,3 +42,67 @@ ParametricWindow *Parametrics::createWindow(QWidget *parent) {
     pw->initParams(this);
     return pw;
 }
+
+void Parametrics::initializeParameterSpace(double delta, double eps) {
+    std::vector<ParameterTriangle *> lowerTriangleLineOld;
+
+    for (int j = 0; j < eps; j++) {
+        ParameterTriangle *leftBound = 0;
+        std::vector<ParameterTriangle *> lowerTriangleLineNew;
+
+        for (int i = 0; i < delta; i++) {
+            QVector2D a = QVector2D(i / delta, j / eps);
+            QVector2D b = QVector2D((i + 1) / delta, j / eps);
+            QVector2D c = QVector2D((i + 1) / delta, (j + 1) / eps);
+            QVector2D d = QVector2D(i / delta, (j + 1) / eps);
+
+            ParameterTriangle *abc = new ParameterTriangle(a, b, c);
+            ParameterTriangle *acd = new ParameterTriangle(a, c, d);
+
+            abc->setNeighbor(2, acd);
+            acd->setNeighbor(0, abc);
+
+            if (leftBound != 0) {
+                acd->setNeighbor(2, leftBound);
+                leftBound->setNeighbor(1, acd);
+            }
+            lowerTriangleLineNew.push_back(acd);
+
+            if (j > 0) {
+                abc->setNeighbor(0, lowerTriangleLineOld[i]);
+                lowerTriangleLineOld[i]->setNeighbor(1, abc);
+            }
+
+            leftBound = abc;
+
+            parameterSpace.push_back(abc);
+            parameterSpace.push_back(acd);
+        }
+
+        lowerTriangleLineOld = lowerTriangleLineNew;
+    }
+}
+
+bool Parametrics::leftTurn(QVector2D a, QVector2D b, QVector2D c) {
+    double ux = b.x() - a.x();
+    double uy = b.y() - a.y();
+    double vx = c.x() - a.x();
+    double vy = c.y() - a.y();
+    return (ux * vy - uy * vx >= 0 || abs(ux * vy - uy * vx) < pow(10, -10));
+}
+
+ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D point) {
+    bool exit = true;
+    int id = 0;
+    for (int i = 0; i < 3; i++) {
+        QPair<QVector2D, QVector2D> segment = actual.getSegment(i);
+        if (!leftTurn(segment.first, segment.second, point)) {
+            exit = false;
+            id = i;
+        }
+    }
+    if (exit) {
+        return actual;
+    }
+    return locatePoint(*actual.getNeighbor(id), point);
+}

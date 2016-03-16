@@ -9,7 +9,8 @@
 #include <cmath>
 #include <memory>
 
-class ParametricWindow;
+#include "ParametricWindow.h"
+#include "ParameterTriangle.h"
 
 class Parametrics {
 
@@ -22,10 +23,14 @@ public:
 
     const double PI = std::atan(1.0) * 4;
 
+
     void setName(QString name_) { name = name_; };
     QString getName() { return name; };
 
     QUuid getUID() { return uid; };
+
+    std::vector<ParameterTriangle*> parameterSpace;
+
 
     virtual double x(double u, double v) = 0;
 
@@ -41,9 +46,15 @@ public:
 
     virtual std::vector<QPair<QVector3D, QVector3D> > getSegments() = 0;
 
-    std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &points, int bucketsize);
+    void initializeParameterSpace(double delta, double eps);
 
-    ParametricWindow* createWindow(QWidget* parent);
+    bool leftTurn(QVector2D a, QVector2D b, QVector2D c);
+
+    ParameterTriangle locatePoint(ParameterTriangle actual, QVector2D point);
+
+    virtual std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &points, int bucketsize);
+
+    virtual ParametricWindow* createWindow(QWidget* parent);
 
 };
 
