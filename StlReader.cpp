@@ -472,5 +472,7 @@ void CGMainWindow::clear() {
     ogl->min = QVector3D(inf, inf, inf);
     ogl->max = QVector3D(-inf, -inf, -inf);
     ogl->center = QVector3D(0, 0, 0);
+    ogl->phi = 0.0f;
+    ogl->theta = 0.0f;
     ogl->updateGL();
 }
