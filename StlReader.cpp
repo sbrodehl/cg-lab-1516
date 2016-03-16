@@ -66,7 +66,47 @@ CGView::CGView(CGMainWindow *mainwindow, QWidget *parent) : QGLWidget(parent) {
 }
 
 int main(int argc, char **argv) {
-    QApplication app(argc, argv);
+    Torus p = Torus();
+    p.initializeParameterSpace(10, 10);
+    std::cout << p.parameterSpace.size() << std::endl;
+    ParameterTriangle t2 = *(p.parameterSpace[26]);
+
+    std::cout << "(" << t2.getPoint(0).x() << "," << t2.getPoint(0).y() << ")" << " " << "(" <<
+    t2.getPoint(1).x() <<
+    "," << t2.getPoint(1).y() << ")" << " " << "(" << t2.getPoint(2).x() << "," << t2.getPoint(2).y() << ")" <<
+    std::endl;
+
+    for (int i=0;i<3;i++) {
+        ParameterTriangle* tp = p.parameterSpace[26]->getNeighbor(i);
+        if (tp != 0){
+            ParameterTriangle t = *tp;
+            std::cout << i << " -> (" << t.getPoint(0).x() << "," << t.getPoint(0).y() << ")" << " " << "(" <<
+            t.getPoint(1).x() <<
+            "," << t.getPoint(1).y() << ")" << " " << "(" << t.getPoint(2).x() << "," << t.getPoint(2).y() << ")" <<
+            std::endl;
+        }
+    }
+
+    t2 = *(p.parameterSpace[29]);
+
+    std::cout << "(" << t2.getPoint(0).x() << "," << t2.getPoint(0).y() << ")" << " " << "(" <<
+    t2.getPoint(1).x() <<
+    "," << t2.getPoint(1).y() << ")" << " " << "(" << t2.getPoint(2).x() << "," << t2.getPoint(2).y() << ")" <<
+    std::endl;
+
+    for (int i=0;i<3;i++) {
+        ParameterTriangle* tp = p.parameterSpace[29]->getNeighbor(i);
+        if (tp != 0){
+            ParameterTriangle t = *tp;
+            std::cout << i << " -> (" << t.getPoint(0).x() << "," << t.getPoint(0).y() << ")" << " " << "(" <<
+            t.getPoint(1).x() <<
+            "," << t.getPoint(1).y() << ")" << " " << "(" << t.getPoint(2).x() << "," << t.getPoint(2).y() << ")" <<
+            std::endl;
+        }
+    }
+
+
+     QApplication app(argc, argv);
 
     if (!QGLFormat::hasOpenGL()) {
         qWarning("This system has no OpenGL support. Exiting.");
