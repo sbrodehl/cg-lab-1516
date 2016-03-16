@@ -1,10 +1,6 @@
 #include "ParametricWindow.h"
 
-ParametricWindow::ParametricWindow(QWidget *parent)
-        : QMainWindow(parent) {
-}
-
-ParametricWindow::ParametricWindow(Part &part) {
+ParametricWindow::ParametricWindow(Part &part, QWidget *parent) : QMainWindow(parent) {
     resize(512, 256);
 
 }

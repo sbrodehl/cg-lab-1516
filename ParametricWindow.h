@@ -8,9 +8,7 @@
 class ParametricWindow : public QMainWindow {
 
 public:
-    ParametricWindow(QWidget *parent = 0);
-
-    ParametricWindow(Part &part);
+    ParametricWindow(Part &part, QWidget *parent = 0);
 };
 
 

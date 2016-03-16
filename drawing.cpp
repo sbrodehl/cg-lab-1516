@@ -1,5 +1,87 @@
 #include "StlReader.h"
 
+void CGView::initShaders() {
+    setlocale(LC_NUMERIC, "C");
+    if (!program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshader.glsl"))
+        close();
+    if (!program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshader.glsl"))
+        close();
+    if (!program.link())
+        close();
+    if (!program.bind())
+        close();
+    setlocale(LC_ALL, "");
+}
+
+void CGView::initializeGL() {
+    initializeGLFunctions();
+    initShaders();
+    initSolidCubeVBO();
+    initSolidSphereVBO();
+    initSolidCylinderVBO();
+    glGenBuffers(1, &vboTmpId);
+
+    qglClearColor(Qt::black);
+
+    glEnable(GL_DEPTH_TEST);
+
+    zoom = 1.0;
+    phi = 0.0;
+    theta = 0.0;
+
+    qreal inf = std::numeric_limits<qreal>::infinity();
+    min = QVector3D(inf, inf, inf);
+    max = QVector3D(-inf, -inf, -inf);
+    center = QVector3D(0, 0, 0);
+    pointPicked = false;
+}
+
+void CGView::paintGL() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    modelView.setToIdentity();
+    modelView.rotate(theta, 1.0, 0.0, 0.0);
+    modelView.rotate(phi, 0.0, 1.0, 0.0);
+    modelView.scale(zoom, zoom, zoom);
+    modelView.translate(-center);
+
+    if (pointPicked) {
+        program.setUniformValue("uColor", QVector4D(1.0, 0.0, 0.0, 1.0));
+        drawSolidSphere(pickPoint, 0.01);
+    }
+
+    for (size_t i = 0; i < vboTrianglesId.size(); i++) {
+        program.setUniformValue("uPMat", projection);
+        program.setUniformValue("uMVMat", modelView);
+        program.setUniformValue("uNMat", modelView.normalMatrix());
+        program.setUniformValue("uColor", QVector4D(0.5, 0.5, 0.0, 1.0));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vboTrianglesId[i]);
+        int vertexLocation = program.attributeLocation("a_position");
+        program.enableAttributeArray(vertexLocation);
+        glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), 0);
+        int normalLocation = program.attributeLocation("a_normal");
+        program.enableAttributeArray(normalLocation);
+        glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
+                              (const void *) sizeof(QVector3D));
+
+        glDrawArrays(GL_TRIANGLES, 0, vboTrianglesSize[i]);
+    }
+}
+
+void CGView::resizeGL(int w, int h) {
+    width = w;
+    height = h;
+    glViewport(0, 0, width, height);
+    projection.setToIdentity();
+    if (width > height) {
+        qreal ratio = width / (qreal) height;
+        projection.ortho(-ratio, ratio, -1.0, 1.0, -10.0, 10.0);
+    } else {
+        qreal ratio = height / (qreal) width;
+        projection.ortho(-1.0, 1.0, -ratio, ratio, -10.0, 10.0);
+    }
+}
+
 void CGView::initSolidCubeVBO() {
     std::vector<QVector3D> vertexWithNormal;
     GLuint id;
