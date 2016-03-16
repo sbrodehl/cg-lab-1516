@@ -4,7 +4,8 @@ precision mediump int;
 precision mediump float;
 #endif
 
-uniform vec4 uColor;
+uniform vec4
+uColor;
 varying float vIntensity;
 
 void main() {

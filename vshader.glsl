@@ -4,12 +4,17 @@ precision mediump int;
 precision mediump float;
 #endif
 
-attribute vec3 a_position;
-attribute vec3 a_normal;
+attribute vec3
+a_position;
+attribute vec3
+a_normal;
 
-uniform mat4 uMVMat;
-uniform mat4 uPMat;
-uniform mat3 uNMat;
+uniform mat4
+uMVMat;
+uniform mat4
+uPMat;
+uniform mat3
+uNMat;
 
 varying float vIntensity;
 

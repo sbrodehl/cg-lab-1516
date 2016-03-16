@@ -40,7 +40,7 @@ public:
     }
 
     QVector3D getNormal(double u, double v) {
-        if(v == 0){
+        if (v == 0) {
             return QVector3D(0, 0, -1);
         }
         float u_scaled = (float) (u * 2 * PI);

@@ -9,7 +9,7 @@ class ConePart : public Part {
 
 public:
 
-    ConePart(){
+    ConePart() {
         parametrics.push_back(new Cone(5, 10));
         parametrics.push_back(new Disc(5, 10));
     }

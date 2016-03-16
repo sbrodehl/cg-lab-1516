@@ -9,7 +9,7 @@ class CylinderPart : public Part {
 
 public:
 
-    CylinderPart(){
+    CylinderPart() {
         parametrics.push_back(new Tube(5, 10));
         parametrics.push_back(new Disc(5, 10));
         parametrics.push_back(new Disc(5, 0));

@@ -8,7 +8,7 @@ class TrefoilPart : public Part {
 
 public:
 
-    TrefoilPart(){
+    TrefoilPart() {
         parametrics.push_back(new Trefoil());
     }
 

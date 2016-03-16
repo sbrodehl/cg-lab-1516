@@ -6,7 +6,6 @@
 class Disc : public Parametrics {
 
 
-
 private:
     // hard coded circle radius R and position H
     float R = 0;

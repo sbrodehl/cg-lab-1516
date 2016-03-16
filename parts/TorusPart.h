@@ -8,7 +8,7 @@ class TorusPart : public Part {
 
 public:
 
-    TorusPart(){
+    TorusPart() {
         parametrics.push_back(new Torus(10, 1));
     }
 
