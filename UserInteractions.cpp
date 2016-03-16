@@ -44,8 +44,6 @@ bool CGView::pick(int x, int y, QVector3D &pickPoint) {
     qreal inf = std::numeric_limits<qreal>::infinity();
     qreal dmin = inf;
 
-    std::cout << triangles.size() << std::endl;
-
     for (size_t j = 0; j < triangles.size(); j += 3) {
         const QVector3D &a = triangles[j + 0];
         const QVector3D &b = triangles[j + 1];
@@ -67,9 +65,6 @@ void CGView::mousePressEvent(QMouseEvent *event) {
     oldY = event->y();
 
     pointPicked = pick(oldX, oldY, pickPoint);
-    if (pointPicked)
-        std::cout << "pickPoint = [" << pickPoint.x() << "," << pickPoint.y() << "," << pickPoint.z() << "]" <<
-        std::endl;
 
     update();
 }

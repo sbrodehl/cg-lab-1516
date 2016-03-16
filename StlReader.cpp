@@ -112,7 +112,8 @@ void CGMainWindow::loadEq(Part &part) {
 
     part.showParamWindows(this);
 
-    statusBar()->showMessage("Loading done.", 3000);
+    statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()) + " triangles.");
+
     ogl->updateGL();
 }
 
