@@ -19,6 +19,8 @@ public:
     Tube(float R_in, float H_in) {
         R = R_in;
         H = H_in;
+        std::string classname = typeid(*this).name();
+        setName(QString(classname.c_str()));
     }
 
     double x(double u, double v) {

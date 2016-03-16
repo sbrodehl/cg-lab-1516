@@ -3,6 +3,9 @@
 
 #include <QVector3D>
 #include <QPair>
+#include <QString>
+#include <QUuid>
+
 #include <cmath>
 #include <memory>
 
@@ -10,9 +13,19 @@ class ParametricWindow;
 
 class Parametrics {
 
+private:
+
+    QString name;
+    QUuid uid = QUuid::createUuid();
+
 public:
 
     const double PI = std::atan(1.0) * 4;
+
+    void setName(QString name_) { name = name_; };
+    QString getName() { return name; };
+
+    QUuid getUID() { return uid; };
 
     virtual double x(double u, double v) = 0;
 

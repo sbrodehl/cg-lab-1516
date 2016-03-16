@@ -44,6 +44,8 @@ public:
         d = d_;
         p = p_;
         q = q_;
+        std::string classname = typeid(*this).name();
+        setName(QString(classname.c_str()));
     }
 
     ~Trefoil() {

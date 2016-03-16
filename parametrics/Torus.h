@@ -19,6 +19,8 @@ public:
     Torus(float R_, float r_) {
         R = R_;
         r = r_;
+        std::string classname = typeid(*this).name();
+        setName(QString(classname.c_str()));
     }
 
     Torus() : Torus(10, 1) {
