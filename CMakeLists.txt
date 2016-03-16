@@ -42,6 +42,8 @@ set(SOURCE_FILES
         ParametricWindow.cpp
         ParametricWindow.h
         Parametrics.h
+        Parametrics.cpp
+        parametrics/ParameterTriangle.h
         parametrics/Torus.h
         parametrics/Trefoil.h
         parametrics/Tube.h
@@ -52,7 +54,8 @@ set(SOURCE_FILES
         parts/ConePart.h
         parts/TorusPart.h
         parts/TrefoilPart.h
-        UserInteractions.cpp Parametrics.cpp)
+        UserInteractions.cpp
+        )
 
 include_directories(.)
 include_directories(parametrics)
