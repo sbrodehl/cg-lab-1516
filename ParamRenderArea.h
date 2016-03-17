@@ -12,6 +12,7 @@ public:
 
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
+    QPainterPath getPath();
 
 public slots:
 

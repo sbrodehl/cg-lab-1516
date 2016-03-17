@@ -84,3 +84,7 @@ void ParamRenderArea::mousePressEvent(QMouseEvent *event) {
 QPointF ParamRenderArea::convertPos(QMouseEvent *e) {
     return QPointF(100 * e->x() / width(), 100 * e->y() / height());
 }
+
+QPainterPath ParamRenderArea::getPath() {
+    return path;
+}

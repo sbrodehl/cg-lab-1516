@@ -43,6 +43,7 @@ public slots:
 
 protected:
     void loadEq(Part &);
+    void updateEq();
     void keyPressEvent(QKeyEvent *);
 };
 

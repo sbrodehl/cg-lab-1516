@@ -2,6 +2,7 @@
 #define CG_LAB_1516_PARAMETRICWINDOW_H
 
 #include <QMainWindow>
+#include "ParamRenderArea.h"
 
 class CGMainWindow;
 class Parametrics;
@@ -11,16 +12,15 @@ Q_OBJECT
 
 public:
     ParametricWindow(QWidget *parent = 0);
-
     void initParams(Parametrics *p);
+    ParamRenderArea *getArea() const;
 
 public slots:
 
     void updateTriangulation();
 
 private:
-
-    CGMainWindow *mainWindow;
+    ParamRenderArea *area;
 };
 
 #endif //CG_LAB_1516_PARAMETRICWINDOW_H

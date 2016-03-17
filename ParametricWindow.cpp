@@ -1,6 +1,5 @@
 #include "ParametricWindow.h"
 #include "Parametrics.h"
-#include "ParamRenderArea.h"
 
 #include <QFrame>
 #include <QHBoxLayout>
@@ -10,6 +9,8 @@
 ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
     resize(256, 256);
 
+    area = new ParamRenderArea(QPainterPath(), this);
+
     // Create a nice frame to put around the OpenGL widget
     QFrame *f = new QFrame(this);
     f->setFrameStyle(QFrame::Sunken | QFrame::Panel);
@@ -17,7 +18,7 @@ ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
 
     // Put the GL widget inside the frame
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(new ParamRenderArea(QPainterPath(), this));
+    layout->addWidget(area);
     layout->setMargin(0);
     f->setLayout(layout);
 
@@ -34,4 +35,9 @@ void ParametricWindow::initParams(Parametrics *p) {
 
 void ParametricWindow::updateTriangulation() {
     std::cout << "push it up..." << std::endl;
+}
+
+
+ParamRenderArea *ParametricWindow::getArea() const {
+    return area;
 }

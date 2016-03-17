@@ -21,8 +21,8 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
 
     // Create a menu
     QMenu *file = new QMenu("&File", this);
-    file->addAction("Quit", this, SLOT(updateTriangulation()), Qt::Key_F5);
-    file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
+    addAction(file->addAction("Refresh", this, SLOT(updateTriangulation()), Qt::Key_F5));
+    addAction(file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q));
     menuBar()->addMenu(file);
 
     QMenu *view = new QMenu("&Parametrics", this);
@@ -84,6 +84,8 @@ void CGMainWindow::loadEq(Part &part) {
     int delta = 64;
     int eps = 64;
 
+    part.showParamWindows(this);
+
     ogl->triangles = part.triangulate(delta, eps);
 
     float x1, x2, y1, y2, z1, z2;
@@ -110,8 +112,6 @@ void CGMainWindow::loadEq(Part &part) {
     QVector3D extent = ogl->max - ogl->min;
     ogl->zoom = 1.5 / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
-
-    part.showParamWindows(this);
 
     statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()) + " triangles.");
 
@@ -156,4 +156,11 @@ void CGMainWindow::changedDeltaSlider(int value) {
 
 void CGMainWindow::updateTriangulation() {
     std::cout << "updating!" << std::endl;
+    updateEq();
+}
+
+void CGMainWindow::updateEq() {
+    int delta = 64;
+    int eps = 64;
+    viewPart->triangulate(delta, eps);
 }

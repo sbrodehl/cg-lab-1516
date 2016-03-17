@@ -61,10 +61,6 @@ public:
         return n;
     }
 
-    std::vector<QPair<QVector3D, QVector3D> > getSegments() {
-        return std::vector<QPair<QVector3D, QVector3D> >();
-    }
-
     std::vector<QVector3D> triangulate(double delta, double eps) {
         std::vector<QVector3D> pointvec;
 

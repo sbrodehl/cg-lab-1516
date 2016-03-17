@@ -24,8 +24,6 @@ public:
         return pointvec;
     }
 
-    virtual std::vector<QPair<QVector3D, QVector3D> > getSegments() = 0;
-
     void showParamWindows(QWidget *parent) {
         for (auto parametric : parametrics) {
             ParametricWindow* pw = parametric->createWindow(parent);
