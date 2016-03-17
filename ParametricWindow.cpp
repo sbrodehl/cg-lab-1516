@@ -5,6 +5,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QStatusBar>
+#include <iostream>
 
 ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
     resize(256, 256);
@@ -14,13 +15,9 @@ ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
     f->setFrameStyle(QFrame::Sunken | QFrame::Panel);
     f->setLineWidth(2);
 
-    QPainterPath bezierPath;
-    bezierPath.moveTo(20, 30);
-    bezierPath.cubicTo(80, 0, 50, 50, 80, 80);
-
     // Put the GL widget inside the frame
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(new ParamRenderArea(bezierPath));
+    layout->addWidget(new ParamRenderArea(QPainterPath(), this));
     layout->setMargin(0);
     f->setLayout(layout);
 
@@ -33,4 +30,8 @@ void ParametricWindow::initParams(Parametrics *p) {
     // init window with parametric eq ...
     QString title(p->getName() + QString(" :: ") + p->getUID().toString());
     setWindowTitle(title);
+}
+
+void ParametricWindow::updateTriangulation() {
+    std::cout << "push it up..." << std::endl;
 }

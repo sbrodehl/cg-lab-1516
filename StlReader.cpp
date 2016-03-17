@@ -21,6 +21,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
 
     // Create a menu
     QMenu *file = new QMenu("&File", this);
+    file->addAction("Quit", this, SLOT(updateTriangulation()), Qt::Key_F5);
     file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
     menuBar()->addMenu(file);
 
@@ -151,4 +152,8 @@ void CGMainWindow::loadKegelPart() {
 
 void CGMainWindow::changedDeltaSlider(int value) {
     // std::cout << value << std::endl;
+}
+
+void CGMainWindow::updateTriangulation() {
+    std::cout << "updating!" << std::endl;
 }

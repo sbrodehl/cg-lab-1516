@@ -39,6 +39,7 @@ public slots:
     void loadZylinderPart();
     void loadKegelPart();
     void changedDeltaSlider(int);
+    void updateTriangulation();
 
 protected:
     void loadEq(Part &);

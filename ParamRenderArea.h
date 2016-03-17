@@ -23,15 +23,20 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    std::vector<QPointF> waypoints;
     QPainterPath path;
     QColor fillColor1;
     QColor fillColor2;
     int penWidth;
     QColor penColor;
+
+    QPoint offset;
     int rotationAngle;
 
+    QPointF convertPos(QMouseEvent *pEvent);
 };
 
 
