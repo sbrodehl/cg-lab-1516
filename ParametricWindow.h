@@ -15,9 +15,14 @@ public:
     void initParams(Parametrics *p);
     ParamRenderArea *getArea() const;
 
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+
 public slots:
 
     void updateTriangulation();
+    void addOuterShaper();
+    void addInnerShaper();
+    void clearShapes();
 
 private:
     ParamRenderArea *area;

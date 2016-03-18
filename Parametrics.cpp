@@ -110,12 +110,15 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
 }
 
 std::vector<QPair<QVector3D, QVector3D> > Parametrics::getSegments() {
+    QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
+    std::cout << "shapes: " << shapeList.size() << std::endl;
+
     QPainterPath path = pw->getArea()->getPath();
-    for(int i = 0; i < path.elementCount()-1; ++i) {
-        QPainterPath::Element s = path.elementAt(i);
-        QPainterPath::Element e = path.elementAt((i+1)%path.elementCount());
-        std::cout << "e" << i << " = (" << s.x << ", " << s.y << ") :: " << s.type << std::endl;
-        std::cout << "s" << (i+1)%path.elementCount() << " = (" << e.x << ", " << e.y << ") :: " << e.type << std::endl;
-    }
+//    for(int i = 0; i < path.elementCount()-1; ++i) {
+//        QPainterPath::Element s = path.elementAt(i);
+//        QPainterPath::Element e = path.elementAt((i+1)%path.elementCount());
+//        std::cout << "e" << i << " = (" << s.x << ", " << s.y << ") :: " << s.type << std::endl;
+//        std::cout << "s" << (i+1)%path.elementCount() << " = (" << e.x << ", " << e.y << ") :: " << e.type << std::endl;
+//    }
     return std::vector<QPair<QVector3D, QVector3D>>();
 }

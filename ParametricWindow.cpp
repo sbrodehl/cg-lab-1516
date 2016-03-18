@@ -3,7 +3,11 @@
 
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QMenu>
+#include <QMenuBar>
 #include <QStatusBar>
+#include <QKeyEvent>
+
 #include <iostream>
 
 ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
@@ -16,6 +20,17 @@ ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
     f->setFrameStyle(QFrame::Sunken | QFrame::Panel);
     f->setLineWidth(2);
 
+    QMenu *file = new QMenu("&File", this);
+    addAction(file->addAction("Clear", this, SLOT(clearShapes()), Qt::Key_F5));
+    menuBar()->addMenu(file);
+
+
+    QMenu *view = new QMenu("&Shapes", this);
+    view->addAction("Add Outer", this, SLOT(addOuterShaper()));
+    view->addAction("Add Inner", this, SLOT(addInnerShaper()));
+    menuBar()->addMenu(view);
+
+
     // Put the GL widget inside the frame
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(area);
@@ -24,7 +39,7 @@ ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
 
     setCentralWidget(f);
 
-    statusBar()->showMessage("Ready!");
+    statusBar()->showMessage("Draw a shape and press enter.");
 }
 
 void ParametricWindow::initParams(Parametrics *p) {
@@ -37,7 +52,22 @@ void ParametricWindow::updateTriangulation() {
     std::cout << "push it up..." << std::endl;
 }
 
-
 ParamRenderArea *ParametricWindow::getArea() const {
     return area;
+}
+
+void ParametricWindow::addOuterShaper() {
+    area->setShapeType(ParamRenderArea::ShapeType::OUTER);
+}
+
+void ParametricWindow::addInnerShaper() {
+    area->setShapeType(ParamRenderArea::ShapeType::INNER);
+}
+
+void ParametricWindow::keyPressEvent(QKeyEvent *event) {
+    area->keyPressEvent(event);
+}
+
+void ParametricWindow::clearShapes() {
+    area->clearShapes();
 }
