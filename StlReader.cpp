@@ -43,7 +43,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     // Create a nice frame to put around the OpenGL widget
     QFrame *f = new QFrame(this);
     f->setFrameStyle(QFrame::Sunken | QFrame::Panel);
-    f->setLineWidth(2);
+    f->setLineWidth(0);
 
     // Create our OpenGL widget
     ogl = new CGView(this, f);

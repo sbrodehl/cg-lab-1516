@@ -47,7 +47,7 @@ public:
         double uy = b.y() - a.y();
         double vx = c.x() - a.x();
         double vy = c.y() - a.y();
-        return (ux * vy - uy * vx >= 0 || abs(ux * vy - uy * vx) < pow(10, -10));
+        return (ux * vy - uy * vx >= 0 || std::abs(ux * vy - uy * vx) < pow(10, -10));
     }
 
 };

@@ -1,15 +1,3 @@
-#define _USE_MATH_DEFINES
-
-#include <cmath>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <limits>
-#include <algorithm>
-#include <random>
-#include <set>
-#include <unordered_map>
-
 #include "StlReader.h"
 
 void CGView::initShaders() {
@@ -33,23 +21,15 @@ void CGView::initializeGL() {
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
-
     glGenBuffers(1, &vboTmpId);
-
     glClearColor(0.4, 0.4, 0.5, 1.0);
 
-    glEnable(GL_DEPTH_TEST);
-
     zoom = 1.0;
-    phi = 0.0;
-    theta = 0.0;
-
     q_now = QQuaternion();
-
-    qreal inf = std::numeric_limits<qreal>::infinity();
+    float inf = std::numeric_limits<float>::infinity();
     min = QVector3D(inf, inf, inf);
     max = QVector3D(-inf, -inf, -inf);
-    center = QVector3D(0, 0, 0);
+    center = QVector3D();
 }
 
 void CGView::paintGL() {
@@ -60,7 +40,7 @@ void CGView::paintGL() {
 
     modelView.setToIdentity();
     modelView.rotate(q_now);
-    modelView.scale(zoom, zoom, zoom);
+    modelView.scale(zoom);
     modelView.translate(-center);
 
     for (size_t i = 0; i < vboTrianglesId.size(); i++) {
@@ -77,7 +57,6 @@ void CGView::paintGL() {
         program.enableAttributeArray(normalLocation);
         glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
                               (const void *) sizeof(QVector3D));
-
         glDrawArrays(GL_TRIANGLES, 0, vboTrianglesSize[i]);
     }
     drawBoundingBox();
@@ -104,7 +83,7 @@ void CGView::draw(bool wireframe) {
     if (wireframe) glDisable(GL_LIGHTING);
     else glEnable(GL_LIGHTING);
 
-
+    // TODO tba.
 }
 
 void CGView::drawBoundingBox() {
@@ -145,15 +124,6 @@ void CGView::initVBO(const std::vector<QVector3D> &trianglesWN) {
 
     vboTrianglesId.push_back(id);
     vboTrianglesSize.push_back(static_cast<int>(triangles.size()));
-}
-
-void CGView::worldCoord(int x, int y, int z, Vector3d &v) {
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    GLdouble M[16], P[16];
-    glGetDoublev(GL_PROJECTION_MATRIX, P);
-    glGetDoublev(GL_MODELVIEW_MATRIX, M);
-    gluUnProject(x, viewport[3] - 1 - y, z, M, P, viewport, &v[0], &v[1], &v[2]);
 }
 
 void CGView::mouseToTrackball(int x, int y, int W, int H, QVector3D &v) {

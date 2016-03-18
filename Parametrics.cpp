@@ -1,8 +1,9 @@
 #include <iostream>
 #include "Parametrics.h"
 
-std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D> &points, int bucketsize) {
-    getSegments();
+std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D> &points,
+                                                    int bucketsize) {
+    getSegments(); // just for testing ...
 
     std::vector<QVector3D> triangles;
     size_t s = points.size();
@@ -21,7 +22,6 @@ std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D>
             QVector3D neleftRNormal = points[nextLeft + 1];
             QVector3D nerightR = points[nextRight];
             QVector3D nerightRNormal = points[nextRight + 1];
-
             triangles.push_back(neleftR);
             triangles.push_back(neleftRNormal);
             triangles.push_back(rightR);
@@ -74,13 +74,10 @@ void Parametrics::initializeParameterSpace(double delta, double eps) {
                 abc->setNeighbor(0, lowerTriangleLineOld[i]);
                 lowerTriangleLineOld[i]->setNeighbor(1, abc);
             }
-
             leftBound = abc;
-
             parameterSpace.push_back(abc);
             parameterSpace.push_back(acd);
         }
-
         lowerTriangleLineOld = lowerTriangleLineNew;
     }
 }
@@ -90,7 +87,7 @@ bool Parametrics::leftTurn(QVector2D a, QVector2D b, QVector2D c) {
     double uy = b.y() - a.y();
     double vx = c.x() - a.x();
     double vy = c.y() - a.y();
-    return (ux * vy - uy * vx >= 0 || abs(ux * vy - uy * vx) < pow(10, -10));
+    return (ux * vy - uy * vx >= 0 || std::abs(ux * vy - uy * vx) < pow(10, -10));
 }
 
 ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D point) {

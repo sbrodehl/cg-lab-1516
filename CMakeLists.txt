@@ -58,9 +58,7 @@ set(SOURCE_FILES
         parts/TrefoilPart.h
         UserInteractions.cpp
         ParamRenderArea.cpp
-        ParamRenderArea.h
-        thirdparty/vecmath.cpp
-        thirdparty/vecmath.h)
+        ParamRenderArea.h)
 
 include_directories(.)
 include_directories(parametrics)
