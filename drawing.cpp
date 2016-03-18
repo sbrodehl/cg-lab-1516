@@ -1,3 +1,14 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <limits>
+#include <algorithm>
+#include <random>
+#include <set>
+#include <unordered_map>
+
 #include "StlReader.h"
 
 void CGView::initShaders() {
@@ -16,12 +27,15 @@ void CGView::initShaders() {
 void CGView::initializeGL() {
     initializeGLFunctions();
     initShaders();
-    initSolidCubeVBO();
-    initSolidSphereVBO();
-    initSolidCylinderVBO();
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
+
     glGenBuffers(1, &vboTmpId);
 
-    qglClearColor(Qt::black);
+    glClearColor(0.4,0.4,0.5,1.0);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -29,31 +43,30 @@ void CGView::initializeGL() {
     phi = 0.0;
     theta = 0.0;
 
+    q_now = QQuaternion();
+
     qreal inf = std::numeric_limits<qreal>::infinity();
     min = QVector3D(inf, inf, inf);
     max = QVector3D(-inf, -inf, -inf);
     center = QVector3D(0, 0, 0);
-    pointPicked = false;
 }
 
 void CGView::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    bool wireframe = false;
+    draw(wireframe);
+
     modelView.setToIdentity();
-    modelView.rotate(theta, 1.0, 0.0, 0.0);
-    modelView.rotate(phi, 0.0, 1.0, 0.0);
+    modelView.rotate(q_now);
     modelView.scale(zoom, zoom, zoom);
     modelView.translate(-center);
-
-    if (pointPicked) {
-        program.setUniformValue("uColor", QVector4D(1.0, 0.0, 0.0, 1.0));
-        drawSolidSphere(pickPoint, 0.01);
-    }
 
     for (size_t i = 0; i < vboTrianglesId.size(); i++) {
         program.setUniformValue("uPMat", projection);
         program.setUniformValue("uMVMat", modelView);
         program.setUniformValue("uNMat", modelView.normalMatrix());
-        program.setUniformValue("uColor", QVector4D(0.5, 0.5, 0.0, 1.0));
+        program.setUniformValue("uColor", QVector4D(0.0, 1.0, 0.0, 1.0));
 
         glBindBuffer(GL_ARRAY_BUFFER, vboTrianglesId[i]);
         int vertexLocation = program.attributeLocation("a_position");
@@ -66,6 +79,7 @@ void CGView::paintGL() {
 
         glDrawArrays(GL_TRIANGLES, 0, vboTrianglesSize[i]);
     }
+    drawBoundingBox();
 }
 
 void CGView::resizeGL(int w, int h) {
@@ -82,278 +96,43 @@ void CGView::resizeGL(int w, int h) {
     }
 }
 
-void CGView::initSolidCubeVBO() {
-    std::vector<QVector3D> vertexWithNormal;
-    GLuint id;
-    glGenBuffers(1, &id);
+void CGView::draw(bool wireframe) {
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    vertexWithNormal.push_back(QVector3D(-1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
-    vertexWithNormal.push_back(QVector3D(-1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
-    vertexWithNormal.push_back(QVector3D(-1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, -1, 0));
+    if(wireframe) glDisable(GL_LIGHTING);
+    else glEnable(GL_LIGHTING);
 
-    vertexWithNormal.push_back(QVector3D(-1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
-    vertexWithNormal.push_back(QVector3D(-1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
-    vertexWithNormal.push_back(QVector3D(1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
-    vertexWithNormal.push_back(QVector3D(1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
-    vertexWithNormal.push_back(QVector3D(1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
-    vertexWithNormal.push_back(QVector3D(-1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 1, 0));
 
-    vertexWithNormal.push_back(QVector3D(-1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(-1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(-1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(-1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(-1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(-1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(-1, 0, 0));
-
-    vertexWithNormal.push_back(QVector3D(1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-    vertexWithNormal.push_back(QVector3D(1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(1, 0, 0));
-
-    vertexWithNormal.push_back(QVector3D(1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-    vertexWithNormal.push_back(QVector3D(-1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-    vertexWithNormal.push_back(QVector3D(-1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-    vertexWithNormal.push_back(QVector3D(-1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-    vertexWithNormal.push_back(QVector3D(1, 1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-    vertexWithNormal.push_back(QVector3D(1, -1, -1));
-    vertexWithNormal.push_back(QVector3D(0, 0, -1));
-
-    vertexWithNormal.push_back(QVector3D(-1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-    vertexWithNormal.push_back(QVector3D(-1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-    vertexWithNormal.push_back(QVector3D(1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-    vertexWithNormal.push_back(QVector3D(1, -1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-    vertexWithNormal.push_back(QVector3D(1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-    vertexWithNormal.push_back(QVector3D(-1, 1, 1));
-    vertexWithNormal.push_back(QVector3D(0, 0, 1));
-
-    glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, vertexWithNormal.size() * sizeof(QVector3D), vertexWithNormal.data(), GL_STATIC_DRAW);
-
-    vboSolidCubeId = id;
-    vboSolidCubeSize = 3 * 12;
 }
 
-void CGView::refineSolidSphere(const std::vector<QVector3D> &sphere, std::vector<QVector3D> &refined) {
-    for (size_t i = 0; i < sphere.size() / 3; i++) {
-        const QVector3D &a = sphere[3 * i + 0];
-        const QVector3D &b = sphere[3 * i + 1];
-        const QVector3D &c = sphere[3 * i + 2];
-
-        QVector3D ab = a + b;
-        QVector3D bc = b + c;
-        QVector3D ca = c + a;
-
-        ab.normalize();
-        bc.normalize();
-        ca.normalize();
-
-        refined.push_back(a);
-        refined.push_back(ab);
-        refined.push_back(ca);
-
-        refined.push_back(ab);
-        refined.push_back(b);
-        refined.push_back(bc);
-
-        refined.push_back(bc);
-        refined.push_back(c);
-        refined.push_back(ca);
-
-        refined.push_back(ab);
-        refined.push_back(bc);
-        refined.push_back(ca);
-    }
-}
-
-void CGView::initSolidSphereVBO() {
-    std::vector<QVector3D> ico;
-    qreal gr = 0.5 * (1.0 + sqrt(5.0));
-
-    ico.push_back(QVector3D(gr, 1.0, 0.0));
-    ico.push_back(QVector3D(1.0, 0.0, gr));
-    ico.push_back(QVector3D(gr, -1.0, 0.0));
-
-    ico.push_back(QVector3D(gr, 1.0, 0.0));
-    ico.push_back(QVector3D(gr, -1.0, 0.0));
-    ico.push_back(QVector3D(1.0, 0.0, -gr));
-
-    ico.push_back(QVector3D(gr, 1.0, 0.0));
-    ico.push_back(QVector3D(0.0, gr, -1.0));
-    ico.push_back(QVector3D(0.0, gr, 1.0));
-
-    ico.push_back(QVector3D(gr, 1.0, 0.0));
-    ico.push_back(QVector3D(0.0, gr, 1.0));
-    ico.push_back(QVector3D(1.0, 0.0, gr));
-
-    ico.push_back(QVector3D(gr, 1.0, 0.0));
-    ico.push_back(QVector3D(1.0, 0.0, -gr));
-    ico.push_back(QVector3D(0.0, gr, -1.0));
-
-    ico.push_back(QVector3D(-gr, -1.0, 0.0));
-    ico.push_back(QVector3D(-1.0, 0.0, gr));
-    ico.push_back(QVector3D(-gr, 1.0, 0.0));
-
-    ico.push_back(QVector3D(-gr, -1.0, 0.0));
-    ico.push_back(QVector3D(-gr, 1.0, 0.0));
-    ico.push_back(QVector3D(-1.0, 0.0, -gr));
-
-    ico.push_back(QVector3D(-gr, -1.0, 0.0));
-    ico.push_back(QVector3D(0.0, -gr, -1.0));
-    ico.push_back(QVector3D(0.0, -gr, 1.0));
-
-    ico.push_back(QVector3D(-gr, -1.0, 0.0));
-    ico.push_back(QVector3D(0.0, -gr, 1.0));
-    ico.push_back(QVector3D(-1.0, 0.0, gr));
-
-    ico.push_back(QVector3D(-gr, -1.0, 0.0));
-    ico.push_back(QVector3D(-1.0, 0.0, -gr));
-    ico.push_back(QVector3D(0.0, -gr, -1.0));
-
-    ico.push_back(QVector3D(1.0, 0.0, gr));
-    ico.push_back(QVector3D(-1.0, 0.0, gr));
-    ico.push_back(QVector3D(0.0, -gr, 1.0));
-
-    ico.push_back(QVector3D(1.0, 0.0, gr));
-    ico.push_back(QVector3D(0.0, gr, 1.0));
-    ico.push_back(QVector3D(-1.0, 0.0, gr));
-
-    ico.push_back(QVector3D(0.0, gr, 1.0));
-    ico.push_back(QVector3D(-gr, 1.0, 0.0));
-    ico.push_back(QVector3D(-1.0, 0.0, gr));
-
-    ico.push_back(QVector3D(0.0, gr, 1.0));
-    ico.push_back(QVector3D(0.0, gr, -1.0));
-    ico.push_back(QVector3D(-gr, 1.0, 0.0));
-
-    ico.push_back(QVector3D(0.0, gr, -1.0));
-    ico.push_back(QVector3D(-1.0, 0.0, -gr));
-    ico.push_back(QVector3D(-gr, 1.0, 0.0));
-
-    ico.push_back(QVector3D(-1.0, 0.0, -gr));
-    ico.push_back(QVector3D(0.0, gr, -1.0));
-    ico.push_back(QVector3D(1.0, 0.0, -gr));
-
-    ico.push_back(QVector3D(-1.0, 0.0, -gr));
-    ico.push_back(QVector3D(1.0, 0.0, -gr));
-    ico.push_back(QVector3D(0.0, -gr, -1.0));
-
-    ico.push_back(QVector3D(0.0, -gr, -1.0));
-    ico.push_back(QVector3D(1.0, 0.0, -gr));
-    ico.push_back(QVector3D(gr, -1.0, 0.0));
-
-    ico.push_back(QVector3D(0.0, -gr, -1.0));
-    ico.push_back(QVector3D(gr, -1.0, 0.0));
-    ico.push_back(QVector3D(0.0, -gr, 1.0));
-
-    ico.push_back(QVector3D(0.0, -gr, 1.0));
-    ico.push_back(QVector3D(gr, -1.0, 0.0));
-    ico.push_back(QVector3D(1.0, 0.0, gr));
-
-    for (size_t i = 0; i < ico.size(); i++) ico[i].normalize();
-
-    for (int i = 0; i < 3; i++) {
-        std::vector<QVector3D> ico_refined;
-        refineSolidSphere(ico, ico_refined);
-        ico = ico_refined;
-    }
-
-    std::vector<QVector3D> vertexWithNormal;
-    GLuint id;
-    glGenBuffers(1, &id);
-
-    for (size_t i = 0; i < ico.size(); i++) {
-        vertexWithNormal.push_back(ico[i]);
-        vertexWithNormal.push_back(ico[i]);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, vertexWithNormal.size() * sizeof(QVector3D), vertexWithNormal.data(), GL_STATIC_DRAW);
-
-    vboSolidSphereId = id;
-    vboSolidSphereSize = static_cast<int>(ico.size());
-}
-
-void CGView::initSolidCylinderVBO() {
-    std::vector<QVector3D> vertexWithNormal;
-    const int n = 64;
-    std::vector<QVector3D> circle(n);
-
-    circle[0] = QVector3D(1.0, 0.0, 0.0);
-    circle[n / 4] = QVector3D(0.0, 1.0, 0.0);
-    circle[n / 2] = QVector3D(-1.0, 0.0, 0.0);
-    circle[3 * n / 4] = QVector3D(0.0, -1.0, 0.0);
-
-    for (int r = n / 4; r > 1; r /= 2)
-        for (int i = 0; i < n; i += r) {
-            circle[i + r / 2] = circle[i] + circle[(i + r) % n];
-            circle[i + r / 2].normalize();
-        }
-
-    QVector3D ez(0.0, 0.0, 1.0);
-
-    for (int i = 0; i < n; i++) {
-        vertexWithNormal.push_back(circle[i]);
-        vertexWithNormal.push_back(circle[i]);
-        vertexWithNormal.push_back(circle[(i + 1) % n]);
-        vertexWithNormal.push_back(circle[(i + 1) % n]);
-        vertexWithNormal.push_back(circle[i] + ez);
-        vertexWithNormal.push_back(circle[i]);
-
-        vertexWithNormal.push_back(circle[(i + 1) % n] + ez);
-        vertexWithNormal.push_back(circle[(i + 1) % n]);
-        vertexWithNormal.push_back(circle[i] + ez);
-        vertexWithNormal.push_back(circle[i]);
-        vertexWithNormal.push_back(circle[(i + 1) % n]);
-        vertexWithNormal.push_back(circle[(i + 1) % n]);
-    }
-
-    GLuint id;
-    glGenBuffers(1, &id);
-
-    glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, vertexWithNormal.size() * sizeof(QVector3D), vertexWithNormal.data(), GL_STATIC_DRAW);
-
-    vboSolidCylinderId = id;
-    vboSolidCylinderSize = static_cast<int>(vertexWithNormal.size() / 2);
+void CGView::drawBoundingBox() {
+    double maxX = 1, maxY = 1, maxZ = 1;
+    double minX = -maxX, minY = -maxY, minZ = -maxZ;
+    glDisable(GL_LIGHTING);
+    glColor3f(0.0,0.0,0.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(minX,minY,minZ);
+    glVertex3d(maxX,minY,minZ);
+    glVertex3d(maxX,maxY,minZ);
+    glVertex3d(minX,maxY,minZ);
+    glEnd();
+    glBegin(GL_LINE_LOOP);
+    glVertex3d(minX,minY,maxZ);
+    glVertex3d(maxX,minY,maxZ);
+    glVertex3d(maxX,maxY,maxZ);
+    glVertex3d(minX,maxY,maxZ);
+    glEnd();
+    glBegin(GL_LINES);
+    glVertex3d(minX,minY,minZ);
+    glVertex3d(minX,minY,maxZ);
+    glVertex3d(maxX,minY,minZ);
+    glVertex3d(maxX,minY,maxZ);
+    glVertex3d(minX,maxY,minZ);
+    glVertex3d(minX,maxY,maxZ);
+    glVertex3d(maxX,maxY,minZ);
+    glVertex3d(maxX,maxY,maxZ);
+    glEnd();
 }
 
 void CGView::initVBO(const std::vector<QVector3D> &trianglesWN) {
@@ -367,135 +146,33 @@ void CGView::initVBO(const std::vector<QVector3D> &trianglesWN) {
     vboTrianglesSize.push_back(static_cast<int>(triangles.size()));
 }
 
-void CGView::initTrianglesVBO(const std::vector<QVector3D> &triangles) {
-    std::vector<QVector3D> vertexWithNormal;
-    GLuint id;
-    glGenBuffers(1, &id);
+void CGView::worldCoord(int x, int y, int z, Vector3d &v) {
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT,viewport);
+    GLdouble M[16], P[16];
+    glGetDoublev(GL_PROJECTION_MATRIX,P);
+    glGetDoublev(GL_MODELVIEW_MATRIX,M);
+    gluUnProject(x,viewport[3]-1-y,z,M,P,viewport,&v[0],&v[1],&v[2]);
+}
 
-    for (size_t i = 0; i < triangles.size(); i += 3) {
-        const QVector3D &a = triangles[i + 0];
-        const QVector3D &b = triangles[i + 1];
-        const QVector3D &c = triangles[i + 2];
-        QVector3D n = QVector3D::crossProduct(b - a, c - a);
-        n.normalize();
-        vertexWithNormal.push_back(a);
-        vertexWithNormal.push_back(n);
-
-        vertexWithNormal.push_back(b);
-        vertexWithNormal.push_back(n);
-
-        vertexWithNormal.push_back(c);
-        vertexWithNormal.push_back(n);
+void CGView::mouseToTrackball(int x, int y, int W, int H, QVector3D &v) {
+    if (W > H) {
+        v[0] = (float) ((2.0 * x - W) / H);
+        v[1] = (float) (1.0 - y * 2.0 / H);
+    } else {
+        v[0] = (float) ((2.0 * x - W) / W);
+        v[1] = (float) ((H - 2.0 * y) / W);
     }
-
-    glBindBuffer(GL_ARRAY_BUFFER, id);
-    glBufferData(GL_ARRAY_BUFFER, vertexWithNormal.size() * sizeof(QVector3D), vertexWithNormal.data(), GL_STATIC_DRAW);
-
-    vboTrianglesId.push_back(id);
-    vboTrianglesSize.push_back(static_cast<int>(triangles.size()));
+    double d = v[0] * v[0] + v[1] * v[1];
+    if (d > 1.0) {
+        v[2] = 0.0;
+        v /= sqrt(d);
+    } else v[2] = (float) sqrt(1.0 - d * d);
 }
 
-QMatrix4x4 orthonormalSystem(QVector3D e3) {
-    qreal u[3], v[3];
-    e3.normalize();
-    v[0] = e3.x();
-    v[1] = e3.y();
-    v[2] = e3.z();
-    int imax = 0;
-    if (fabs(v[1]) > fabs(v[imax])) imax = 1;
-    if (fabs(v[2]) > fabs(v[imax])) imax = 2;
-    u[imax] = v[(imax + 1) % 3];
-    u[(imax + 1) % 3] = -v[imax];
-    u[(imax + 2) % 3] = 0.0;
-    QVector3D e2(u[0], u[1], u[2]);
-    e2.normalize();
-    QVector3D e1 = QVector3D::crossProduct(e2, e3);
-    e1.normalize();
-
-    return QMatrix4x4(e1.x(), e2.x(), e3.x(), 0.0,
-                      e1.y(), e2.y(), e3.y(), 0.0,
-                      e1.z(), e2.z(), e3.z(), 0.0,
-                      0.0, 0.0, 0.0, 1.0);
+QQuaternion CGView::trackball(const QVector3D& u, const QVector3D& v) {
+    QVector3D uxv = QVector3D::crossProduct(u, v);
+    QQuaternion ret(1.0f + QVector3D::dotProduct(u, v), uxv);
+    ret.normalize();
+    return ret;
 }
-
-void CGView::drawSolidCylinder(const QVector3D &a, const QVector3D &b, qreal radius) {
-    QMatrix4x4 M(modelView);
-    M.translate(a);
-    M *= orthonormalSystem(b - a);
-    M.scale(radius, radius, (b - a).length());
-
-    program.setUniformValue("uMVMat", M);
-    program.setUniformValue("uNMat", M.normalMatrix());
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboSolidCylinderId);
-    int vertexLocation = program.attributeLocation("a_position");
-    program.enableAttributeArray(vertexLocation);
-    glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), 0);
-    int normalLocation = program.attributeLocation("a_normal");
-    program.enableAttributeArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
-                          (const void *) sizeof(QVector3D));
-
-    glDrawArrays(GL_TRIANGLES, 0, vboSolidCylinderSize);
-}
-
-void CGView::drawSolidSphere(const QVector3D &c, qreal r) {
-    QMatrix4x4 M(modelView);
-    M.translate(c);
-    M.scale(r);
-
-    program.setUniformValue("uMVMat", M);
-    program.setUniformValue("uNMat", M.normalMatrix());
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboSolidSphereId);
-    int vertexLocation = program.attributeLocation("a_position");
-    program.enableAttributeArray(vertexLocation);
-    glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), 0);
-    int normalLocation = program.attributeLocation("a_normal");
-    program.enableAttributeArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
-                          (const void *) sizeof(QVector3D));
-
-    glDrawArrays(GL_TRIANGLES, 0, vboSolidSphereSize);
-}
-
-void CGView::drawOBB(const QMatrix4x4 &R, const QVector3D &l) {
-    QMatrix4x4 M(modelView);
-    M *= R;
-    M.scale(l.x() + 0.001, l.y() + 0.001, l.z() + 0.001);
-
-    program.setUniformValue("uMVMat", M);
-    program.setUniformValue("uNMat", M.normalMatrix());
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboSolidCubeId);
-    int vertexLocation = program.attributeLocation("a_position");
-    program.enableAttributeArray(vertexLocation);
-    glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), 0);
-    int normalLocation = program.attributeLocation("a_normal");
-    program.enableAttributeArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
-                          (const void *) sizeof(QVector3D));
-
-    glDrawArrays(GL_TRIANGLES, 0, vboSolidCubeSize);
-}
-
-void CGView::drawAABB(const QVector3D &bMin, const QVector3D &bMax) {
-    QMatrix4x4 M(modelView);
-    M.translate((bMax.x() + bMin.x()) / 2, (bMax.y() + bMin.y()) / 2, (bMax.z() + bMin.z()) / 2);
-    M.scale((bMax.x() - bMin.x()) / 2 + 0.001, (bMax.y() - bMin.y()) / 2 + 0.001, (bMax.z() - bMin.z()) / 2 + 0.001);
-
-    program.setUniformValue("uMVMat", M);
-    program.setUniformValue("uNMat", M.normalMatrix());
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboSolidCubeId);
-    int vertexLocation = program.attributeLocation("a_position");
-    program.enableAttributeArray(vertexLocation);
-    glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D), 0);
-    int normalLocation = program.attributeLocation("a_normal");
-    program.enableAttributeArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(QVector3D),
-                          (const void *) sizeof(QVector3D));
-
-    glDrawArrays(GL_TRIANGLES, 0, vboSolidCubeSize);
-}
-

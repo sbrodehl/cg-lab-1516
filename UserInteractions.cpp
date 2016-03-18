@@ -64,8 +64,6 @@ void CGView::mousePressEvent(QMouseEvent *event) {
     oldX = event->x();
     oldY = event->y();
 
-    pointPicked = pick(oldX, oldY, pickPoint);
-
     update();
 }
 
@@ -77,6 +75,15 @@ void CGView::wheelEvent(QWheelEvent *event) {
 }
 
 void CGView::mouseMoveEvent(QMouseEvent *event) {
+    QVector3D p1, p2;
+
+    mouseToTrackball(oldX, oldY, width, height, p1);
+    mouseToTrackball(event->x(), event->y(), width, height, p2);
+
+    QQuaternion q = trackball(p1, p2);
+    q_now = q * q_now;
+    q_now.normalize();
+
     phi += 0.2 * (event->x() - oldX);
     theta += 0.2 * (event->y() - oldY);
     oldX = event->x();
@@ -85,7 +92,7 @@ void CGView::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void CGView::clearGL() {
-    qglClearColor(Qt::black);
+    glClearColor(0.4,0.4,0.5,1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_ARRAY_BUFFER);
     triangles = std::vector<QVector3D>();
@@ -95,8 +102,7 @@ void CGView::clearGL() {
     min = QVector3D(inf, inf, inf);
     max = QVector3D(-inf, -inf, -inf);
     center = QVector3D(0, 0, 0);
-    phi = 0.0f;
-    theta = 0.0f;
+    q_now = QQuaternion();
     updateGL();
 }
 

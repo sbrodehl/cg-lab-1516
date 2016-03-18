@@ -15,9 +15,18 @@
 #include <vector>
 #include <iostream>
 
+#if _MSC_VER
+    #include <gl/glu.h>
+#elif __APPLE__
+    #include <OpenGL/glu.h>
+#else
+    #include <GL/glu.h>
+#endif
+
 #include "Part.h"
 #include "Parametrics.h"
 #include "ParametricWindow.h"
+#include "vecmath.h"
 
 class CGView;
 
@@ -61,6 +70,8 @@ public:
 
     CGView(CGMainWindow *, QWidget *);
 
+    void worldCoord(int x, int y, int z, Vector3d &v);
+
     void clearGL();
 
     void initShaders();
@@ -71,16 +82,6 @@ public:
 
     bool pick(int, int, QVector3D &);
 
-    void initSolidCubeVBO();
-
-    void initSolidSphereVBO();
-
-    void initSolidCylinderVBO();
-
-    void refineSolidSphere(const std::vector<QVector3D> &, std::vector<QVector3D> &);
-
-    void initTrianglesVBO(const std::vector<QVector3D> &);
-
     void initVBO(const std::vector<QVector3D> &);
 
     QVector3D min, max, center;
@@ -89,11 +90,9 @@ public:
     std::vector<QVector3D> triangles;
     std::vector<GLuint> vboTrianglesId;
     std::vector<int> vboTrianglesSize;
-    GLuint vboSolidCubeId, vboSolidSphereId, vboSolidCylinderId, vboTmpId;
-    int vboSolidCubeSize, vboSolidSphereSize, vboSolidCylinderSize, vboTmpSize;
+    GLuint vboTmpId;
 
     QVector3D pickPoint;
-    bool pointPicked;
 
 protected:
 
@@ -109,22 +108,24 @@ protected:
 
     void wheelEvent(QWheelEvent *);
 
-    void drawSolidSphere(const QVector3D &, qreal);
+    void mouseToTrackball(int x, int y, int W, int H, QVector3D &v);
 
-    void drawSolidCylinder(const QVector3D &, const QVector3D &, qreal);
-
-    void drawAABB(const QVector3D &, const QVector3D &);
-
-    void drawOBB(const QMatrix4x4 &, const QVector3D &);
+    QQuaternion trackball(const QVector3D&, const QVector3D&);
 
     CGMainWindow *main;
     int oldX, oldY;
+    GLUquadric *quad;
+    QQuaternion q_now;
 
 private:
 
     QGLShaderProgram program;
     QMatrix4x4 projection, modelView;
     int width, height;
+
+    void drawBoundingBox();
+
+    void draw(bool wireframe);
 };
 
 #endif
