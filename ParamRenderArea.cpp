@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "ParamRenderArea.h"
 
 #include <QPainter>
@@ -10,9 +12,8 @@ ParamRenderArea::ParamRenderArea(const QPainterPath &path, QWidget *parent)
     rotationAngle = 0;
     offset.setX(50);
     offset.setY(50);
-    QColor rndC = QColor::fromRgb(qrand() % (255 + 1), qrand() % (255 + 1), qrand() % (255 + 1));
-    setFillGradient(rndC, rndC);
     setBackgroundRole(QPalette::Base);
+    std::random_shuffle(colors.begin(), colors.end());
 }
 
 QSize ParamRenderArea::minimumSizeHint() const {
@@ -23,17 +24,6 @@ QSize ParamRenderArea::sizeHint() const {
     return QSize(100, 100);
 }
 
-void ParamRenderArea::setFillRule(Qt::FillRule rule) {
-    path.setFillRule(rule);
-    update();
-}
-
-void ParamRenderArea::setFillGradient(const QColor &color1, const QColor &color2) {
-    fillColor1 = color1;
-    fillColor2 = color2;
-    update();
-}
-
 void ParamRenderArea::setPenWidth(float width) {
     penWidth = width;
     update();
@@ -41,11 +31,6 @@ void ParamRenderArea::setPenWidth(float width) {
 
 void ParamRenderArea::setPenColor(const QColor &color) {
     penColor = color;
-    update();
-}
-
-void ParamRenderArea::setRotationAngle(int degrees) {
-    rotationAngle = degrees;
     update();
 }
 
@@ -59,7 +44,6 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
     painter.setPen(QPen(penColor, penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     int colorID = 0;
-
     // draw all outer shapes
     for (QPainterPath p : outerShapes) {
         QLinearGradient g(0, 0, 0, 100);
@@ -69,7 +53,6 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
         painter.drawPath(p);
         colorID = (colorID + 1) % colors.size();
     }
-
     // draw all inner shapes
     for (QPainterPath p : innerShapes) {
         QLinearGradient g(0, 0, 0, 100);
@@ -79,7 +62,6 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
         painter.drawPath(p);
         colorID = (colorID + 1) % colors.size();
     }
-
     // draw current path
     QLinearGradient gradient(0, 0, 0, 100);
     gradient.setColorAt(0.0, colors.at(colorID));
@@ -96,8 +78,6 @@ void ParamRenderArea::mousePressEvent(QMouseEvent *event) {
         shapeList.append(shape);
         path = QPainterPath();
         waypoints.clear();
-        QColor rndC = QColor::fromRgb(qrand() % (255 + 1), qrand() % (255 + 1), qrand() % (255 + 1));
-        setFillGradient(rndC, rndC);
     } else {
         waypoints.push_back(pos);
         path = QPainterPath();
@@ -114,10 +94,6 @@ QPointF ParamRenderArea::convertPos(QMouseEvent *e) {
     return QPointF(100 * e->x() / width(), 100 * e->y() / height());
 }
 
-QPainterPath ParamRenderArea::getPath() {
-    return path;
-}
-
 QList<QList<QPointF> > ParamRenderArea::getShapes() {
     return shapeList;
 }
@@ -125,7 +101,6 @@ QList<QList<QPointF> > ParamRenderArea::getShapes() {
 void ParamRenderArea::setShapeType(ShapeType type) {
     currentType = type;
 }
-
 
 void ParamRenderArea::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {

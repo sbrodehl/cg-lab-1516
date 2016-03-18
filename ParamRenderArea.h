@@ -17,18 +17,15 @@ public:
     explicit ParamRenderArea(const QPainterPath &path, QWidget *parent = 0);
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
-    QPainterPath getPath();
-    QList<QList<QPointF> > getShapes();
-    void setShapeType(ShapeType type);
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
+    QList<QList<QPointF> > getShapes();
+    void setShapeType(ShapeType type);
+
 public slots:
-    void setFillRule(Qt::FillRule rule);
-    void setFillGradient(const QColor &color1, const QColor &color2);
     void setPenWidth(float width);
     void setPenColor(const QColor &color);
-    void setRotationAngle(int degrees);
     void clearShapes();
 
 protected:
@@ -46,8 +43,6 @@ private:
     QList<QPainterPath> outerShapes;
     QList<QPainterPath> innerShapes;
     QPainterPath path;
-    QColor fillColor1;
-    QColor fillColor2;
     float penWidth;
     QColor penColor;
     ShapeType currentType = ParamRenderArea::ShapeType::OUTER;
