@@ -92,7 +92,7 @@ void CGView::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void CGView::clearGL() {
-    glClearColor(0.4,0.4,0.5,1.0);
+    glClearColor(0.4, 0.4, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_ARRAY_BUFFER);
     triangles = std::vector<QVector3D>();

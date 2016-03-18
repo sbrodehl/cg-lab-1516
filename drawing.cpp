@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -35,7 +36,7 @@ void CGView::initializeGL() {
 
     glGenBuffers(1, &vboTmpId);
 
-    glClearColor(0.4,0.4,0.5,1.0);
+    glClearColor(0.4, 0.4, 0.5, 1.0);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -100,7 +101,7 @@ void CGView::draw(bool wireframe) {
     if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    if(wireframe) glDisable(GL_LIGHTING);
+    if (wireframe) glDisable(GL_LIGHTING);
     else glEnable(GL_LIGHTING);
 
 
@@ -110,28 +111,28 @@ void CGView::drawBoundingBox() {
     double maxX = 1, maxY = 1, maxZ = 1;
     double minX = -maxX, minY = -maxY, minZ = -maxZ;
     glDisable(GL_LIGHTING);
-    glColor3f(0.0,0.0,0.0);
+    glColor3f(0.0, 0.0, 0.0);
     glBegin(GL_LINE_LOOP);
-    glVertex3d(minX,minY,minZ);
-    glVertex3d(maxX,minY,minZ);
-    glVertex3d(maxX,maxY,minZ);
-    glVertex3d(minX,maxY,minZ);
+    glVertex3d(minX, minY, minZ);
+    glVertex3d(maxX, minY, minZ);
+    glVertex3d(maxX, maxY, minZ);
+    glVertex3d(minX, maxY, minZ);
     glEnd();
     glBegin(GL_LINE_LOOP);
-    glVertex3d(minX,minY,maxZ);
-    glVertex3d(maxX,minY,maxZ);
-    glVertex3d(maxX,maxY,maxZ);
-    glVertex3d(minX,maxY,maxZ);
+    glVertex3d(minX, minY, maxZ);
+    glVertex3d(maxX, minY, maxZ);
+    glVertex3d(maxX, maxY, maxZ);
+    glVertex3d(minX, maxY, maxZ);
     glEnd();
     glBegin(GL_LINES);
-    glVertex3d(minX,minY,minZ);
-    glVertex3d(minX,minY,maxZ);
-    glVertex3d(maxX,minY,minZ);
-    glVertex3d(maxX,minY,maxZ);
-    glVertex3d(minX,maxY,minZ);
-    glVertex3d(minX,maxY,maxZ);
-    glVertex3d(maxX,maxY,minZ);
-    glVertex3d(maxX,maxY,maxZ);
+    glVertex3d(minX, minY, minZ);
+    glVertex3d(minX, minY, maxZ);
+    glVertex3d(maxX, minY, minZ);
+    glVertex3d(maxX, minY, maxZ);
+    glVertex3d(minX, maxY, minZ);
+    glVertex3d(minX, maxY, maxZ);
+    glVertex3d(maxX, maxY, minZ);
+    glVertex3d(maxX, maxY, maxZ);
     glEnd();
 }
 
@@ -148,11 +149,11 @@ void CGView::initVBO(const std::vector<QVector3D> &trianglesWN) {
 
 void CGView::worldCoord(int x, int y, int z, Vector3d &v) {
     GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT,viewport);
+    glGetIntegerv(GL_VIEWPORT, viewport);
     GLdouble M[16], P[16];
-    glGetDoublev(GL_PROJECTION_MATRIX,P);
-    glGetDoublev(GL_MODELVIEW_MATRIX,M);
-    gluUnProject(x,viewport[3]-1-y,z,M,P,viewport,&v[0],&v[1],&v[2]);
+    glGetDoublev(GL_PROJECTION_MATRIX, P);
+    glGetDoublev(GL_MODELVIEW_MATRIX, M);
+    gluUnProject(x, viewport[3] - 1 - y, z, M, P, viewport, &v[0], &v[1], &v[2]);
 }
 
 void CGView::mouseToTrackball(int x, int y, int W, int H, QVector3D &v) {
@@ -170,7 +171,7 @@ void CGView::mouseToTrackball(int x, int y, int W, int H, QVector3D &v) {
     } else v[2] = (float) sqrt(1.0 - d * d);
 }
 
-QQuaternion CGView::trackball(const QVector3D& u, const QVector3D& v) {
+QQuaternion CGView::trackball(const QVector3D &u, const QVector3D &v) {
     QVector3D uxv = QVector3D::crossProduct(u, v);
     QQuaternion ret(1.0f + QVector3D::dotProduct(u, v), uxv);
     ret.normalize();

@@ -52,7 +52,7 @@ struct face {
 
 class Mesh {
 public:
-    Mesh() {};
+    Mesh() { };
 
     void addTetrahedron(Vector3d &a, Vector3d &b, Vector3d &c, Vector3d &d);
 

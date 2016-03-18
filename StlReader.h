@@ -16,11 +16,13 @@
 #include <iostream>
 
 #if _MSC_VER
-    #include <gl/glu.h>
+#include <gl/glu.h>
 #elif __APPLE__
-    #include <OpenGL/glu.h>
+#include <OpenGL/glu.h>
 #else
-    #include <GL/glu.h>
+
+#include <GL/glu.h>
+
 #endif
 
 #include "Part.h"
@@ -110,7 +112,7 @@ protected:
 
     void mouseToTrackball(int x, int y, int W, int H, QVector3D &v);
 
-    QQuaternion trackball(const QVector3D&, const QVector3D&);
+    QQuaternion trackball(const QVector3D &, const QVector3D &);
 
     CGMainWindow *main;
     int oldX, oldY;

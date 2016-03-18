@@ -19,7 +19,8 @@ public:
     ParamRenderArea *getArea() const;
 
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-    void mouseDoubleClickEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
+
+    void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 public slots:
 

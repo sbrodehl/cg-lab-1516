@@ -28,7 +28,7 @@ public:
 
     void keyPressEvent(QKeyEvent *event);
 
-    void mouseDoubleClickEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 public slots:
 
@@ -50,9 +50,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QList<QColor> colors = QList<QColor>() << Qt::GlobalColor::black <<Qt::GlobalColor::yellow
-    << Qt::GlobalColor::blue << Qt::GlobalColor::green << Qt::GlobalColor::red << Qt::GlobalColor::magenta
-    << Qt::GlobalColor::gray << Qt::GlobalColor::cyan << Qt::GlobalColor::darkBlue;
+    QList<QColor> colors = QList<QColor>() << Qt::GlobalColor::black << Qt::GlobalColor::yellow
+                           << Qt::GlobalColor::blue << Qt::GlobalColor::green << Qt::GlobalColor::red <<
+                           Qt::GlobalColor::magenta
+                           << Qt::GlobalColor::gray << Qt::GlobalColor::cyan << Qt::GlobalColor::darkBlue;
 
     std::vector<QPointF> waypoints;
     QList<QList<QPointF> > shapeList;
