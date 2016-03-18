@@ -39,6 +39,8 @@ set(SOURCE_FILES
         drawing.cpp
         StlReader.cpp
         StlReader.h
+        Mesh.cpp
+        Mesh.h
         ParametricWindow.cpp
         ParametricWindow.h
         Parametrics.h
@@ -56,11 +58,14 @@ set(SOURCE_FILES
         parts/TrefoilPart.h
         UserInteractions.cpp
         ParamRenderArea.cpp
-        ParamRenderArea.h)
+        ParamRenderArea.h
+        thirdparty/vecmath.cpp
+        thirdparty/vecmath.h)
 
 include_directories(.)
 include_directories(parametrics)
 include_directories(parts)
+include_directories(thirdparty)
 
 add_executable(cg_lab_1516
         ${SOURCE_FILES}
