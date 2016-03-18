@@ -60,7 +60,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     statusBar()->showMessage("Ready", 1000);
 }
 
-CGMainWindow::~CGMainWindow() {}
+CGMainWindow::~CGMainWindow() { }
 
 CGView::CGView(CGMainWindow *mainwindow, QWidget *parent) : QGLWidget(parent) {
     main = mainwindow;

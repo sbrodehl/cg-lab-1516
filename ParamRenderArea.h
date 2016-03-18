@@ -17,23 +17,34 @@ public:
     explicit ParamRenderArea(const QPainterPath &path, QWidget *parent = 0);
 
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+
     QSize sizeHint() const Q_DECL_OVERRIDE;
+
     QPainterPath getPath();
+
     QList<QList<QPointF> > getShapes();
+
     void setShapeType(ShapeType type);
+
     void keyPressEvent(QKeyEvent *event);
 
 public slots:
 
     void setFillRule(Qt::FillRule rule);
+
     void setFillGradient(const QColor &color1, const QColor &color2);
+
     void setPenWidth(float width);
+
     void setPenColor(const QColor &color);
+
     void setRotationAngle(int degrees);
+
     void clearShapes();
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:

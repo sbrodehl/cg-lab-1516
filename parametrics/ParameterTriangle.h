@@ -1,4 +1,3 @@
-
 #ifndef CG_LAB_1516_PARAMETERTRIANGLE_H
 #define CG_LAB_1516_PARAMETERTRIANGLE_H
 
@@ -8,15 +7,15 @@
 class ParameterTriangle {
     QVector2D points[3] = {};
     QPair<QVector2D, QVector2D> segments[3] = {};
-    ParameterTriangle* neighbors[3] = {};
+    ParameterTriangle *neighbors[3] = {};
 
 public:
-    ParameterTriangle(QVector2D a, QVector2D b, QVector2D c){
-        if( leftTurn(a, b, c) ){
+    ParameterTriangle(QVector2D a, QVector2D b, QVector2D c) {
+        if (leftTurn(a, b, c)) {
             points[0] = a;
             points[1] = b;
             points[2] = c;
-        }else{
+        } else {
             points[0] = a;
             points[1] = c;
             points[2] = b;
@@ -27,28 +26,28 @@ public:
         segments[2] = QPair<QVector2D, QVector2D>(points[2], points[0]);
     }
 
-    void setNeighbor(int id, ParameterTriangle* neighbor){
+    void setNeighbor(int id, ParameterTriangle *neighbor) {
         neighbors[id] = neighbor;
     }
 
-    ParameterTriangle* getNeighbor(int id){
+    ParameterTriangle *getNeighbor(int id) {
         return neighbors[id];
     }
 
-    QPair<QVector2D, QVector2D> getSegment(int id){
+    QPair<QVector2D, QVector2D> getSegment(int id) {
         return segments[id];
     }
 
-    QVector2D getPoint(int id){
+    QVector2D getPoint(int id) {
         return points[id];
     }
 
-    bool leftTurn(QVector2D a, QVector2D b, QVector2D c){
-        double ux = b.x()-a.x();
-        double uy = b.y()-a.y();
-        double vx = c.x()-a.x();
-        double vy = c.y()-a.y();
-        return (ux*vy-uy*vx >= 0 || abs(ux*vy-uy*vx) < pow(10, -10));
+    bool leftTurn(QVector2D a, QVector2D b, QVector2D c) {
+        double ux = b.x() - a.x();
+        double uy = b.y() - a.y();
+        double vx = c.x() - a.x();
+        double vy = c.y() - a.y();
+        return (ux * vy - uy * vx >= 0 || abs(ux * vy - uy * vx) < pow(10, -10));
     }
 
 };

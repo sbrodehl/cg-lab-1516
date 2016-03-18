@@ -5,6 +5,7 @@
 #include "ParamRenderArea.h"
 
 class CGMainWindow;
+
 class Parametrics;
 
 class ParametricWindow : public QMainWindow {
@@ -12,7 +13,9 @@ Q_OBJECT
 
 public:
     ParametricWindow(QWidget *parent = 0);
+
     void initParams(Parametrics *p);
+
     ParamRenderArea *getArea() const;
 
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -20,8 +23,11 @@ public:
 public slots:
 
     void updateTriangulation();
+
     void addOuterShaper();
+
     void addInnerShaper();
+
     void clearShapes();
 
 private:

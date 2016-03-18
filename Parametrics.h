@@ -19,7 +19,7 @@ private:
     QString name;
     QString description;
     QUuid uid = QUuid::createUuid();
-    std::vector<ParameterTriangle*> parameterSpace;
+    std::vector<ParameterTriangle *> parameterSpace;
     ParametricWindow *pw;
 
 public:
@@ -27,28 +27,38 @@ public:
     const double PI = M_PI;
 
     void setDescription(QString description_) { description = description_; };
+
     QString getDescription() { return description; };
 
     void setName(QString name_) { name = name_; };
+
     QString getName() { return name; };
 
     QUuid getUID() { return uid; };
 
     virtual double x(double u, double v) = 0;
+
     virtual double y(double u, double v) = 0;
+
     virtual double z(double u, double v) = 0;
 
     virtual QVector3D getPoint(double u, double v) = 0;
+
     virtual QVector3D getNormal(double u, double v) = 0;
+
     virtual std::vector<QVector3D> triangulate(double delta, double eps) = 0;
+
     std::vector<QPair<QVector3D, QVector3D> > getSegments();
 
     void initializeParameterSpace(double delta, double eps);
+
     bool leftTurn(QVector2D a, QVector2D b, QVector2D c);
+
     ParameterTriangle locatePoint(ParameterTriangle actual, QVector2D point);
 
     virtual std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &points, int bucketsize);
-    virtual ParametricWindow* createWindow(QWidget* parent);
+
+    virtual ParametricWindow *createWindow(QWidget *parent);
 
 };
 

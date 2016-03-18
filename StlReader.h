@@ -35,15 +35,22 @@ public:
 public slots:
 
     void loadTorusPart();
+
     void loadTrefoilPart();
+
     void loadZylinderPart();
+
     void loadKegelPart();
+
     void changedDeltaSlider(int);
+
     void updateTriangulation();
 
 protected:
     void loadEq(Part &);
+
     void updateEq();
+
     void keyPressEvent(QKeyEvent *);
 };
 
@@ -53,16 +60,27 @@ Q_OBJECT
 public:
 
     CGView(CGMainWindow *, QWidget *);
+
     void clearGL();
+
     void initShaders();
+
     void initializeGL();
+
     void pickLine(int, int, QVector3D &, QVector3D &);
+
     bool pick(int, int, QVector3D &);
+
     void initSolidCubeVBO();
+
     void initSolidSphereVBO();
+
     void initSolidCylinderVBO();
+
     void refineSolidSphere(const std::vector<QVector3D> &, std::vector<QVector3D> &);
+
     void initTrianglesVBO(const std::vector<QVector3D> &);
+
     void initVBO(const std::vector<QVector3D> &);
 
     QVector3D min, max, center;
@@ -80,14 +98,23 @@ public:
 protected:
 
     void paintGL();
+
     void resizeGL(int, int);
+
     void mouseMoveEvent(QMouseEvent *);
+
     void mousePressEvent(QMouseEvent *);
+
     void mouseReleaseEvent(QMouseEvent *);
+
     void wheelEvent(QWheelEvent *);
+
     void drawSolidSphere(const QVector3D &, qreal);
+
     void drawSolidCylinder(const QVector3D &, const QVector3D &, qreal);
+
     void drawAABB(const QVector3D &, const QVector3D &);
+
     void drawOBB(const QMatrix4x4 &, const QVector3D &);
 
     CGMainWindow *main;

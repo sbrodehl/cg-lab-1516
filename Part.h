@@ -26,7 +26,7 @@ public:
 
     void showParamWindows(QWidget *parent) {
         for (auto parametric : parametrics) {
-            ParametricWindow* pw = parametric->createWindow(parent);
+            ParametricWindow *pw = parametric->createWindow(parent);
             windows.push_back(std::shared_ptr<ParametricWindow>(pw));
             pw->show();
         }
