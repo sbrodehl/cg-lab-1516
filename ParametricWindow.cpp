@@ -71,3 +71,7 @@ void ParametricWindow::keyPressEvent(QKeyEvent *event) {
 void ParametricWindow::clearShapes() {
     area->clearShapes();
 }
+
+void ParametricWindow::mouseDoubleClickEvent(QMouseEvent *event) {
+    area->mouseDoubleClickEvent(event);
+}

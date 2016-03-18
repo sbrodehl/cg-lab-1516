@@ -58,30 +58,32 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
     painter.translate(-offset);
     painter.setPen(QPen(penColor, penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
+    int colorID = 0;
+
     // draw all outer shapes
     for (QPainterPath p : outerShapes) {
-        QColor rndC = QColor::fromRgb(qrand() % (255 + 1), qrand() % (255 + 1), qrand() % (255 + 1));
         QLinearGradient g(0, 0, 0, 100);
-        g.setColorAt(0.0, rndC);
-        g.setColorAt(1.0, rndC);
+        g.setColorAt(0.0, colors.at(colorID));
+        g.setColorAt(1.0, colors.at(colorID));
         painter.setBrush(g);
         painter.drawPath(p);
+        colorID = (colorID + 1) % colors.size();
     }
 
     // draw all inner shapes
     for (QPainterPath p : innerShapes) {
-        QColor rndC = QColor::fromRgb(qrand() % (255 + 1), qrand() % (255 + 1), qrand() % (255 + 1));
         QLinearGradient g(0, 0, 0, 100);
-        g.setColorAt(0.0, rndC);
-        g.setColorAt(1.0, rndC);
+        g.setColorAt(0.0, colors.at(colorID));
+        g.setColorAt(1.0, colors.at(colorID));
         painter.setBrush(g);
         painter.drawPath(p);
+        colorID = (colorID + 1) % colors.size();
     }
 
     // draw current path
     QLinearGradient gradient(0, 0, 0, 100);
-    gradient.setColorAt(0.0, fillColor1);
-    gradient.setColorAt(1.0, fillColor2);
+    gradient.setColorAt(0.0, colors.at(colorID));
+    gradient.setColorAt(1.0, colors.at(colorID));
     painter.setBrush(gradient);
     painter.drawPath(path);
 }
@@ -180,4 +182,11 @@ void ParamRenderArea::clearShapes() {
     outerShapes.clear();
     waypoints.clear();
     update();
+}
+
+void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        removeLastWaypoint(); // undo first click
+        removeLastWaypoint(); // undo second click
+    }
 }
