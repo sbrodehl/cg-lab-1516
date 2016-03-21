@@ -48,8 +48,6 @@ public:
 
     bool isEmpty();
 
-    void append(const Mesh &mesh);
-
     void addTriangle(const QVector3D &a, const QVector3D &b, const QVector3D &c); //creates triangle from the points abc
     void addTriangle(int ei, const QVector3D &c); //creates triangle from the existing edge e and new point p
     void addTriangle(int e1, int e2); //creates triangle from the two existing edges e1 and e2

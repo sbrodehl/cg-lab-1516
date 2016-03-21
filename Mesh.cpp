@@ -85,10 +85,6 @@ void Mesh::addTriangle(int e1, int e2, int e3) {
     faces.push_back(face(e1i, n));
 }
 
-void Mesh::append(const Mesh &mesh) {
-    // TODO tba.
-}
-
 bool Mesh::isEmpty() {
     return faces.empty();
 }
