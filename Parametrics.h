@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <memory>
+#include <QtCore/qmath.h>
 
 #include "ParametricWindow.h"
 #include "ParameterTriangle.h"
