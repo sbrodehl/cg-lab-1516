@@ -110,7 +110,7 @@ void CGMainWindow::loadEq(Part &part) {
     ogl->initVBO(ogl->triangles);
 
     QVector3D extent = ogl->max - ogl->min;
-    ogl->zoom = 1.5 / std::max(std::max(extent.x(), extent.y()), extent.z());
+    ogl->zoom = 1.5f / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
 
     statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()) + " triangles.");
