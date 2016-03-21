@@ -1,6 +1,7 @@
 #include <iostream>
-#include "TriangulationAlgorithm.h"
 #include <queue>
+
+#include "TriangulationAlgorithm.h"
 
 bool TriangulationAlgorithm::canSee(QVector2D v, QVector2D next, QVector2D vertex, std::vector<QVector2D> left) {
     if (contains(left, v)) {
@@ -90,11 +91,7 @@ struct TriangulationAlgorithm::yPriorityLine {
         QVector2D *p1 = a->getv1()->y() > b->getv2()->y() ? a->getv1() : b->getv2();
         QVector2D *p2 = b->getv1()->y() > b->getv2()->y() ? a->getv1() : b->getv2();
 
-        if (p1->x() > p2->x()) {
-            return true;
-        } else {
-            return false;
-        }
+        return p1->x() > p2->x();
     }
 };
 
@@ -106,7 +103,6 @@ void TriangulationAlgorithm::makeMonotone() {
     }
 
     std::set<Line *, yPriorityLine> SL;
-
     std::map<Line *, Vertex *> helpers;
 
     while (!pq.empty()) {
