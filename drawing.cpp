@@ -33,10 +33,10 @@ void CGView::initializeGL() {
 }
 
 void CGView::paintGL() {
-    if(wireframe){
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    if (wireframe) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -142,11 +142,11 @@ QQuaternion CGView::trackball(const QVector3D &u, const QVector3D &v) {
 
 void CGView::drawMesh(Mesh m) {
     std::vector<QVector3D> poWN;
-    for(face& f: m.faces){
-        if(f.halfedge == -1) continue;
-        edge& e1 = m.edges[f.halfedge];
-        edge& e2 = m.edges[e1.succ];
-        edge& e3 = m.edges[e1.pred];
+    for (face &f: m.faces) {
+        if (f.halfedge == -1) continue;
+        edge &e1 = m.edges[f.halfedge];
+        edge &e2 = m.edges[e1.succ];
+        edge &e3 = m.edges[e1.pred];
         QVector3D a = m.verts[e1.vertex].pos;
         QVector3D aN = m.verts[e1.vertex].normal;
         QVector3D b = m.verts[e2.vertex].pos;

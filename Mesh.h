@@ -19,6 +19,7 @@ struct vertex {
     };
 
     vertex(QVector3D pos, int halfedge, QVector3D n) : pos(pos), halfedge(halfedge), normal(n) { };
+
     vertex(QVector3D pos, int halfedge) : pos(pos), halfedge(halfedge) { };
 };
 
@@ -28,6 +29,7 @@ struct edge {
     int face;
 
     edge() { vertex = pred = succ = opposite = face = -1; };
+
     edge(int vertex, int pred, int succ, int opposite, int face) : vertex(vertex), pred(pred),
                                                                    succ(succ), opposite(opposite),
                                                                    face(face) { };

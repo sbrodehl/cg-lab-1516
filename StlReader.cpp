@@ -94,17 +94,14 @@ void CGMainWindow::loadEq(Part &part) {
         faceCount += m.faces.size();
     }
 
-
     statusBar()->showMessage("Loaded " + QString::number(faceCount) + " faces.");
 
     if (faceCount < 1) {
         ogl->triangles = part.triangulate(delta, eps);
-        statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()/6) + " triangles.");
+        statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size() / 6) + " triangles.");
     }
 
     ogl->initVBO(ogl->triangles);
-
-
 
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
