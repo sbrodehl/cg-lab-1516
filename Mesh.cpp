@@ -11,7 +11,8 @@ void Mesh::addTriangle(const QVector3D &a, const QVector3D &b, const QVector3D &
             e2i = e1i + 1,
             e3i = e1i + 2;
     int fi = (int) faces.size();
-    QVector3D n = QVector3D::crossProduct((b - a), (c - b));
+    QVector3D n = QVector3D::crossProduct((b - a), (c - b))
+            .normalized();
     verts.push_back(vertex(a, e1i));
     verts.push_back(vertex(b, e2i));
     verts.push_back(vertex(c, e3i));
@@ -32,7 +33,8 @@ void Mesh::addTriangle(int ei, const QVector3D &c) {
     int fi = (int) faces.size();
     QVector3D a = verts[ai].pos;
     QVector3D b = verts[bi].pos;
-    QVector3D n = QVector3D::crossProduct((b - a), (c - b));
+    QVector3D n = QVector3D::crossProduct((b - a), (c - b))
+            .normalized();
     verts.push_back(vertex(c, e1i));
     edges.push_back(edge(bi, e3i, e2i, ei, fi)); //e1
     edges[ei].opposite = e1i;
@@ -52,7 +54,8 @@ void Mesh::addTriangle(int e1, int e2) {
             e3i = (int) (edges.size() + 2);
     int fi = (int) faces.size();
     QVector3D n = QVector3D::crossProduct((verts[bi].pos - verts[ai].pos),
-                                          (verts[ci].pos - verts[bi].pos));
+                                          (verts[ci].pos - verts[bi].pos))
+            .normalized();
     edges.push_back(edge(bi, e3i, e2i, e2, fi));//e1
     edges[e2].opposite = e1i;
     edges.push_back(edge(ci, e1i, e3i, e1, fi));//e2
@@ -77,12 +80,19 @@ void Mesh::addTriangle(int e1, int e2, int e3) {
     edges.push_back(edge(ai, e2i, e1i, e2, fi));//e3
     edges[e2].opposite = e3i;
     QVector3D n = QVector3D::crossProduct((verts[bi].pos - verts[ai].pos),
-                                          (verts[ci].pos - verts[bi].pos));
+                                          (verts[ci].pos - verts[bi].pos))
+            .normalized();
     faces.push_back(face(e1i, n));
 }
 
 void Mesh::append(const Mesh &mesh) {
     // TODO tba.
 }
+
+bool Mesh::isEmpty() {
+    return faces.empty();
+}
+
+
 
 

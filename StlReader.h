@@ -38,6 +38,7 @@ public slots:
     void loadKegelPart();
     void changedDeltaSlider(int);
     void updateTriangulation();
+    void toggleWireframe();
 
 protected:
     void loadEq(Part &);
@@ -53,7 +54,9 @@ public:
     void clearGL();
     void initShaders();
     void initializeGL();
+    void drawMesh(Mesh m);
     void initVBO(const std::vector<QVector3D> &);
+    void toggleWireframe();
 
     QVector3D min, max, center;
     float zoom;
@@ -81,9 +84,9 @@ private:
     QGLShaderProgram program;
     QMatrix4x4 projection, modelView;
     int width, height;
+    bool wireframe = false;
 
     void drawBoundingBox();
-    void draw(bool wireframe);
 };
 
 #endif

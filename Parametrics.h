@@ -20,6 +20,9 @@ private:
     QUuid uid = QUuid::createUuid();
     std::vector<ParameterTriangle *> parameterSpace;
     ParametricWindow *pw;
+
+protected:
+
     Mesh mesh;
 
 public:

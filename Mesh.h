@@ -44,6 +44,8 @@ class Mesh {
 public:
     Mesh() { };
 
+    bool isEmpty();
+
     void append(const Mesh &mesh);
 
     void addTriangle(const QVector3D &a, const QVector3D &b, const QVector3D &c); //creates triangle from the points abc

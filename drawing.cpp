@@ -33,10 +33,12 @@ void CGView::initializeGL() {
 }
 
 void CGView::paintGL() {
+    if(wireframe){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    bool wireframe = false;
-    draw(wireframe);
 
     modelView.setToIdentity();
     modelView.rotate(q_now);
@@ -69,21 +71,11 @@ void CGView::resizeGL(int w, int h) {
     projection.setToIdentity();
     if (width > height) {
         qreal ratio = width / (qreal) height;
-        projection.ortho(-ratio, ratio, -1.0, 1.0, -10.0, 10.0);
+        projection.ortho(-ratio, ratio, -1.0f, 1.0f, -10.0f, 10.0f);
     } else {
         qreal ratio = height / (qreal) width;
-        projection.ortho(-1.0, 1.0, -ratio, ratio, -10.0, 10.0);
+        projection.ortho(-1.0f, 1.0f, -ratio, ratio, -10.0f, 10.0f);
     }
-}
-
-void CGView::draw(bool wireframe) {
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    if (wireframe) glDisable(GL_LIGHTING);
-    else glEnable(GL_LIGHTING);
-
-    // TODO tba.
 }
 
 void CGView::drawBoundingBox() {
@@ -146,4 +138,33 @@ QQuaternion CGView::trackball(const QVector3D &u, const QVector3D &v) {
     QQuaternion ret(1.0f + QVector3D::dotProduct(u, v), uxv);
     ret.normalize();
     return ret;
+}
+
+void CGView::drawMesh(Mesh m) {
+    std::vector<QVector3D> poWN;
+    for(face& f: m.faces){
+        if(f.halfedge == -1) continue;
+        edge& e1 = m.edges[f.halfedge];
+        edge& e2 = m.edges[e1.succ];
+        edge& e3 = m.edges[e1.pred];
+        QVector3D a = m.verts[e1.vertex].pos;
+        QVector3D aN = m.verts[e1.vertex].normal;
+        QVector3D b = m.verts[e2.vertex].pos;
+        QVector3D bN = m.verts[e2.vertex].normal;
+        QVector3D c = m.verts[e3.vertex].pos;
+        QVector3D cN = m.verts[e3.vertex].normal;
+
+        poWN.push_back(a);
+        poWN.push_back(aN);
+        poWN.push_back(b);
+        poWN.push_back(bN);
+        poWN.push_back(c);
+        poWN.push_back(cN);
+    }
+    initVBO(poWN);
+}
+
+void CGView::toggleWireframe() {
+    wireframe = !wireframe;
+    update();
 }

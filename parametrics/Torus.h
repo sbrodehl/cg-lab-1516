@@ -79,7 +79,10 @@ public:
     }
 
     Mesh getMesh(double delta, double eps) {
-        Mesh mesh;
+        if (!mesh.isEmpty())
+            return mesh;
+
+        mesh = Mesh();
 
         std::vector<QVector3D> pointsWN;
         int bucketsize = (int) (delta + 1);
@@ -92,24 +95,42 @@ public:
         }
 
         for (size_t i = 0; i < pointsWN.size() - (2 * bucketsize); i += 2 * bucketsize) {
-            for (size_t l = 0; l < 2 * bucketsize - 2; l += 2) {
+            int preLeft = -1;
+            int preRight = -1;
+            int preEdge = -1;
+            int preBorderL = -1;
+            for (size_t l = 0; l < 2 * bucketsize - 0; l += 2) {
                 size_t leftRoot = i + l;
                 size_t rightRoot = i + l + 2 * bucketsize;
-                size_t nextLeft = i + l + 2;
-                size_t nextRight = i + l + 2 + 2 * bucketsize;
-                QVector3D leftR = pointsWN[leftRoot];
-                QVector3D leftRNormal = pointsWN[leftRoot + 1];
-                QVector3D rightR = pointsWN[rightRoot];
-                QVector3D rightRNormal = pointsWN[rightRoot + 1];
-                QVector3D neleftR = pointsWN[nextLeft];
-                QVector3D neleftRNormal = pointsWN[nextLeft + 1];
-                QVector3D nerightR = pointsWN[nextRight];
-                QVector3D nerightRNormal = pointsWN[nextRight + 1];
+
+                if (preLeft < 0 || preRight < 0) {
+                    preLeft = (int) leftRoot;
+                    preRight = (int) rightRoot;
+                    continue;
+                }
+
+                if (preEdge < 0) {
+                    mesh.addTriangle(pointsWN[leftRoot], pointsWN[preRight], pointsWN[preLeft]);
+                    mesh.verts[mesh.verts.size() - 3].normal = pointsWN[leftRoot + 1]; //a
+                    mesh.verts[mesh.verts.size() - 2].normal = pointsWN[preRight + 1]; //b
+                    mesh.verts[mesh.verts.size() - 1].normal = pointsWN[preLeft + 1]; //c
+                    preEdge = (int) mesh.edges.size() - 3;
+                } else {
+                    mesh.addTriangle(preEdge, pointsWN[leftRoot]);
+                    mesh.verts[mesh.verts.size() - 1].normal = pointsWN[leftRoot + 1]; //c
+                    preEdge = (int) mesh.edges.size() - 1;
+                }
+
+                mesh.addTriangle(preEdge, pointsWN[rightRoot]);
+                mesh.verts[mesh.verts.size() - 1].normal = pointsWN[rightRoot + 1]; //c
+                preEdge = (int) (mesh.edges.size() - 2);
+
+                preLeft = (int) leftRoot;
+                preRight = (int) rightRoot;
             }
         }
         return mesh;
     }
-
 };
 
 #endif //CG_LAB_1516_TORUS_H

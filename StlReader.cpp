@@ -22,6 +22,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     // Create a menu
     QMenu *file = new QMenu("&File", this);
     addAction(file->addAction("Refresh", this, SLOT(updateTriangulation()), Qt::Key_F5));
+    addAction(file->addAction("Wireframe", this, SLOT(toggleWireframe())));
     addAction(file->addAction("Quit", qApp, SLOT(quit()), Qt::CTRL + Qt::Key_Q));
     menuBar()->addMenu(file);
 
@@ -88,6 +89,16 @@ void CGMainWindow::loadEq(Part &part) {
 
     ogl->triangles = part.triangulate(delta, eps);
 
+    int faceCount = 0;
+
+    std::vector<Mesh> meshes = part.getMeshes(delta, eps);
+    for (Mesh m : meshes) {
+        ogl->drawMesh(m);
+        faceCount += m.faces.size();
+    }
+
+    statusBar()->showMessage("Loaded " + QString::number(faceCount) + " faces.");
+
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
     y1 = ogl->min.y();
@@ -107,7 +118,7 @@ void CGMainWindow::loadEq(Part &part) {
 
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
-    ogl->initVBO(ogl->triangles);
+    // ogl->initVBO(ogl->triangles);
 
     QVector3D extent = ogl->max - ogl->min;
     ogl->zoom = 1.5f / std::max(std::max(extent.x(), extent.y()), extent.z());
@@ -163,4 +174,8 @@ void CGMainWindow::updateEq() {
     int delta = 64;
     int eps = 64;
     viewPart->triangulate(delta, eps);
+}
+
+void CGMainWindow::toggleWireframe() {
+    ogl->toggleWireframe();
 }
