@@ -5,10 +5,7 @@
 #include <QPair>
 #include <QString>
 #include <QUuid>
-
-#include <cmath>
-#include <memory>
-#include <QtCore/qmath.h>
+#include <QtMath>
 
 #include "ParametricWindow.h"
 #include "ParameterTriangle.h"
@@ -56,6 +53,5 @@ public:
     virtual ParametricWindow *createWindow(QWidget *parent);
 
 };
-
 
 #endif //CG_LAB_1516_PARAMETRICS_H
