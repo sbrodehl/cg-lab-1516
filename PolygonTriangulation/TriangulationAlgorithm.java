@@ -28,11 +28,11 @@ public class TriangulationAlgorithm implements Drawable2D {
 	
 	@Override
 	public void paint(Graphics2D g) {
-		// Dicke des Zeichenstiftes für die Konturen
+		// Dicke des Zeichenstiftes fï¿½r die Konturen
 		g.setStroke(new BasicStroke(0.01f));
 		g.setColor(Color.black);
 		
-		// Iteration über alle vorhandenen Punkte
+		// Iteration ï¿½ber alle vorhandenen Punkte
 		double rad = 0.02;
 		for(Vertex v: vertices){
 			if(v.getType() == Type.START){
@@ -55,7 +55,7 @@ public class TriangulationAlgorithm implements Drawable2D {
 		
 		g.setColor(Color.black);
 		
-		// Iteration über alle Linien
+		// Iteration ï¿½ber alle Linien
 		for(Line2D line : lines){
 			g.draw(line);
 		}
@@ -80,7 +80,7 @@ public class TriangulationAlgorithm implements Drawable2D {
 	}
 	
 	private void triangulate(Vector<Vertex> polygon){
-		PriorityQueue<Vertex> pq = new PriorityQueue<Vertex>(new Comparator<Vertex>(){			
+		PriorityQueue<Vertex> pq = new PriorityQueue<Vertex>(new Comparator<Vertex>(){
 			@Override
 			public int compare(Vertex a, Vertex b) {
 				if(a.getY() < b.getY()){
