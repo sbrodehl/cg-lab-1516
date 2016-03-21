@@ -5,30 +5,31 @@
 
 class Line {
 private:
-    QVector2D* v1;
-    QVector2D* v2;
+    // why do we use pointer here?
+    QVector2D *v1;
+    QVector2D *v2;
 
 public:
     bool visited = false;
 
-    Line(QVector2D* v1_new, QVector2D* v2_new){
+    Line(QVector2D *v1_new, QVector2D *v2_new) { // : v1(...) , v2(...) {
         v1 = v1_new;
         v2 = v2_new;
     }
 
-    QVector2D* getv1(){
+    QVector2D *getv1() {
         return v1;
     }
 
-    QVector2D* getv2(){
+    QVector2D *getv2() {
         return v2;
     }
 
-    void setV1(QVector2D* v1_new){
+    void setV1(QVector2D *v1_new) {
         v1 = v1_new;
     }
 
-    void setV2(QVector2D* v2_new){
+    void setV2(QVector2D *v2_new) {
         v2 = v2_new;
     }
 };

@@ -58,12 +58,19 @@ set(SOURCE_FILES
         parts/TrefoilPart.h
         UserInteractions.cpp
         ParamRenderArea.cpp
-        ParamRenderArea.h PolygonTriangulationC/TriangulationAlgorithm.cpp PolygonTriangulationC/TriangulationAlgorithm.h PolygonTriangulationC/Edge.h PolygonTriangulationC/Vertex.h PolygonTriangulationC/Vertex.cpp PolygonTriangulationC/Line.h)
+        ParamRenderArea.h
+        PolygonTriangulationC/TriangulationAlgorithm.cpp
+        PolygonTriangulationC/TriangulationAlgorithm.h
+        PolygonTriangulationC/Edge.h
+        PolygonTriangulationC/Vertex.h
+        PolygonTriangulationC/Vertex.cpp
+        PolygonTriangulationC/Line.h)
 
 include_directories(.)
 include_directories(parametrics)
 include_directories(parts)
 include_directories(thirdparty)
+include_directories(PolygonTriangulationC)
 
 add_executable(cg_lab_1516
         ${SOURCE_FILES}

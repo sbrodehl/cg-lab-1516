@@ -5,30 +5,30 @@
 
 class Edge {
 private:
-    Vertex* v1;
-    Vertex* v2;
+    Vertex *v1;
+    Vertex *v2;
 
 public:
     bool visited = false;
 
-    Edge(Vertex* v1_new, Vertex* v2_new){
+    Edge(Vertex *v1_new, Vertex *v2_new) {
         v1 = v1_new;
         v2 = v2_new;
     }
 
-    Vertex* getv1(){
+    Vertex *getv1() {
         return v1;
     }
 
-    Vertex* getv2(){
+    Vertex *getv2() {
         return v2;
     }
 
-    void setV1(Vertex* v1_new){
+    void setV1(Vertex *v1_new) {
         v1 = v1_new;
     }
 
-    void setV2(Vertex* v2_new){
+    void setV2(Vertex *v2_new) {
         v2 = v2_new;
     }
 };
