@@ -161,7 +161,10 @@ void CGView::drawMesh(Mesh m) {
         poWN.push_back(c);
         poWN.push_back(cN);
     }
-    initVBO(poWN);
+    if (!poWN.empty()) {
+        triangles.insert(triangles.end(), poWN.begin(), poWN.end());
+        //initVBO(poWN);
+    }
 }
 
 void CGView::toggleWireframe() {

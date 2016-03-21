@@ -87,17 +87,24 @@ void CGMainWindow::loadEq(Part &part) {
 
     part.showParamWindows(this);
 
-    ogl->triangles = part.triangulate(delta, eps);
-
     int faceCount = 0;
-
     std::vector<Mesh> meshes = part.getMeshes(delta, eps);
     for (Mesh m : meshes) {
         ogl->drawMesh(m);
         faceCount += m.faces.size();
     }
 
+
     statusBar()->showMessage("Loaded " + QString::number(faceCount) + " faces.");
+
+    if (faceCount < 1) {
+        ogl->triangles = part.triangulate(delta, eps);
+        statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()/6) + " triangles.");
+    }
+
+    ogl->initVBO(ogl->triangles);
+
+
 
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
@@ -118,13 +125,10 @@ void CGMainWindow::loadEq(Part &part) {
 
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
-    // ogl->initVBO(ogl->triangles);
 
     QVector3D extent = ogl->max - ogl->min;
     ogl->zoom = 1.5f / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
-
-    statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size()) + " triangles.");
 
     ogl->updateGL();
 }
