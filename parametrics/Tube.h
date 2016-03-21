@@ -74,6 +74,7 @@ public:
         return createTriangles(pointvec, delta + 1);
     }
 
+    Mesh getMesh(double delta, double eps) { return Mesh(); }
 };
 
 #endif //CG_LAB_1516_TUBE_H

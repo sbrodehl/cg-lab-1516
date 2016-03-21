@@ -75,7 +75,39 @@ public:
             }
         }
 
-        return createTriangles(pointvec, delta + 1);
+        return createTriangles(pointvec, (int) (delta + 1));
+    }
+
+    Mesh getMesh(double delta, double eps) {
+        Mesh mesh;
+
+        std::vector<QVector3D> pointsWN;
+        int bucketsize = (int) (delta + 1);
+
+        for (int i = 0; i <= delta; i++) {
+            for (int j = 0; j <= eps; j++) {
+                pointsWN.push_back(getPoint((float) i / delta, (float) j / eps));
+                pointsWN.push_back(getNormal((float) i / delta, (float) j / eps));
+            }
+        }
+
+        for (size_t i = 0; i < pointsWN.size() - (2 * bucketsize); i += 2 * bucketsize) {
+            for (size_t l = 0; l < 2 * bucketsize - 2; l += 2) {
+                size_t leftRoot = i + l;
+                size_t rightRoot = i + l + 2 * bucketsize;
+                size_t nextLeft = i + l + 2;
+                size_t nextRight = i + l + 2 + 2 * bucketsize;
+                QVector3D leftR = pointsWN[leftRoot];
+                QVector3D leftRNormal = pointsWN[leftRoot + 1];
+                QVector3D rightR = pointsWN[rightRoot];
+                QVector3D rightRNormal = pointsWN[rightRoot + 1];
+                QVector3D neleftR = pointsWN[nextLeft];
+                QVector3D neleftRNormal = pointsWN[nextLeft + 1];
+                QVector3D nerightR = pointsWN[nextRight];
+                QVector3D nerightRNormal = pointsWN[nextRight + 1];
+            }
+        }
+        return mesh;
     }
 
 };

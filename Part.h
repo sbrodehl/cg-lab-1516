@@ -24,6 +24,14 @@ public:
         return pointvec;
     }
 
+    std::vector<Mesh> getMeshes(double delta, double eps) {
+        std::vector<Mesh> meshes;
+        for (auto parametric : parametrics) {
+            meshes.push_back(parametric->getMesh(delta, eps));
+        }
+        return meshes;
+    }
+
     void showParamWindows(QWidget *parent) {
         for (auto parametric : parametrics) {
             ParametricWindow *pw = parametric->createWindow(parent);

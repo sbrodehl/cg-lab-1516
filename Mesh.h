@@ -9,13 +9,16 @@
 
 struct vertex {
     QVector3D pos;
+    QVector3D normal;
     int halfedge;
 
     vertex() {
         pos = QVector3D();
+        normal = QVector3D();
         halfedge = -1;
     };
 
+    vertex(QVector3D pos, int halfedge, QVector3D n) : pos(pos), halfedge(halfedge), normal(n) { };
     vertex(QVector3D pos, int halfedge) : pos(pos), halfedge(halfedge) { };
 };
 
@@ -40,6 +43,8 @@ struct face {
 class Mesh {
 public:
     Mesh() { };
+
+    void append(const Mesh &mesh);
 
     void addTriangle(const QVector3D &a, const QVector3D &b, const QVector3D &c); //creates triangle from the points abc
     void addTriangle(int ei, const QVector3D &c); //creates triangle from the existing edge e and new point p

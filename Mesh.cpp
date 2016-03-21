@@ -80,3 +80,9 @@ void Mesh::addTriangle(int e1, int e2, int e3) {
                                           (verts[ci].pos - verts[bi].pos));
     faces.push_back(face(e1i, n));
 }
+
+void Mesh::append(const Mesh &mesh) {
+    // TODO tba.
+}
+
+
