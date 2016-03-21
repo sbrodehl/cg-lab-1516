@@ -108,5 +108,6 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
 
 std::vector<QPair<QVector3D, QVector3D> > Parametrics::getSegments() {
     QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
+    // TODO convert to useful data structure
     return std::vector<QPair<QVector3D, QVector3D>>();
 }
