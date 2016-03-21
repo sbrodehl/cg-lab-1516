@@ -48,10 +48,6 @@ void ParametricWindow::initParams(Parametrics *p) {
     setWindowTitle(title);
 }
 
-void ParametricWindow::updateTriangulation() {
-    std::cout << "push it up..." << std::endl;
-}
-
 ParamRenderArea *ParametricWindow::getArea() const {
     return area;
 }

@@ -23,9 +23,6 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 public slots:
-
-    void updateTriangulation();
-
     void addOuterShaper();
 
     void addInnerShaper();
