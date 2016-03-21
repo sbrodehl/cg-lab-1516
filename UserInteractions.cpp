@@ -30,18 +30,20 @@ void CGView::mouseMoveEvent(QMouseEvent *event) {
     updateGL();
 }
 
-void CGView::clearGL() {
+void CGView::clearGL(bool soft) {
     glClearColor(0.4, 0.4, 0.5, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_ARRAY_BUFFER);
     triangles = std::vector<QVector3D>();
     vboTrianglesId = std::vector<GLuint>();
     vboTrianglesSize = std::vector<int>();
-    qreal inf = std::numeric_limits<qreal>::infinity();
-    min = QVector3D(inf, inf, inf);
-    max = QVector3D(-inf, -inf, -inf);
-    center = QVector3D(0, 0, 0);
-    q_now = QQuaternion();
+    if (!soft) {
+        qreal inf = std::numeric_limits<qreal>::infinity();
+        min = QVector3D(inf, inf, inf);
+        max = QVector3D(-inf, -inf, -inf);
+        center = QVector3D(0, 0, 0);
+        q_now = QQuaternion();
+    }
     updateGL();
 }
 

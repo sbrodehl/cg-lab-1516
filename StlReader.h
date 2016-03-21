@@ -62,7 +62,7 @@ Q_OBJECT
 public:
     CGView(CGMainWindow *, QWidget *);
 
-    void clearGL();
+    void clearGL(bool soft = false);
 
     void initShaders();
 

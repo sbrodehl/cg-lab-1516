@@ -167,14 +167,19 @@ void CGMainWindow::changedDeltaSlider(int value) {
 }
 
 void CGMainWindow::updateTriangulation() {
-    std::cout << "updating!" << std::endl;
     updateEq();
 }
 
 void CGMainWindow::updateEq() {
     int delta = 64;
     int eps = 64;
-    viewPart->triangulate(delta, eps);
+    ogl->clearGL(true);
+    std::vector<Mesh> meshes = viewPart->getMeshes(delta, eps);
+    for (Mesh m : meshes) {
+        ogl->drawMesh(m);
+    }
+    ogl->initVBO(ogl->triangles);
+    ogl->update();
 }
 
 void CGMainWindow::toggleWireframe() {
