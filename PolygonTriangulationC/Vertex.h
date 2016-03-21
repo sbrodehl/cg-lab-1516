@@ -73,6 +73,7 @@ public:
         if(n==1){
             return b;
         }
+        return nullptr;
     }
 
     void setType(Type t_new){

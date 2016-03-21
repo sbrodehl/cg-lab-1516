@@ -4,6 +4,8 @@
 #include <QVector2D>
 #include <QPair>
 
+#include <cmath>
+
 class ParameterTriangle {
     QVector2D points[3] = {};
     QPair<QVector2D, QVector2D> segments[3] = {};
@@ -47,7 +49,7 @@ public:
         double uy = b.y() - a.y();
         double vx = c.x() - a.x();
         double vy = c.y() - a.y();
-        return (ux * vy - uy * vx >= 0 || std::abs(ux * vy - uy * vx) < pow(10, -10));
+        return (ux * vy - uy * vx >= 0 || std::abs(ux * vy - uy * vx) < std::pow(10, -10));
     }
 
 };

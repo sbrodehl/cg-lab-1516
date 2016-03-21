@@ -15,7 +15,7 @@ bool TriangulationAlgorithm::leftTurn(QVector2D a, QVector2D b, QVector2D c) {
     double uy = b.y()-a.y();
     double vx = c.x()-a.x();
     double vy = c.y()-a.y();
-    return (ux*vy-uy*vx >= 0 || abs(ux*vy-uy*vx) < pow(10, -10));
+    return (ux*vy-uy*vx >= 0 || std::abs(ux*vy-uy*vx) < pow(10, -10));
 }
 
 bool TriangulationAlgorithm::contains(std::vector<QVector2D> vec, QVector2D v){
@@ -37,6 +37,7 @@ std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(std::vector
     for(std::vector<Vertex*> polygon : polygons){
         // triangulateMonotone(polygon);
     }
+    return std::vector<ParameterTriangle *>();
 }
 
 template <typename T> int TriangulationAlgorithm::getIndex(std::vector<T*> vec, T* item){
