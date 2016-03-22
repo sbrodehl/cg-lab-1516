@@ -36,7 +36,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QList<QColor> colors = QList<QColor>() << Qt::GlobalColor::black << Qt::GlobalColor::yellow
+    QList<QColor> colors = QList<QColor>() << Qt::GlobalColor::yellow
                            << Qt::GlobalColor::blue << Qt::GlobalColor::green
                            << Qt::GlobalColor::red << Qt::GlobalColor::magenta
                            << Qt::GlobalColor::gray << Qt::GlobalColor::cyan;

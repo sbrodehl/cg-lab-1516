@@ -12,6 +12,7 @@ ParamRenderArea::ParamRenderArea(const QPainterPath &path, QWidget *parent)
     rotationAngle = 0;
     offset.setX(50);
     offset.setY(50);
+    triangulation = std::vector<ParameterTriangle *>();
     setBackgroundRole(QPalette::Base);
     std::random_shuffle(colors.begin(), colors.end());
 }
@@ -35,25 +36,6 @@ void ParamRenderArea::setPenColor(const QColor &color) {
 }
 
 void ParamRenderArea::paintEvent(QPaintEvent *) {
-    // draw parameter triangulation
-    QPainter trip(this);
-    trip.setRenderHint(QPainter::Antialiasing);
-    trip.scale(width() / 100.0, height() / 100.0);
-    trip.translate(offset);
-    trip.rotate(-rotationAngle);
-    trip.translate(-offset);
-    trip.setPen(QPen(Qt::black, 0.1f * penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-    for (ParameterTriangle *t : triangulation) {
-        QPainterPath path;
-        QVector2D p1 = t->getPoint(0);
-        path.moveTo(p1.x(), p1.y());
-        QVector2D p2 = t->getPoint(1);
-        path.lineTo(p2.x(), p2.y());
-        QVector2D p3 = t->getPoint(2);
-        path.lineTo(p3.x(), p3.y());
-        trip.drawPath(path);
-    }
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.scale(width() / 100.0, height() / 100.0);
@@ -87,6 +69,25 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
     gradient.setColorAt(1.0, colors.at(colorID));
     painter.setBrush(gradient);
     painter.drawPath(path);
+
+    // draw parameter triangulation
+    QPainter trip(this);
+    trip.setRenderHint(QPainter::Antialiasing);
+    trip.scale(width() / 100.0, height() / 100.0);
+    trip.translate(offset);
+    trip.rotate(-rotationAngle);
+    trip.translate(-offset);
+    trip.setPen(QPen(Qt::black, 1.0f * penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    for (ParameterTriangle *t : triangulation) {
+        QPainterPath tP;
+        QVector2D p1 = t->getPoint(0);
+        tP.moveTo(p1.x(), p1.y());
+        QVector2D p2 = t->getPoint(1);
+        tP.lineTo(p2.x(), p2.y());
+        QVector2D p3 = t->getPoint(2);
+        tP.lineTo(p3.x(), p3.y());
+        trip.drawPath(tP);
+    }
 }
 
 void ParamRenderArea::mousePressEvent(QMouseEvent *event) {
@@ -191,4 +192,5 @@ void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void ParamRenderArea::drawTriangulation(std::vector<ParameterTriangle *> triangulation_) {
     triangulation = triangulation_;
+    update();
 }

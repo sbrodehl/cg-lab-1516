@@ -176,7 +176,8 @@ void CGMainWindow::updateEq() {
     ogl->clearGL(true);
     ogl->triangles = viewPart->triangulate(delta, eps);
     ogl->initVBO(ogl->triangles);
-    ogl->update();
+    statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size() / 6) + " triangles.");
+    ogl->updateGL();
 }
 
 void CGMainWindow::toggleWireframe() {
