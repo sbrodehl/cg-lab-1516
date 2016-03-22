@@ -3,6 +3,7 @@
 
 #include <QVector3D>
 #include <QPair>
+#include <QList>
 
 #include "TriangulationAlgorithm.h"
 
@@ -86,20 +87,22 @@ void TriangulationAlgorithm::makeMonotone() {
 }
 
 void TriangulationAlgorithm::handleVertex(Vertex *p) {
-    if (p->getType() == Vertex::START) {
-        handleStart(p);
-    }
-    if (p->getType() == Vertex::SPLIT) {
-        handleSplit(p);
-    }
-    if (p->getType() == Vertex::END) {
-        handleEnd(p);
-    }
-    if (p->getType() == Vertex::MERGE) {
-        handleMerge(p);
-    }
-    if (p->getType() == Vertex::REGULAR) {
-        handleRegular(p);
+    switch (p->getType()) {
+        case Vertex::START:
+            handleStart(p);
+            break;
+        case Vertex::SPLIT:
+            handleSplit(p);
+            break;
+        case Vertex::END:
+            handleEnd(p);
+            break;
+        case Vertex::MERGE:
+            handleMerge(p);
+            break;
+        case Vertex::REGULAR:
+            handleRegular(p);
+            break;
     }
 }
 
