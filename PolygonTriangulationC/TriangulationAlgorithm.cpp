@@ -1,16 +1,16 @@
 #include <iostream>
 #include <queue>
-
+#include <stack>
 #include <QVector3D>
 #include <QPair>
 
 #include "TriangulationAlgorithm.h"
 
-bool TriangulationAlgorithm::canSee(QVector2D v, QVector2D next, QVector2D vertex, std::vector<QVector2D> left) {
-    if (contains(left, v)) {
-        return leftTurn(next, v, vertex);
+bool TriangulationAlgorithm::canSee(Vertex* v, Vertex* next, Vertex* vertex, std::vector<Vertex*> left) {
+    if (getIndex(left, v) != -1) {
+        return leftTurn(*next->getPoint(), *v->getPoint(), *vertex->getPoint());
     } else {
-        return leftTurn(v, next, vertex);
+        return leftTurn(*v->getPoint(), *next->getPoint(), *vertex->getPoint());
     }
 }
 
@@ -38,11 +38,21 @@ std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(
 
     buildVertices();
     makeMonotone();
-    // createPolygons();
+    createPolygons();
     for (std::vector<Vertex *> polygon : polygons) {
-        // triangulateMonotone(polygon);
+        triangulateMonotone(polygon);
     }
-    return std::vector<ParameterTriangle *>();
+
+    polygons.clear();
+    for(std::pair<Vertex*, std::vector<Edge*>> evpair : graph) {
+        for(Edge * e : evpair.second){
+            e->visited = false;
+        }
+    }
+    createPolygons();
+    std::vector<ParameterTriangle *> triangles = createParameterTriangles(polygons);
+
+    return triangles;
 }
 
 template<typename T>
@@ -53,6 +63,157 @@ int TriangulationAlgorithm::getIndex(std::vector<T *> vec, T *item) {
         }
     }
     return -1;
+}
+
+std::vector<ParameterTriangle *> TriangulationAlgorithm::createParameterTriangles(std::vector<std::vector<Vertex *>> polygons){
+    std::vector<ParameterTriangle *> triangles;
+
+    for (std::vector<Vertex *> polygon : polygons) {
+        ParameterTriangle* t = new ParameterTriangle(*polygon[0]->getPoint(), *polygon[1]->getPoint(), *polygon[2]->getPoint());
+        triangles.push_back(t);
+    }
+
+    return triangles;
+}
+
+void TriangulationAlgorithm::triangulateMonotone(std::vector<Vertex *> polygon){
+    std::priority_queue<Vertex *, std::vector<Vertex *>, yPriority> pq;
+
+    for (Vertex *v : polygon) {
+        pq.push(v);
+    }
+
+    // get min
+    Vertex* min = polygon[0];
+    double min_val = polygon[0]->y();
+
+    for(Vertex* v : polygon){
+        if(v->y() < min_val){
+            min_val = v->y();
+            min = v;
+        }
+        if(v->y() == min_val && v->x() > min->x()){
+            min_val = v->y();
+            min = v;
+        }
+    }
+
+    // create paths
+    std::vector<Vertex*> left;
+    std::vector<Vertex*> right;
+
+    Vertex* max = pq.top();
+    Vertex* actual = polygon[(getIndex(polygon, max)+1) % polygon.size()];
+    while(actual != min){
+        left.push_back(actual);
+        actual = polygon[(getIndex(polygon, actual)+1) % polygon.size()];
+    }
+
+    actual = polygon[(getIndex(polygon, actual)+1) % polygon.size()];
+    while(actual != max){
+        right.push_back(actual);
+        actual = polygon[(getIndex(polygon, actual)+1) % polygon.size()];
+    }
+
+    std::stack<Vertex*> stack;
+
+    stack.push(pq.top());
+    pq.pop();
+    stack.push(pq.top());
+    pq.pop();
+
+    Vertex* v_last = stack.top();
+
+    while(pq.size() > 1){
+        Vertex* v = pq.top();
+        pq.pop();
+        Vertex* top = stack.top();
+
+        if(( (getIndex(left, v) != -1) && (getIndex(right, top) != -1) ) || ( (getIndex(right, v) != -1) && (getIndex(left, top) != -1) )){
+            while(!stack.empty()){
+                Vertex* next = stack.top();
+                stack.pop();
+                if(!stack.empty()){
+                    lines.push_back(new Line(v->getPoint(), next->getPoint()));
+                    graph[v].push_back(new Edge(v, next));
+                    graph[next].push_back(new Edge(next, v));
+                }
+            }
+            stack.push(v_last);
+            stack.push(v);
+        }else{
+            Vertex* next = stack.top();
+            stack.pop();
+
+            while(!stack.empty() && canSee(v, next, stack.top(), left)){
+                next = stack.top();
+                stack.pop();
+                lines.push_back(new Line(v->getPoint(), next->getPoint()));
+                graph[v].push_back(new Edge(v, next));
+                graph[next].push_back(new Edge(next, v));
+            }
+            stack.push(next);
+            stack.push(v);
+        }
+
+        v_last = v;
+    }
+
+    Vertex* v = pq.top();
+    pq.pop();
+
+    stack.pop();
+    while(!stack.empty()){
+        Vertex* next = stack.top();
+        stack.pop();
+        if(!stack.empty()){
+            lines.push_back(new Line(v->getPoint(), next->getPoint()));
+            graph[v].push_back(new Edge(v, next));
+            graph[next].push_back(new Edge(next, v));
+        }
+    }
+}
+
+void TriangulationAlgorithm::createPolygons(){
+    for(std::pair<Vertex*, std::vector<Edge*>> evpair : graph){
+        std::vector<Edge*> ev = evpair.second;
+
+        for(Edge* e : ev){
+            if(e->visited){
+                continue;
+            }
+
+            std::vector<Vertex*> polygon;
+            Vertex* start = e->getv1();
+            Edge* actual = e;
+            do{
+                actual->visited = true;
+                polygon.push_back(actual->getv1());
+
+                std::vector<Edge*> outEdges = graph[actual->getv2()];
+                // get most left edge
+                Edge* out = outEdges[0];
+                double min_angle = start->angleBetween2Lines(*actual->getv1()->getPoint(), *actual->getv2()->getPoint(), *out->getv2()->getPoint());
+                for(Edge* o : outEdges){
+                    if(o->visited){
+                        continue;
+                    }
+                    if(actual->getv1() == o->getv2()){
+                        continue;
+                    }
+                    double angle = start->angleBetween2Lines(*actual->getv1()->getPoint(), *actual->getv2()->getPoint(), *o->getv2()->getPoint());
+                    if(angle < min_angle){
+                        min_angle = angle;
+                        out = o;
+                    }
+                }
+
+                actual = out;
+
+            }while(actual->getv1() != start);
+            polygons.push_back(polygon);
+        }
+    }
 }
 
 void TriangulationAlgorithm::buildVertices() {
@@ -124,7 +285,6 @@ void TriangulationAlgorithm::handleEnd(Vertex *p) {
 
 void TriangulationAlgorithm::handleSplit(Vertex *p) {
     std::set<Line *>::iterator it = SL.lower_bound(new Line(p->getPoint(), p->getPoint()));
-    it--;
     Line *e = *it;
     Vertex *p2 = helpers[e];
     lines.push_back(new Line(p->getPoint(), p2->getPoint()));
@@ -151,7 +311,6 @@ void TriangulationAlgorithm::handleMerge(Vertex *p) {
     SL.erase(e);
 
     std::set<Line *>::iterator it = SL.lower_bound(new Line(p->getPoint(), p->getPoint()));
-    it--;
     Line *e2 = *it;
     Vertex *p3 = helpers[e2];
 
@@ -180,7 +339,6 @@ void TriangulationAlgorithm::handleRegular(Vertex *p) {
         helpers[e1] = p;
     } else {
         std::set<Line *>::iterator it = SL.lower_bound(new Line(p->getPoint(), p->getPoint()));
-        it--;
         Line *e = *it;
         Vertex *p2 = helpers[e];
 
