@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <QSlider>
 
-#include "StlReader.h"
+#include "ParametricsViewer.h"
 #include "CylinderPart.h"
 #include "ConePart.h"
 #include "TorusPart.h"

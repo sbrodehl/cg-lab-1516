@@ -1,4 +1,4 @@
-#include "StlReader.h"
+#include "ParametricsViewer.h"
 
 void CGView::initShaders() {
     setlocale(LC_NUMERIC, "C");

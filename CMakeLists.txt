@@ -39,8 +39,8 @@ qt5_add_resources(RESOURCES shaders.qrc)
 
 set(SOURCE_FILES
         drawing.cpp
-        StlReader.cpp
-        StlReader.h
+        ParametricsViewer.cpp
+        ParametricsViewer.h
         Mesh.cpp
         Mesh.h
         ParametricWindow.cpp

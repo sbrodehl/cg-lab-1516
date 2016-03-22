@@ -1,6 +1,6 @@
 #include <QKeyEvent>
 
-#include "StlReader.h"
+#include "ParametricsViewer.h"
 
 void CGView::mousePressEvent(QMouseEvent *event) {
     oldX = event->x();
