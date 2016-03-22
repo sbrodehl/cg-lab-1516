@@ -63,7 +63,7 @@ public:
     std::map<Vertex *, std::vector<Edge *>> graph;
     std::vector<std::vector<Vertex *>> polygons;
 
-    std::vector<ParameterTriangle *> triangulate(std::vector<std::vector<QVector2D *>> polygon_in);
+    std::vector<ParameterTriangle *> triangulate(std::vector<std::vector<QVector2D *>> polygon);
 };
 
 #endif //CG_LAB_1516_TRIANGULATIONALGORITHM_H
