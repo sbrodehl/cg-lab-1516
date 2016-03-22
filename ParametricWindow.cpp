@@ -71,3 +71,7 @@ void ParametricWindow::clearShapes() {
 void ParametricWindow::mouseDoubleClickEvent(QMouseEvent *event) {
     area->mouseDoubleClickEvent(event);
 }
+
+void ParametricWindow::drawTriangulation(std::vector<ParameterTriangle *> triangulation) {
+    area->drawTriangulation(triangulation);
+}

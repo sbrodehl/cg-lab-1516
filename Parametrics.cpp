@@ -5,11 +5,26 @@
 
 std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D> &points,
                                                     int bucketsize) {
-    getSegments(); // just for testing ...
-
     std::vector<QVector3D> triangles;
-    size_t s = points.size();
 
+    std::vector<ParameterTriangle *> trias = getPolygonTriangulation();
+    for (ParameterTriangle *t : trias) {
+        QVector2D p1 = t->getPoint(0);
+        triangles.push_back(getPoint(p1.x(), p1.y()));
+        triangles.push_back(getNormal(p1.x(), p1.y()));
+        QVector2D p2 = t->getPoint(1);
+        triangles.push_back(getPoint(p2.x(), p2.y()));
+        triangles.push_back(getNormal(p2.x(), p2.y()));
+        QVector2D p3 = t->getPoint(2);
+        triangles.push_back(getPoint(p3.x(), p3.y()));
+        triangles.push_back(getNormal(p3.x(), p3.y()));
+    }
+    if (triangles.size() > 0) {
+        pw->drawTriangulation(trias);
+        return triangles;
+    }
+
+    size_t s = points.size();
     for (size_t i = 0; i < s - (2 * bucketsize); i += 2 * bucketsize) {
         for (size_t l = 0; l < 2 * bucketsize - 2; l += 2) {
             size_t leftRoot = i + l;
@@ -108,11 +123,16 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
     return locatePoint(*actual.getNeighbor(id), point);
 }
 
-std::vector<QPair<QVector3D, QVector3D> > Parametrics::getSegments() {
+std::vector<ParameterTriangle *> Parametrics::getPolygonTriangulation() {
     QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
+    std::vector<std::vector<QVector2D *>> polygon;
+    for (QList<QPointF> shape : shapeList) {
+        std::vector<QVector2D *> s;
+        for (QPointF p : shape) {
+            s.push_back(new QVector2D((float) p.x(), (float) p.y()));
+        }
+        polygon.push_back(s);
+    }
     TriangulationAlgorithm algorithm;
-//    algorithm.triangulate();
-
-    // TODO convert to useful data structure
-    return std::vector<QPair<QVector3D, QVector3D>>();
+    return algorithm.triangulate(polygon);
 }

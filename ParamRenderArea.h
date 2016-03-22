@@ -4,6 +4,8 @@
 #include <QPainterPath>
 #include <QWidget>
 
+#include "ParameterTriangle.h"
+
 class ParamRenderArea : public QWidget {
 Q_OBJECT
 
@@ -22,6 +24,7 @@ public:
 
     QList<QList<QPointF> > getShapes();
     void setShapeType(ShapeType type);
+    void drawTriangulation(std::vector<ParameterTriangle *> triangulation);
 
 public slots:
     void setPenWidth(float width);
@@ -49,6 +52,7 @@ private:
 
     QPoint offset;
     int rotationAngle;
+    std::vector<ParameterTriangle *> triangulation;
 
     QPointF convertPos(QMouseEvent *pEvent);
     void removeLastWaypoint();

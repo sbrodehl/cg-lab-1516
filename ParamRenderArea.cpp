@@ -35,6 +35,25 @@ void ParamRenderArea::setPenColor(const QColor &color) {
 }
 
 void ParamRenderArea::paintEvent(QPaintEvent *) {
+    // draw parameter triangulation
+    QPainter trip(this);
+    trip.setRenderHint(QPainter::Antialiasing);
+    trip.scale(width() / 100.0, height() / 100.0);
+    trip.translate(offset);
+    trip.rotate(-rotationAngle);
+    trip.translate(-offset);
+    trip.setPen(QPen(Qt::black, 0.1f * penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    for (ParameterTriangle *t : triangulation) {
+        QPainterPath path;
+        QVector2D p1 = t->getPoint(0);
+        path.moveTo(p1.x(), p1.y());
+        QVector2D p2 = t->getPoint(1);
+        path.lineTo(p2.x(), p2.y());
+        QVector2D p3 = t->getPoint(2);
+        path.lineTo(p3.x(), p3.y());
+        trip.drawPath(path);
+    }
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.scale(width() / 100.0, height() / 100.0);
@@ -164,4 +183,8 @@ void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) {
         removeLastWaypoint(); // undo first click
         removeLastWaypoint(); // undo second click
     }
+}
+
+void ParamRenderArea::drawTriangulation(std::vector<ParameterTriangle *> triangulation_) {
+    triangulation = triangulation_;
 }
