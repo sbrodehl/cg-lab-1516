@@ -105,7 +105,7 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
     return locatePoint(*actual.getNeighbor(id), point);
 }
 
-std::vector<QVector3D> Parametrics::getPolygonTriangulation() {
+std::vector<QVector3D> Parametrics::getPolygonTriangulation(float edgeLength) {
     QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
     float scale = 100.0f;
 
@@ -124,17 +124,30 @@ std::vector<QVector3D> Parametrics::getPolygonTriangulation() {
 
     std::vector<QVector3D> triangles;
     for (ParameterTriangle *t : trias) {
-        QVector2D p1 = t->getPoint(0);
-        triangles.push_back(getPoint(p1.x(), p1.y()));
-        triangles.push_back(getNormal(p1.x(), p1.y()));
-        QVector2D p2 = t->getPoint(1);
-        triangles.push_back(getPoint(p2.x(), p2.y()));
-        triangles.push_back(getNormal(p2.x(), p2.y()));
-        QVector2D p3 = t->getPoint(2);
-        triangles.push_back(getPoint(p3.x(), p3.y()));
-        triangles.push_back(getNormal(p3.x(), p3.y()));
+        if (!t->isQualityTriangle(edgeLength)) {
+            for (ParameterTriangle *ref : t->refine(edgeLength)) {
+                QVector2D p1 = ref->getPoint(0);
+                triangles.push_back(getPoint(p1.x(), p1.y()));
+                triangles.push_back(getNormal(p1.x(), p1.y()));
+                QVector2D p2 = ref->getPoint(1);
+                triangles.push_back(getPoint(p2.x(), p2.y()));
+                triangles.push_back(getNormal(p2.x(), p2.y()));
+                QVector2D p3 = ref->getPoint(2);
+                triangles.push_back(getPoint(p3.x(), p3.y()));
+                triangles.push_back(getNormal(p3.x(), p3.y()));
+            }
+        } else {
+            QVector2D p1 = t->getPoint(0);
+            triangles.push_back(getPoint(p1.x(), p1.y()));
+            triangles.push_back(getNormal(p1.x(), p1.y()));
+            QVector2D p2 = t->getPoint(1);
+            triangles.push_back(getPoint(p2.x(), p2.y()));
+            triangles.push_back(getNormal(p2.x(), p2.y()));
+            QVector2D p3 = t->getPoint(2);
+            triangles.push_back(getPoint(p3.x(), p3.y()));
+            triangles.push_back(getNormal(p3.x(), p3.y()));
+        }
     }
-
     pw->drawTriangulation(trias);
     return triangles;
 }

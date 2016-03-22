@@ -3,6 +3,7 @@
 
 #include <QVector2D>
 #include <QPair>
+#include <QLineF>
 
 #include <cmath>
 
@@ -52,6 +53,19 @@ public:
         return (ux * vy - uy * vx >= 0 || std::abs(ux * vy - uy * vx) < std::pow(10, -10));
     }
 
+    bool isQualityTriangle(float d) {
+        for (QPair<QVector2D, QVector2D> seg : segments) {
+            QLineF line = QLineF(seg.first.toPointF(), seg.second.toPointF());
+            if (line.length() > d)
+                return false;
+        }
+        return true;
+    };
+
+    std::vector<ParameterTriangle *> refine(float d) {
+        // TODO refine triangle
+        return std::vector<ParameterTriangle *>();
+    };
 };
 
 #endif //CG_LAB_1516_PARAMETERTRIANGLE_H

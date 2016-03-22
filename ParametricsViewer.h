@@ -30,30 +30,23 @@ public:
     ~CGMainWindow();
 
     CGView *ogl;
+    float refineDelta;
     Part *viewPart = nullptr;
 
 public slots:
-
     void loadTorusPart();
-
     void loadTrefoilPart();
-
     void loadZylinderPart();
-
     void loadKegelPart();
-
     void changedDeltaSlider(int);
-
     void updateTriangulation();
-
     void toggleWireframe();
 
 protected:
     void loadEq(Part &);
-
     void updateEq();
-
     void keyPressEvent(QKeyEvent *);
+    void setRefinementDelta(int i);
 };
 
 class CGView : public QGLWidget, public QGLFunctions {
@@ -61,17 +54,11 @@ Q_OBJECT
 
 public:
     CGView(CGMainWindow *, QWidget *);
-
     void clearGL(bool soft = false);
-
     void initShaders();
-
     void initializeGL();
-
     void drawMesh(Mesh m);
-
     void initVBO(const std::vector<QVector3D> &);
-
     void toggleWireframe();
 
     QVector3D min, max, center;

@@ -35,10 +35,11 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QSlider *slider = new QSlider(Qt::Vertical, this);
     slider->setMinimum(0);
-    slider->setMaximum(100);
-    slider->setSliderPosition(50);
-    slider->setSingleStep(5);
-    slider->setPageStep(20);
+    slider->setMaximum(10);
+    slider->setSliderPosition(10);
+    setRefinementDelta(5);
+    slider->setSingleStep(1);
+    slider->setPageStep(2);
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changedDeltaSlider(int)));
 
     // Create a nice frame to put around the OpenGL widget
@@ -71,27 +72,19 @@ CGView::CGView(CGMainWindow *mainwindow, QWidget *parent) : QGLWidget(parent) {
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
-
     if (!QGLFormat::hasOpenGL()) {
         qWarning("This system has no OpenGL support. Exiting.");
         return 1;
     }
-
     w = new CGMainWindow(NULL);
     w->show();
-
     return app.exec();
 }
 
 void CGMainWindow::loadEq(Part &part) {
-    int delta = 64;
-    int eps = 64;
-
     part.showParamWindows(this);
-
-    ogl->triangles = part.triangulate(delta, eps);
+    ogl->triangles = part.triangulate(refineDelta);
     statusBar()->showMessage("Loaded " + QString::number(ogl->triangles.size() / 6) + " triangles.");
-
     ogl->initVBO(ogl->triangles);
 
     float x1, x2, y1, y2, z1, z2;
@@ -101,7 +94,6 @@ void CGMainWindow::loadEq(Part &part) {
     x2 = ogl->max.x();
     y2 = ogl->max.y();
     z2 = ogl->max.z();
-
     for (size_t i = 0; i < ogl->triangles.size(); i++) {
         x1 = std::min(x1, ogl->triangles[i].x());
         x2 = std::max(x2, ogl->triangles[i].x());
@@ -110,14 +102,11 @@ void CGMainWindow::loadEq(Part &part) {
         z1 = std::min(z1, ogl->triangles[i].z());
         z2 = std::max(z2, ogl->triangles[i].z());
     }
-
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
-
     QVector3D extent = ogl->max - ogl->min;
     ogl->zoom = 1.5f / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
-
     ogl->updateGL();
 }
 
@@ -154,7 +143,8 @@ void CGMainWindow::loadKegelPart() {
 }
 
 void CGMainWindow::changedDeltaSlider(int value) {
-    // std::cout << value << std::endl;
+    setRefinementDelta(value);
+    statusBar()->showMessage("Refinement delta set to " + QString::number(refineDelta));
 }
 
 void CGMainWindow::updateTriangulation() {
@@ -162,10 +152,9 @@ void CGMainWindow::updateTriangulation() {
 }
 
 void CGMainWindow::updateEq() {
-    int delta = 64;
-    int eps = 64;
     ogl->clearGL();
-    ogl->triangles = viewPart->triangulate(delta, eps);
+    if (viewPart != nullptr)
+        ogl->triangles = viewPart->triangulate(refineDelta);
     ogl->initVBO(ogl->triangles);
     float x1, x2, y1, y2, z1, z2;
     x1 = ogl->min.x();
@@ -174,7 +163,6 @@ void CGMainWindow::updateEq() {
     x2 = ogl->max.x();
     y2 = ogl->max.y();
     z2 = ogl->max.z();
-
     for (size_t i = 0; i < ogl->triangles.size(); i++) {
         x1 = std::min(x1, ogl->triangles[i].x());
         x2 = std::max(x2, ogl->triangles[i].x());
@@ -183,10 +171,8 @@ void CGMainWindow::updateEq() {
         z1 = std::min(z1, ogl->triangles[i].z());
         z2 = std::max(z2, ogl->triangles[i].z());
     }
-
     ogl->min = QVector3D(x1, y1, z1);
     ogl->max = QVector3D(x2, y2, z2);
-
     QVector3D extent = ogl->max - ogl->min;
     ogl->zoom = 1.5f / std::max(std::max(extent.x(), extent.y()), extent.z());
     ogl->center = (ogl->min + ogl->max) / 2;
@@ -197,3 +183,9 @@ void CGMainWindow::updateEq() {
 void CGMainWindow::toggleWireframe() {
     ogl->toggleWireframe();
 }
+
+void CGMainWindow::setRefinementDelta(int value) {
+    refineDelta = value * 0.1f;
+}
+
+
