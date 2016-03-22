@@ -25,20 +25,23 @@ private:
 
     struct yPriorityLine;
 
-    void handleVertex(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleVertex(Vertex *p);
 
-    void handleStart(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleStart(Vertex *p);
 
-    void handleEnd(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleEnd(Vertex *p);
 
-    void handleSplit(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleSplit(Vertex *p);
 
-    void handleMerge(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleMerge(Vertex *p);
 
-    void handleRegular(Vertex *p, std::set<Line *, yPriorityLine> SL, std::map<Line *, Vertex *> helpers);
+    void handleRegular(Vertex *p);
 
     template<typename T>
     int getIndex(std::vector<T *> vec, T *item);
+
+    std::set<Line *, yPriorityLine> SL;
+    std::map<Line *, Vertex *> helpers;
 
 public:
     std::vector<QVector2D *> points;

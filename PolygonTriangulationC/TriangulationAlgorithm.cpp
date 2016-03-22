@@ -102,44 +102,38 @@ void TriangulationAlgorithm::makeMonotone() {
         pq.push(v);
     }
 
-    std::set<Line *, yPriorityLine> SL;
-    std::map<Line *, Vertex *> helpers;
-
     while (!pq.empty()) {
         Vertex *p = pq.top();
         pq.pop();
-        handleVertex(p, SL, helpers);
+        handleVertex(p);
     }
 }
 
-void TriangulationAlgorithm::handleVertex(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                          std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleVertex(Vertex *p) {
     if (p->getType() == Vertex::START) {
-        handleStart(p, SL, helpers);
+        handleStart(p);
     }
     if (p->getType() == Vertex::SPLIT) {
-        handleSplit(p, SL, helpers);
+        handleSplit(p);
     }
     if (p->getType() == Vertex::END) {
-        handleEnd(p, SL, helpers);
+        handleEnd(p);
     }
     if (p->getType() == Vertex::MERGE) {
-        handleMerge(p, SL, helpers);
+        handleMerge(p);
     }
     if (p->getType() == Vertex::REGULAR) {
-        handleRegular(p, SL, helpers);
+        handleRegular(p);
     }
 }
 
-void TriangulationAlgorithm::handleStart(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                         std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleStart(Vertex *p) {
     int idx = getIndex(vertices, p);
     SL.insert(lines[idx]);
     helpers[lines[idx]] = p;
 }
 
-void TriangulationAlgorithm::handleEnd(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                       std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleEnd(Vertex *p) {
     int idx = getIndex(vertices, p->getNeighbor(0));
     Line *e = lines[idx];
 
@@ -152,8 +146,7 @@ void TriangulationAlgorithm::handleEnd(Vertex *p, std::set<Line *, yPriorityLine
     SL.erase(e);
 }
 
-void TriangulationAlgorithm::handleSplit(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                         std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleSplit(Vertex *p) {
     std::set<Line *>::iterator it = SL.lower_bound(new Line(p->getPoint(), p->getPoint()));
     it--;
     Line *e = *it;
@@ -169,8 +162,7 @@ void TriangulationAlgorithm::handleSplit(Vertex *p, std::set<Line *, yPriorityLi
     helpers[lines[idx]] = p;
 }
 
-void TriangulationAlgorithm::handleMerge(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                         std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleMerge(Vertex *p) {
     int idx = getIndex(vertices, p->getNeighbor(0));
     Line *e = lines[idx];
 
@@ -195,8 +187,7 @@ void TriangulationAlgorithm::handleMerge(Vertex *p, std::set<Line *, yPriorityLi
     helpers[e2] = p;
 }
 
-void TriangulationAlgorithm::handleRegular(Vertex *p, std::set<Line *, yPriorityLine> SL,
-                                           std::map<Line *, Vertex *> helpers) {
+void TriangulationAlgorithm::handleRegular(Vertex *p) {
     if (p->getNeighbor(0)->y() > p->y()) {
         int idx = getIndex(vertices, p->getNeighbor(0));
         Line *e = lines[idx];
