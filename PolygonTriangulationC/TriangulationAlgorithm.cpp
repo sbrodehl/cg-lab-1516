@@ -38,6 +38,7 @@ std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(
     }
 
     buildVertices();
+
     makeMonotone();
     createPolygons();
     for (std::vector<Vertex *> polygon : polygons) {
