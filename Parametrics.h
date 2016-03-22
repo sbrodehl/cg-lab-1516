@@ -44,7 +44,7 @@ public:
 
     virtual std::vector<QVector3D> triangulate(double delta, double eps) = 0;
     virtual std::vector<QVector3D> createTriangles(const std::vector<QVector3D> &points, int bucketsize);
-    std::vector<ParameterTriangle *> getPolygonTriangulation();
+    std::vector<QVector3D> getPolygonTriangulation();
 
     void initializeParameterSpace(double delta, double eps);
     bool leftTurn(QVector2D a, QVector2D b, QVector2D c);

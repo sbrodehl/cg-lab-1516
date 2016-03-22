@@ -88,13 +88,13 @@ void CGMainWindow::loadEq(Part &part) {
     part.showParamWindows(this);
 
     int faceCount = 0;
-    std::vector<Mesh> meshes = part.getMeshes(delta, eps);
-    for (Mesh m : meshes) {
-        ogl->drawMesh(m);
-        faceCount += m.faces.size();
-    }
+//    std::vector<Mesh> meshes = part.getMeshes(delta, eps);
+//    for (Mesh m : meshes) {
+//        ogl->drawMesh(m);
+//        faceCount += m.faces.size();
+//    }
 
-    statusBar()->showMessage("Loaded " + QString::number(faceCount) + " faces.");
+//    statusBar()->showMessage("Loaded " + QString::number(faceCount) + " faces.");
 
     if (faceCount < 1) {
         ogl->triangles = part.triangulate(delta, eps);
@@ -174,10 +174,7 @@ void CGMainWindow::updateEq() {
     int delta = 64;
     int eps = 64;
     ogl->clearGL(true);
-    std::vector<Mesh> meshes = viewPart->getMeshes(delta, eps);
-    for (Mesh m : meshes) {
-        ogl->drawMesh(m);
-    }
+    ogl->triangles = viewPart->triangulate(delta, eps);
     ogl->initVBO(ogl->triangles);
     ogl->update();
 }

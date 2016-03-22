@@ -94,7 +94,6 @@ void ParamRenderArea::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         QList<QPointF> shape;
         std::copy(waypoints.begin(), waypoints.end(), std::back_inserter(shape));
-        shapeList.append(shape);
         path = QPainterPath();
         waypoints.clear();
     } else {
@@ -158,6 +157,11 @@ void ParamRenderArea::saveCurrentShape() {
         }
         p.closeSubpath();
     }
+    QList<QPointF> wp;
+    for (QPointF po : waypoints) {
+        wp.push_back(po);
+    }
+    shapeList.append(wp);
     waypoints.clear();
     switch (currentType) {
         case ShapeType::INNER:

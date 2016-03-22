@@ -18,7 +18,8 @@ public:
     std::vector<QVector3D> triangulate(double delta, double eps) {
         std::vector<QVector3D> pointvec;
         for (auto parametric : parametrics) {
-            std::vector<QVector3D> p = parametric->triangulate(delta, eps);
+            // std::vector<QVector3D> p = parametric->triangulate(delta, eps);
+            std::vector<QVector3D> p = parametric->getPolygonTriangulation();
             pointvec.insert(std::end(pointvec), std::begin(p), std::end(p));
         }
         return pointvec;
