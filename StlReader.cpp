@@ -13,7 +13,6 @@
 #include "TrefoilPart.h"
 
 #include <fstream>
-#include <PolygonTriangulationC/TriangulationAlgorithm.h>
 
 CGMainWindow *w;
 
