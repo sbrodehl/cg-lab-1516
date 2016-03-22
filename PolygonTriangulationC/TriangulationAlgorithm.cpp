@@ -34,11 +34,13 @@ std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(
         for (int i = 0; i < pointVector.size(); i++) {
             lines.push_back(new Line(pointVector[i], pointVector[(i + 1) % pointVector.size()]));
             vertices.push_back(new Vertex(*pointVector[i]));
+
+            // std::cout << "(" << pointVector[i]->x() << "," << pointVector[i]->y() << ")" << std::endl;
         }
+        // std::cout << "------------" << std::endl;
     }
 
     buildVertices();
-
     makeMonotone();
     createPolygons();
     for (std::vector<Vertex *> polygon : polygons) {
@@ -327,7 +329,7 @@ void TriangulationAlgorithm::handleMerge(Vertex *p) {
 }
 
 void TriangulationAlgorithm::handleRegular(Vertex *p) {
-    if (p->getNeighbor(0)->y() > p->y()) {
+    if(p->getNeighbor(0)->y() > p->y() || (p->getNeighbor(0)->y() == p->y() && p->getNeighbor(0)->x() < p->x())){
         int idx = getIndex(vertices, p->getNeighbor(0));
         Line *e = lines[idx];
 
