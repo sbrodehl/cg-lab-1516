@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "TriangulationAlgorithm.h"
 #include "Parametrics.h"
 
 std::vector<QVector3D> Parametrics::createTriangles(const std::vector<QVector3D> &points,
@@ -108,6 +110,9 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
 
 std::vector<QPair<QVector3D, QVector3D> > Parametrics::getSegments() {
     QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
+    TriangulationAlgorithm algorithm;
+//    algorithm.triangulate();
+
     // TODO convert to useful data structure
     return std::vector<QPair<QVector3D, QVector3D>>();
 }

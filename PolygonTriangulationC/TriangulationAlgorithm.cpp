@@ -1,6 +1,9 @@
 #include <iostream>
 #include <queue>
 
+#include <QVector3D>
+#include <QPair>
+
 #include "TriangulationAlgorithm.h"
 
 bool TriangulationAlgorithm::canSee(QVector2D v, QVector2D next, QVector2D vertex, std::vector<QVector2D> left) {
@@ -67,33 +70,6 @@ void TriangulationAlgorithm::buildVertices() {
         v->setType();
     }
 }
-
-struct TriangulationAlgorithm::yPriority {
-    bool operator()(Vertex *a, Vertex *b) {
-        if (a->y() < b->y()) {
-            return true;
-        }
-        if (a->y() > b->y()) {
-            return false;
-        }
-        if (a->x() > b->x()) {
-            return true;
-        }
-        if (a->x() < b->x()) {
-            return false;
-        }
-        return false;
-    }
-};
-
-struct TriangulationAlgorithm::yPriorityLine {
-    bool operator()(Line *a, Line *b) {
-        QVector2D *p1 = a->getv1()->y() > b->getv2()->y() ? a->getv1() : b->getv2();
-        QVector2D *p2 = b->getv1()->y() > b->getv2()->y() ? a->getv1() : b->getv2();
-
-        return p1->x() > p2->x();
-    }
-};
 
 void TriangulationAlgorithm::makeMonotone() {
     std::priority_queue<Vertex *, std::vector<Vertex *>, yPriority> pq;
