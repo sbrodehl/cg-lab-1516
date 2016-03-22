@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(cg_lab_1516)
 
+set(PROGNAME "cg_lab_1516")
+
 # Add lokal CMake module path
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
@@ -72,14 +74,33 @@ include_directories(parts)
 include_directories(thirdparty)
 include_directories(PolygonTriangulationC)
 
-add_executable(cg_lab_1516
-        ${SOURCE_FILES}
-        ${RESOURCES})
-
-# Use the Widgets module from Qt 5.
-target_link_libraries(cg_lab_1516
-        Qt5::Core
-        Qt5::Widgets
-        Qt5::Gui
-        Qt5::OpenGL
-        ${OPENGL_LIBRARY})
+if (APPLE)
+    add_executable(${PROGNAME}
+            MACOSX_BUNDLE
+            ${SOURCE_FILES}
+            ${RESOURCES})
+    target_link_libraries(${PROGNAME}
+            Qt5::Core
+            Qt5::Widgets
+            Qt5::Gui
+            Qt5::OpenGL
+            ${OPENGL_LIBRARY})
+    qt5_use_modules(${PROGNAME}
+            Widgets
+            Gui
+            OpenGL)
+else ()
+    add_executable(${PROGNAME}
+            ${SOURCE_FILES}
+            ${RESOURCES})
+    target_link_libraries(${PROGNAME}
+            Qt5::Core
+            Qt5::Widgets
+            Qt5::Gui
+            Qt5::OpenGL
+            ${OPENGL_LIBRARY})
+    qt5_use_modules(${PROGNAME}
+            Widgets
+            Gui
+            OpenGL)
+endif()

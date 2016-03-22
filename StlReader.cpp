@@ -65,6 +65,8 @@ CGMainWindow::~CGMainWindow() { }
 
 CGView::CGView(CGMainWindow *mainwindow, QWidget *parent) : QGLWidget(parent) {
     main = mainwindow;
+    // get those keyboard events ...
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 int main(int argc, char **argv) {
