@@ -57,6 +57,8 @@ private:
     QPointF convertPos(QMouseEvent *pEvent);
     void removeLastWaypoint();
     void saveCurrentShape();
+
+    QPointF denormalize(QVector2D vector2D);
 };
 
 #endif //CG_LAB_1516_PARAMRENDERAREA_H

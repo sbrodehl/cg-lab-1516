@@ -80,12 +80,10 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
     trip.setPen(QPen(Qt::black, 1.0f * penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     for (ParameterTriangle *t : triangulation) {
         QPainterPath tP;
-        QVector2D p1 = t->getPoint(0);
-        tP.moveTo(p1.x(), p1.y());
-        QVector2D p2 = t->getPoint(1);
-        tP.lineTo(p2.x(), p2.y());
-        QVector2D p3 = t->getPoint(2);
-        tP.lineTo(p3.x(), p3.y());
+        tP.moveTo(denormalize(t->getPoint(0)));
+        tP.lineTo(denormalize(t->getPoint(1)));
+        tP.lineTo(denormalize(t->getPoint(2)));
+        tP.lineTo(denormalize(t->getPoint(0)));
         trip.drawPath(tP);
     }
 }
@@ -194,3 +192,9 @@ void ParamRenderArea::drawTriangulation(std::vector<ParameterTriangle *> triangu
     triangulation = triangulation_;
     update();
 }
+
+QPointF ParamRenderArea::denormalize(QVector2D v) {
+    return QPointF(100.0f * v.x(), 100.0f - 100.f * v.y());
+}
+
+

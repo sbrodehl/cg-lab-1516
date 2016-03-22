@@ -107,12 +107,15 @@ ParameterTriangle Parametrics::locatePoint(ParameterTriangle actual, QVector2D p
 
 std::vector<QVector3D> Parametrics::getPolygonTriangulation() {
     QList<QList<QPointF> > shapeList = pw->getArea()->getShapes();
+    float scale = 100.0f;
 
     std::vector<std::vector<QVector2D *>> polygon;
     for (QList<QPointF> shape : shapeList) {
         std::vector<QVector2D *> s;
         for (QPointF p : shape) {
-            s.push_back(new QVector2D((float) p.x(), (float) p.y()));
+            QVector2D *v = new QVector2D((float) (p.x() / scale),
+                                         (float) ((scale - p.y()) / scale));
+            s.push_back(v);
         }
         polygon.push_back(s);
     }
