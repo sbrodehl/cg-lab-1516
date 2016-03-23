@@ -56,6 +56,8 @@ private:
     std::set<Line *, yPriorityLine> SL;
     std::map<Line *, Vertex *> helpers;
 
+    std::vector<ParameterTriangle *> delaunay(std::vector<ParameterTriangle *> triangles);
+
 public:
     std::vector<QVector2D *> points;
     std::vector<Line *> lines;

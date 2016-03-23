@@ -28,6 +28,10 @@ bool TriangulationAlgorithm::contains(std::vector<QVector2D> vec, QVector2D v) {
     return std::find(vec.begin(), vec.end(), v) != vec.end();
 }
 
+std::vector<ParameterTriangle *> delaunay(std::vector<ParameterTriangle *> triangles){
+
+}
+
 std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(std::vector<Spline> polygon) {
     for (Spline spline : polygon) {
         points.insert(points.end(), spline.begin(), spline.end());
