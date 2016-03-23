@@ -21,15 +21,13 @@ ParametricWindow::ParametricWindow(QWidget *parent) : QMainWindow(parent) {
     f->setLineWidth(2);
 
     QMenu *file = new QMenu("&File", this);
-    addAction(file->addAction("Clear", this, SLOT(clearShapes()), Qt::Key_F5));
+    addAction(file->addAction("Clear", this, SLOT(clearShapes())));
     menuBar()->addMenu(file);
 
-
-    QMenu *view = new QMenu("&Shapes", this);
-    view->addAction("Add Outer", this, SLOT(addOuterShaper()));
-    view->addAction("Add Inner", this, SLOT(addInnerShaper()));
-    menuBar()->addMenu(view);
-
+//    QMenu *view = new QMenu("&Shapes", this);
+//    view->addAction("Add Outer", this, SLOT(addOuterShaper()));
+//    view->addAction("Add Inner", this, SLOT(addInnerShaper()));
+//    menuBar()->addMenu(view);
 
     // Put the GL widget inside the frame
     QHBoxLayout *layout = new QHBoxLayout();
