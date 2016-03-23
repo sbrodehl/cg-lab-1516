@@ -120,7 +120,16 @@ public:
 
         double scp = v1.x() * v2.x() + v1.y() * v2.y();
 
-        double alpha = acos(scp / (norm1 * norm2));
+        double val = scp / (norm1 * norm2);
+
+        if(val < -1){
+            val = -1;
+        }
+        if(val > 1){
+            val = 1;
+        }
+
+        double alpha = acos(val);
 
         if (leftTurn(n1, a, n2)) {
             return alpha;
