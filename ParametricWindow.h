@@ -24,6 +24,8 @@ public:
 public slots:
     void addOuterShaper();
     void addInnerShaper();
+    void saveShapes();
+    void loadShapes();
     void clearShapes();
 
 private:
