@@ -182,10 +182,10 @@ void ParamRenderArea::clearShapes() {
 }
 
 void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton) {
-        removeLastWaypoint(); // undo first click
-        removeLastWaypoint(); // undo second click
-    }
+//    if (event->button() == Qt::LeftButton) {
+//        removeLastWaypoint(); // undo first click
+//        removeLastWaypoint(); // undo second click
+//    }
 }
 
 void ParamRenderArea::drawTriangulation(std::vector<ParameterTriangle *> triangulation_) {
