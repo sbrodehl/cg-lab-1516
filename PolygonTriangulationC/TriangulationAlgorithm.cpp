@@ -29,7 +29,7 @@ bool TriangulationAlgorithm::contains(std::vector<QVector2D> vec, QVector2D v) {
 }
 
 std::vector<ParameterTriangle *> delaunay(std::vector<ParameterTriangle *> triangles){
-
+    return std::vector<ParameterTriangle *>();
 }
 
 std::vector<ParameterTriangle *> TriangulationAlgorithm::triangulate(std::vector<Spline> polygon) {
