@@ -35,10 +35,10 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     menuBar()->addMenu(view);
 
     QSlider *slider = new QSlider(Qt::Vertical, this);
-    slider->setMinimum(0);
-    slider->setMaximum(10);
-    slider->setSliderPosition(10);
-    setRefinementDelta(10);
+    slider->setMinimum(1);
+    slider->setMaximum(100);
+    slider->setSliderPosition(100);
+    setRefinementDelta(100);
     slider->setSingleStep(1);
     slider->setPageStep(2);
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changedDeltaSlider(int)));
@@ -186,7 +186,7 @@ void CGMainWindow::toggleWireframe() {
 }
 
 void CGMainWindow::setRefinementDelta(int value) {
-    refineDelta = value * 0.1f;
+    refineDelta = value * 0.01f;
 }
 
 
