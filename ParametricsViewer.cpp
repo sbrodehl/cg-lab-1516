@@ -37,7 +37,7 @@ CGMainWindow::CGMainWindow(QWidget *parent) : QMainWindow(parent) {
     slider->setMinimum(0);
     slider->setMaximum(10);
     slider->setSliderPosition(10);
-    setRefinementDelta(5);
+    setRefinementDelta(10);
     slider->setSingleStep(1);
     slider->setPageStep(2);
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(changedDeltaSlider(int)));
