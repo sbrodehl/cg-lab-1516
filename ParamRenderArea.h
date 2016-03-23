@@ -23,7 +23,6 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     QList<QList<QPointF> > getShapes();
-    void setShapeType(ShapeType type);
     void drawTriangulation(std::vector<ParameterTriangle *> triangulation);
 
 public slots:

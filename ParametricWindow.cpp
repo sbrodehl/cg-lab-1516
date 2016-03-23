@@ -47,14 +47,6 @@ ParamRenderArea *ParametricWindow::getArea() const {
     return area;
 }
 
-void ParametricWindow::addOuterShaper() {
-    area->setShapeType(ParamRenderArea::ShapeType::OUTER);
-}
-
-void ParametricWindow::addInnerShaper() {
-    area->setShapeType(ParamRenderArea::ShapeType::INNER);
-}
-
 void ParametricWindow::keyPressEvent(QKeyEvent *event) {
     area->keyPressEvent(event);
 }
@@ -76,5 +68,26 @@ void ParametricWindow::loadShapes() {
 }
 
 void ParametricWindow::saveShapes() {
+    QJsonArray json;
+    for (QList<QPointF> shape : area->getShapes()) {
+        QJsonArray s;
+        for (QPointF point : shape) {
+            QJsonObject p;
+            p["x"] = point.x();
+            p["y"] = point.y();
+            s.push_back(p);
+        }
+        json.push_back(s);
+    }
+    QJsonDocument saveDoc(json);
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    QString fname = dialog.getSaveFileName();
+    std::cout << "Saving shapes in " << fname.toStdString() << std::endl;
+    QFile file(fname);
+    if (file.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&file);
+        stream << saveDoc.toJson() << endl;
+    }
     //TODO implement saving shapes to file
 }

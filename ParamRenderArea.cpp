@@ -45,24 +45,22 @@ void ParamRenderArea::paintEvent(QPaintEvent *) {
     painter.setPen(QPen(penColor, penWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
     int colorID = 0;
-    // draw all outer shapes
-    for (QPainterPath p : outerShapes) {
+
+    // draw all shapes
+    for (QList<QPointF> sha : shapeList) {
         QLinearGradient g(0, 0, 0, 100);
         g.setColorAt(0.0, colors.at(colorID));
         g.setColorAt(1.0, colors.at(colorID));
         painter.setBrush(g);
-        painter.drawPath(p);
+        QPainterPath tP;
+        tP.moveTo(sha.first());
+        for (int i = 0; i < sha.size(); ++i) {
+            tP.lineTo(sha.at(i));
+        }
+        painter.drawPath(tP);
         colorID = (colorID + 1) % colors.size();
     }
-    // draw all inner shapes
-    for (QPainterPath p : innerShapes) {
-        QLinearGradient g(0, 0, 0, 100);
-        g.setColorAt(0.0, colors.at(colorID));
-        g.setColorAt(1.0, colors.at(colorID));
-        painter.setBrush(g);
-        painter.drawPath(p);
-        colorID = (colorID + 1) % colors.size();
-    }
+
     // draw current path
     QLinearGradient gradient(0, 0, 0, 100);
     gradient.setColorAt(0.0, colors.at(colorID));
@@ -112,11 +110,15 @@ QPointF ParamRenderArea::convertPos(QMouseEvent *e) {
 }
 
 QList<QList<QPointF> > ParamRenderArea::getShapes() {
+    if (shapeList.isEmpty()) {
+        QList<QPointF> s;
+        s.push_back(denormalize(QVector2D(0.0f, 0.0f)));
+        s.push_back(denormalize(QVector2D(1.0f, 0.0f)));
+        s.push_back(denormalize(QVector2D(1.0f, 1.0f)));
+        s.push_back(denormalize(QVector2D(0.0f, 1.0f)));
+        shapeList.append(s);
+    }
     return shapeList;
-}
-
-void ParamRenderArea::setShapeType(ShapeType type) {
-    currentType = type;
 }
 
 void ParamRenderArea::keyPressEvent(QKeyEvent *event) {
@@ -162,31 +164,16 @@ void ParamRenderArea::saveCurrentShape() {
     }
     shapeList.append(wp);
     waypoints.clear();
-    switch (currentType) {
-        case ShapeType::INNER:
-            innerShapes.append(p);
-            break;
-        case ShapeType::OUTER:
-            outerShapes.append(p);
-            break;
-        default:
-            break;
-    }
 }
 
 void ParamRenderArea::clearShapes() {
-    innerShapes.clear();
-    outerShapes.clear();
+    shapeList.clear();
     waypoints.clear();
+    triangulation.clear();
     update();
 }
 
-void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) {
-//    if (event->button() == Qt::LeftButton) {
-//        removeLastWaypoint(); // undo first click
-//        removeLastWaypoint(); // undo second click
-//    }
-}
+void ParamRenderArea::mouseDoubleClickEvent(QMouseEvent *event) { }
 
 void ParamRenderArea::drawTriangulation(std::vector<ParameterTriangle *> triangulation_) {
     triangulation = triangulation_;

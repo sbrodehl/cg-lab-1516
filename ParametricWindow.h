@@ -22,8 +22,6 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 public slots:
-    void addOuterShaper();
-    void addInnerShaper();
     void saveShapes();
     void loadShapes();
     void clearShapes();
