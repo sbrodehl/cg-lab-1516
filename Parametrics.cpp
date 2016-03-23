@@ -119,6 +119,16 @@ std::vector<QVector3D> Parametrics::getPolygonTriangulation(float edgeLength) {
         }
         polygon.push_back(s);
     }
+
+    if (polygon.empty()) {
+        std::vector<QVector2D *> s;
+        s.push_back(new QVector2D(0.0f, 0.0f));
+        s.push_back(new QVector2D(1.0f, 0.0f));
+        s.push_back(new QVector2D(1.0f, 1.0f));
+        s.push_back(new QVector2D(0.0f, 1.0f));
+        polygon.push_back(s);
+    }
+
     TriangulationAlgorithm algorithm;
     std::vector<ParameterTriangle *> trias = algorithm.triangulate(polygon);
     std::vector<ParameterTriangle *> refined;
