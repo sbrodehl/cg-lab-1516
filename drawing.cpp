@@ -61,7 +61,7 @@ void CGView::paintGL() {
                               (const void *) sizeof(QVector3D));
         glDrawArrays(GL_TRIANGLES, 0, vboTrianglesSize[i]);
     }
-    drawBoundingBox();
+    // drawBoundingBox();
 }
 
 void CGView::resizeGL(int w, int h) {
