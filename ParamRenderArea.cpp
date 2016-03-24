@@ -112,10 +112,10 @@ QPointF ParamRenderArea::convertPos(QMouseEvent *e) {
 QList<QList<QPointF> > ParamRenderArea::getShapes() {
     if (shapeList.isEmpty()) {
         QList<QPointF> s;
-        s.push_back(denormalize(QVector2D(0.0f, 0.0f)));
-        s.push_back(denormalize(QVector2D(1.0f, 0.0f)));
-        s.push_back(denormalize(QVector2D(1.0f, 1.0f)));
-        s.push_back(denormalize(QVector2D(0.0f, 1.0f)));
+        s.push_back(denormalize(QVector2D(0.0f, 0.0f+0.00001*(rand()%10))));
+        s.push_back(denormalize(QVector2D(1.0f, 0.0f+0.00001*(rand()%10))));
+        s.push_back(denormalize(QVector2D(1.0f, 1.0f-0.00001*(rand()%10))));
+        s.push_back(denormalize(QVector2D(0.0f, 1.0f-0.00001*(rand()%10))));
         shapeList.append(s);
     }
     return shapeList;
