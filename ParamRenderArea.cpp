@@ -152,8 +152,10 @@ void ParamRenderArea::removeLastWaypoint() {
 void ParamRenderArea::saveCurrentShape() {
     QPainterPath p;
     if (!waypoints.empty()) {
+        waypoints[0].setY(waypoints[0].y()+0.001*((rand()%19)-9));
         p.moveTo(waypoints[0]);
         for (int i = 1; i < waypoints.size(); ++i) {
+            waypoints[i].setY(waypoints[i].y()+0.001*((rand()%19)-9));
             p.lineTo(waypoints[i]);
         }
         p.closeSubpath();
