@@ -127,7 +127,7 @@ std::vector<QVector3D> Parametrics::getPolygonTriangulation(float edgeLength) {
     std::vector<QVector3D> triangles;
     for (ParameterTriangle *t : trias) {
         if (!t->isQualityTriangle(edgeLength)) {
-            for (ParameterTriangle *ref : t->refine(edgeLength)) {
+            for (ParameterTriangle *ref : t->splitLongestEdge(edgeLength)) {
                 refined.push_back(ref);
                 QVector2D p1 = ref->getPoint(0);
                 triangles.push_back(getPoint(p1.x(), p1.y()));

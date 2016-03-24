@@ -62,6 +62,41 @@ public:
         return true;
     };
 
+    std::vector<ParameterTriangle *> splitLongestEdge(float edgeLength) {
+        typedef QPair<QVector2D, QVector2D> Segment;
+        typedef std::vector<ParameterTriangle *> TriaL;
+        TriaL refined;
+        Segment longest;
+        qreal length = -1.0f;
+        int i = -1;
+        int idx = -1;
+        for (Segment seg : segments) {
+            ++i;
+            if ((seg.first - seg.second).length() > length) {
+                length = (seg.first - seg.second).length();
+                longest = seg;
+                idx = i;
+            }
+        }
+        int pID = (idx - 1 + 3) % 3;
+        QVector2D splitPoint = longest.first + 0.5 * (longest.second - longest.first);
+        ParameterTriangle *tA = new ParameterTriangle(longest.first, splitPoint, points[pID]);
+        if (tA->isQualityTriangle(edgeLength))
+            refined.push_back(tA);
+        else {
+            TriaL rtA = tA->splitLongestEdge(edgeLength);
+            refined.insert(refined.end(), rtA.begin(), rtA.end());
+        }
+        ParameterTriangle *tB = new ParameterTriangle(longest.second, points[pID], splitPoint);
+        if (tB->isQualityTriangle(edgeLength))
+            refined.push_back(tB);
+        else {
+            TriaL rtB = tB->splitLongestEdge(edgeLength);
+            refined.insert(refined.end(), rtB.begin(), rtB.end());
+        }
+        return refined;
+    };
+
     std::vector<ParameterTriangle *> refine(float edgeLength) {
         typedef QPair<QVector2D, QVector2D> Segment;
         typedef std::vector<ParameterTriangle *> TriaL;
