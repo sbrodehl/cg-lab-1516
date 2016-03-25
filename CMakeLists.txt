@@ -35,7 +35,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-qt5_add_resources(RESOURCES shaders.qrc)
+qt5_add_resources(RESOURCES shader/shaders.qrc)
 
 set(SOURCE_FILES
         drawing.cpp
