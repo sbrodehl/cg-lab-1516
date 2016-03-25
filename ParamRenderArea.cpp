@@ -112,10 +112,10 @@ QPointF ParamRenderArea::convertPos(QMouseEvent *e) {
 QList<QList<QPointF> > ParamRenderArea::getShapes() {
     if (shapeList.isEmpty()) {
         QList<QPointF> s;
-        s.push_back(denormalize(QVector2D(0.0f, 0.0f+0.00001*(rand()%10))));
-        s.push_back(denormalize(QVector2D(1.0f, 0.0f+0.00001*(rand()%10))));
-        s.push_back(denormalize(QVector2D(1.0f, 1.0f-0.00001*(rand()%10))));
-        s.push_back(denormalize(QVector2D(0.0f, 1.0f-0.00001*(rand()%10))));
+        s.push_back(denormalize(QVector2D(0.0f, 0.0f + noise * (rand() % 10))));
+        s.push_back(denormalize(QVector2D(1.0f, 0.0f + noise * (rand() % 10))));
+        s.push_back(denormalize(QVector2D(1.0f, 1.0f - noise * (rand() % 10))));
+        s.push_back(denormalize(QVector2D(0.0f, 1.0f - noise * (rand() % 10))));
         shapeList.append(s);
     }
     return shapeList;
@@ -152,10 +152,10 @@ void ParamRenderArea::removeLastWaypoint() {
 void ParamRenderArea::saveCurrentShape() {
     QPainterPath p;
     if (!waypoints.empty()) {
-        waypoints[0].setY(waypoints[0].y()+0.001*((rand()%19)-9));
+        waypoints[0].setY(waypoints[0].y() + noise * ((rand() % 19) - 9));
         p.moveTo(waypoints[0]);
         for (int i = 1; i < waypoints.size(); ++i) {
-            waypoints[i].setY(waypoints[i].y()+0.001*((rand()%19)-9));
+            waypoints[i].setY(waypoints[i].y() + noise * ((rand() % 19) - 9));
             p.lineTo(waypoints[i]);
         }
         p.closeSubpath();

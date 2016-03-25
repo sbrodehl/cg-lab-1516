@@ -46,6 +46,7 @@ private:
     QList<QPainterPath> innerShapes;
     QPainterPath path;
     float penWidth;
+    float noise = 1.0e-5;
     QColor penColor;
     ShapeType currentType = ParamRenderArea::ShapeType::OUTER;
 
